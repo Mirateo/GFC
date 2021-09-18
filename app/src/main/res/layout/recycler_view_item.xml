@@ -10,7 +10,9 @@
   <androidx.constraintlayout.widget.ConstraintLayout
       android:id="@+id/listElement"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      android:layout_height="wrap_content"
+      android:background="@color/black"
+      >
 
     <TextView
         android:id="@+id/elementTitle"
@@ -20,7 +22,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@tools:sample/lorem" />
+        tools:text="@tools:sample/lorem"
+        android:textColor="@color/white"/>
 
     <TextView
         android:id="@+id/elementDescription"
@@ -30,7 +33,8 @@
         app:layout_constraintEnd_toStartOf="@+id/elementCheck"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="@tools:sample/lorem" />
+        tools:text="@tools:sample/lorem"
+        android:textColor="@color/white" />
 
     <CheckBox
         android:id="@+id/elementCheck"

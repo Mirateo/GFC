@@ -3,4 +3,13 @@
     <string name="tab_text_1"> Zadania codzienne </string>
     <string name="tab_text_2"> Do zrobienia </string>
     <string name="tab_text_3"> Nagrody </string>
+    <string name="add_things">Add things</string>
+    <string name="item_1">Item 1</string>
+    <string name="item_2">Item 2</string>
+    <string name="item_3">Item 3</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="Home">Strona główna</string>
+    <string name="Logout">Wyloguj się</string>
+    <string name="Profile">Profil</string>
 </resources>

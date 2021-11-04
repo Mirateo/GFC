@@ -4,13 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import gfc.frontend.R
 import gfc.frontend.databinding.FragmentMainBinding
 
 class PlaceholderFragment : Fragment() {
@@ -36,7 +32,7 @@ class PlaceholderFragment : Fragment() {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val root = binding.root
         binding.recyclerViewList.layoutManager = LinearLayoutManager(this.context)
-        binding.recyclerViewList.adapter = listAdapter()
+        binding.recyclerViewList.adapter = ListAdapter(arguments?.getInt(ARG_SECTION_NUMBER))
         return root
     }
 
@@ -45,7 +41,7 @@ class PlaceholderFragment : Fragment() {
          * The fragment argument representing the section number for this
          * fragment.
          */
-        private const val ARG_SECTION_NUMBER = "section_number"
+        const val ARG_SECTION_NUMBER = "section_number"
 
         /**
          * Returns a new instance of this fragment for the given section

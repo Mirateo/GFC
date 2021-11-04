@@ -5,13 +5,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.beust.klaxon.Klaxon
 import gfc.frontend.R
-import gfc.frontend.dataclasses.temporaryDatabase
+import gfc.frontend.dataclasses.Task
+import gfc.frontend.service.TasksService
 
-class listAdapter :RecyclerView.Adapter<MyViewHolder>(){
+//import gfc.frontend.dataclasses.temporaryDatabase
+
+class ListAdapter(section: Int?) :RecyclerView.Adapter<MyViewHolder>(){
+
+    private val section = section
+    private var elements: List<Any>? = null
+    private lateinit var tasksService: TasksService
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val listRow = layoutInflater.inflate(R.layout.recycler_view_item, parent, false)
+        tasksService = TasksService(parent.context)
+
+        refreshList()
 
         return MyViewHolder(listRow)
     }
@@ -21,13 +33,22 @@ class listAdapter :RecyclerView.Adapter<MyViewHolder>(){
         val description = holder.elementDescription
         val done = holder.elementCheck
 
-        name.setText(temporaryDatabase.tasks[position].title)
-        description.setText(temporaryDatabase.tasks[position].description)
-//        done.setChecked(temporaryDatabase.tasks[position].done)
+        refreshList()
     }
 
     override fun getItemCount(): Int {
-        return temporaryDatabase.tasks.size
+        return if (this.elements == null) { 0 } else {
+            this.elements!!.size
+        }
+    }
+
+    private fun refreshList() {
+        if (this.section == 1) {
+            elements = tasksService.getAllUserTasks("unrepeatable")
+        }
+        else if(this.section == 2) {
+            elements = tasksService.getAllUserTasks("repeatable")
+        }
     }
 }
 

@@ -34,6 +34,8 @@ class MainActivity : AppCompatActivity() {
         viewPager.adapter = sectionsPagerAdapter
         val tabs: TabLayout = binding.tabs
         tabs.setupWithViewPager(viewPager)
+        println("ReadyStart")
+
         val fab: FloatingActionButton = binding.fab
 
         // Adder listener

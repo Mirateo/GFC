@@ -8,11 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import gfc.frontend.databinding.FragmentMainBinding
+import gfc.frontend.service.TasksService
 
 class PlaceholderFragment : Fragment() {
 
     private lateinit var pageViewModel: PageViewModel
     private var _binding: FragmentMainBinding? = null
+    private var elements: List<Any>? = null
+    private lateinit var tasksService: TasksService
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -20,9 +23,12 @@ class PlaceholderFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        tasksService = TasksService(this.context)
         pageViewModel = ViewModelProvider(this).get(PageViewModel::class.java).apply {
             setIndex(arguments?.getInt(ARG_SECTION_NUMBER) ?: 1)
         }
+        println("Ready-4")
+        refreshList()
     }
 
     override fun onCreateView(
@@ -33,7 +39,19 @@ class PlaceholderFragment : Fragment() {
         val root = binding.root
         binding.recyclerViewList.layoutManager = LinearLayoutManager(this.context)
         binding.recyclerViewList.adapter = ListAdapter(arguments?.getInt(ARG_SECTION_NUMBER))
+        println("Ready-3")
+        refreshList()
         return root
+    }
+
+    private fun refreshList() {
+        println("Ready-1")
+        if (arguments?.getInt(ARG_SECTION_NUMBER) == 1) {
+            elements = tasksService.getAllUserTasks("unrepeatable")
+        }
+        else if(arguments?.getInt(ARG_SECTION_NUMBER) == 2) {
+            elements = tasksService.getAllUserTasks("repeatable")
+        }
     }
 
     companion object {

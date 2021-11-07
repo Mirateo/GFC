@@ -34,26 +34,29 @@ class TasksService(val context: Context?) : Service() {
     }
 
     fun volleyRequest(callBack: VolleyCallBack?, method: String, url: String, jsonArgs: JSONArray?) {
-        val jsonObjectRequest = JsonArrayRequest(
-            when (method){
-                "GET" -> Request.Method.GET
-                "POST" -> Request.Method.POST
-                else -> Request.Method.PUT
-            },
-            url,
-            jsonArgs,
-            { response ->
-                try {
-                    this.response = response
-                    callBack?.onSuccess()
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }
-            },
-            {
-                Toast.makeText( context, "Problem z połączeniem.", Toast.LENGTH_LONG ).show()
-            })
-        queue.add(jsonObjectRequest)
+//        val jsonObjectRequest = JsonArrayRequest(
+//            when (method){
+//                "GET" -> Request.Method.GET
+//                "POST" -> Request.Method.POST
+//                else -> Request.Method.PUT
+//            },
+//            url,
+//            jsonArgs,
+//            { response ->
+//                try {
+//                    val tmp = Klaxon().parseArray<Task>(result.toString())
+//                    println("tmp: " + tmp)
+//                    val tasks = Klaxon().parseArray<Task>(result.toString())
+//                    this.response = response
+//                    callBack?.onSuccess()
+//                } catch (e: JSONException) {
+//                    e.printStackTrace()
+//                }
+//            },
+//            {
+//                Toast.makeText( context, "Problem z połączeniem.", Toast.LENGTH_LONG ).show()
+//            })
+//        queue.add(jsonObjectRequest)
     }
 
 
@@ -70,9 +73,9 @@ class TasksService(val context: Context?) : Service() {
         volleyRequest(
             object : VolleyCallBack {
                 override fun onSuccess() {
-                    val tmp = Klaxon().parseArray<Task>(queue.toString())
-                    println("tmp: " + tmp)
-                    val tasks = Klaxon().parseArray<Task>(result.toString())
+//                    val tmp = Klaxon().parseArray<Task>(queue.toString())
+//                    println("tmp: " + tmp)
+//                    val tasks = Klaxon().parseArray<Task>(result.toString())
                 }
             },
             "GET",

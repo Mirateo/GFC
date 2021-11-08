@@ -1,5 +1,20 @@
 package gfc.frontend.dataclasses
 
-import java.sql.Date
+import io.objectbox.annotation.Entity
+import io.objectbox.annotation.Id
+import java.util.*
 
-data class RepeatableTask(val id: Long = 0, val ownerId: Long = 0, val name: String = "", val description: String = "", val points: Long = 0, val doneToday: Boolean = false, val lastDone: Date)
+
+@Entity
+public data class RepeatableTask(
+    @Id
+    public var id: Long = 0,
+    public var ownerId: Long = 0,
+    public var name: String = "",
+    public var description: String = "",
+    public var points: Long = 0,
+    public var doneToday: Boolean = false,
+    public var lastDone: Date = Date()
+
+
+)

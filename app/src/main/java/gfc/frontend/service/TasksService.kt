@@ -15,6 +15,9 @@ import android.widget.Toast
 import gfc.frontend.dataclasses.RepeatableTask
 import org.json.JSONException
 import org.json.JSONObject
+import gfc.frontend.dataclasses.ObjectBox
+import io.objectbox.Box
+
 
 class TasksService(val context: Context?) : Service() {
     val url = "https://gamefication-for-children.herokuapp.com/tasks"
@@ -22,6 +25,8 @@ class TasksService(val context: Context?) : Service() {
     val userId = 0
     lateinit var tasks: List<Task>
     lateinit var reTasks: List<RepeatableTask>
+    var taskBox: Box<Task> = ObjectBox.store.boxFor(Task::class.java)
+    var reTaskBox: Box<RepeatableTask> = ObjectBox.store.boxFor(RepeatableTask::class.java)
 
     class SimpleTasksServiceBinder(val servc: TasksService): Binder() {
         fun getService(): TasksService {

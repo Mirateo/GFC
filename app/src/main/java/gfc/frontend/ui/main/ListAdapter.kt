@@ -7,13 +7,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.beust.klaxon.Klaxon
 import gfc.frontend.R
+import gfc.frontend.controllers.TasksController
 import gfc.frontend.dataclasses.Task
 import gfc.frontend.service.TasksService
+import io.objectbox.Box
 
 //import gfc.frontend.dataclasses.temporaryDatabase
 
-class ListAdapter(section: Int?) :RecyclerView.Adapter<MyViewHolder>(){
-
+class ListAdapter(section: Int?, tasksController: TasksController) :RecyclerView.Adapter<MyViewHolder>(){
+    private val tasksController = tasksController
     private val section = section
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -27,11 +29,14 @@ class ListAdapter(section: Int?) :RecyclerView.Adapter<MyViewHolder>(){
         val name = holder.elementTitle
         val description = holder.elementDescription
         val done = holder.elementCheck
-
     }
 
     override fun getItemCount(): Int {
-        return 2
+        return when (section) {
+            0 -> this.tasksController.taskBox.count().toInt()
+            1 -> this.tasksController.reTaskBox.count().toInt()
+            else -> 1
+        }
     }
 
 }

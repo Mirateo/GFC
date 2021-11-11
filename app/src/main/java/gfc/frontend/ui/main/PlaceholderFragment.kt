@@ -7,15 +7,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import gfc.frontend.controllers.TasksController
 import gfc.frontend.databinding.FragmentMainBinding
 import gfc.frontend.service.TasksService
+
+import kotlinx.coroutines.*
 
 class PlaceholderFragment : Fragment() {
 
     private lateinit var pageViewModel: PageViewModel
     private var _binding: FragmentMainBinding? = null
-    private var elements: List<Any>? = null
-    private lateinit var tasksService: TasksService
+    private lateinit var tasksController: TasksController
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -23,12 +25,9 @@ class PlaceholderFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        tasksService = TasksService(this.context)
         pageViewModel = ViewModelProvider(this).get(PageViewModel::class.java).apply {
             setIndex(arguments?.getInt(ARG_SECTION_NUMBER) ?: 1)
         }
-        println("Ready-4")
-        refreshList()
     }
 
     override fun onCreateView(
@@ -37,8 +36,9 @@ class PlaceholderFragment : Fragment() {
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val root = binding.root
+        this.tasksController = TasksController(this.context)
         binding.recyclerViewList.layoutManager = LinearLayoutManager(this.context)
-        binding.recyclerViewList.adapter = ListAdapter(arguments?.getInt(ARG_SECTION_NUMBER))
+        binding.recyclerViewList.adapter = ListAdapter(arguments?.getInt(ARG_SECTION_NUMBER), tasksController)
         println("Ready-3")
         refreshList()
         return root
@@ -47,10 +47,10 @@ class PlaceholderFragment : Fragment() {
     private fun refreshList() {
         println("Ready-1")
         if (arguments?.getInt(ARG_SECTION_NUMBER) == 1) {
-            elements = tasksService.getAllUserTasks("unrepeatable")
+            tasksController.refreshTasks("unrepeatable")
         }
         else if(arguments?.getInt(ARG_SECTION_NUMBER) == 2) {
-            elements = tasksService.getAllUserTasks("repeatable")
+            tasksController.refreshTasks("unrepeatable")
         }
     }
 

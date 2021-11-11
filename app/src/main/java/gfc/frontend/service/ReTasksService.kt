@@ -4,36 +4,39 @@ import android.content.Context
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
-import gfc.frontend.dataclasses.Task
+import gfc.frontend.dataclasses.RepeatableTask
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
+import java.text.DateFormat
 
 
-class TasksService(context: Context?) : VolleyService(context) {
+class ReTasksService(context: Context?) : VolleyService(context) {
 
-    class SimpleTasksServiceBinder(val servc: TasksService): Binder() {
-        fun getService(): TasksService {
+    class SimpleReTasksServiceBinder(val servc: ReTasksService): Binder() {
+        fun getService(): ReTasksService {
             return servc
         }
     }
 
     override fun onBind(intent: Intent?): IBinder {
-        return SimpleTasksServiceBinder(this)
+        return SimpleReTasksServiceBinder(this)
     }
 
-    fun toList(jsonArray: JSONArray?): List<Task>{
-        val list: ArrayList<Task> = arrayListOf()
+    fun toReList(jsonArray: JSONArray?): List<RepeatableTask>{
+        val list: ArrayList<RepeatableTask> = arrayListOf()
 
         if (jsonArray != null) {
             for (j in 0 until jsonArray.length()) {
-                val user = Task(
+                val user = RepeatableTask(
                     jsonArray.getJSONObject(j).getLong("id"),
                     jsonArray.getJSONObject(j).getLong("ownerId"),
                     jsonArray.getJSONObject(j).getString("name"),
                     jsonArray.getJSONObject(j).getString("description"),
-                    jsonArray.getJSONObject(j).getLong("points")
+                    jsonArray.getJSONObject(j).getLong("points"),
+                    jsonArray.getJSONObject(j).getBoolean("doneToday"),
+                    DateFormat.getDateInstance().parse(jsonArray.getJSONObject(j).getString("lastDone"))
                 )
                 list.add(user)
             }
@@ -41,9 +44,9 @@ class TasksService(context: Context?) : VolleyService(context) {
         return list
     }
 
-    suspend fun getData(url: String) =  runBlocking<List<Task>>  {
+    suspend fun getData(url: String) =  runBlocking<List<RepeatableTask>>  {
         withContext(Dispatchers.Default) {
-            toList(volleyRequest("GET", url, null))
+            toReList(volleyRequest("GET", url, null))
         }
     }
 

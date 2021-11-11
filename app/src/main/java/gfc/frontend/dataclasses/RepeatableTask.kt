@@ -6,15 +6,15 @@ import java.util.*
 
 
 @Entity
-public data class RepeatableTask(
+data class RepeatableTask(
     @Id
-    public var id: Long = 0,
-    public var ownerId: Long = 0,
-    public var name: String = "",
-    public var description: String = "",
-    public var points: Long = 0,
-    public var doneToday: Boolean = false,
-    public var lastDone: Date = Date()
+    var id: Long = 0,
+    var ownerId: Long = 0,
+    var name: String = "",
+    var description: String = "",
+    var points: Long = 0,
+    var doneToday: Boolean = false,
+    var lastDone: Date = Date()
 
 
 )

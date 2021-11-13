@@ -20,29 +20,26 @@ class TasksController(val context: Context?) {
     val taskService = TasksService(this.context)
 
 
-    fun refreshTasks(type : String) = runBlocking<Unit> {
+    fun refreshTasks(type : String) {
+        println("refresh task started")
         when (type) {
             "repeatable" -> {
-                val result =
-                    withContext(Dispatchers.Default) {
-                        reTaskService.getData("$url/allre/$userId")
-                    }
+                val result = reTaskService.getData("$url/allre/$userId")
 
                 reTaskBox.removeAll()
+                println("refresh task before put")
                 reTaskBox.put(result)
             }
             "unrepeatable" -> {
-                val result =
-                    withContext(Dispatchers.Default) {
-                        taskService.getData("$url/all/$userId")
-                    }
-
+                taskService.getData("$url/all/$userId")
                 taskBox.removeAll()
-                taskBox.put(result)
+                println("refresh task before await")
+                taskBox.put(taskService.result)
             }
             else -> {
                 println("Incorrect task type!")
             }
         }
+        println("refresh task finished")
     }
 }

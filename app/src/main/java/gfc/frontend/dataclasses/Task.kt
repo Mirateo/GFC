@@ -2,13 +2,15 @@ package gfc.frontend.dataclasses
 
 import io.objectbox.annotation.Entity
 import io.objectbox.annotation.Id
+import kotlinx.serialization.Serializable
 
 @Entity
-public data class Task (
+@Serializable
+data class Task (
     @Id
-    public var id: Long = 0,
-    public var ownerId: Long = 0,
-    public var name: String = "",
-    public var description: String = "",
-    public var points: Long = 0
+    var id: Long = 0,
+    var ownerId: Long = 0,
+    var name: String = "",
+    var description: String = "",
+    var points: Long = 0
 )

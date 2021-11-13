@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'io.objectbox'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.5.31'
 }
 
 android {
@@ -53,4 +54,7 @@ dependencies {
     implementation 'com.beust:klaxon:5.5'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
+    implementation 'io.ktor:ktor-client-core:1.6.5'
+    implementation 'io.ktor:ktor-client-android:1.6.5'
+    implementation "io.ktor:ktor-client-serialization:1.6.5"
 }

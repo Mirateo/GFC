@@ -5,14 +5,12 @@ import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import gfc.frontend.dataclasses.RepeatableTask
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import java.text.DateFormat
 
 
-class ReTasksService(context: Context?) : VolleyService(context) {
+class ReTasksService(context: Context?) : KtorService(context) {
 
     class SimpleReTasksServiceBinder(val servc: ReTasksService): Binder() {
         fun getService(): ReTasksService {
@@ -44,10 +42,11 @@ class ReTasksService(context: Context?) : VolleyService(context) {
         return list
     }
 
-    suspend fun getData(url: String) =  runBlocking<List<RepeatableTask>>  {
-        withContext(Dispatchers.Default) {
-            toReList(volleyRequest("GET", url, null))
-        }
+    fun getData(url: String) =  runBlocking<List<RepeatableTask>>  {
+        volleyRequest <List<RepeatableTask>> ("GET", url, null)
+//        toReList(super.response)
+
+        super.response as List<RepeatableTask>
     }
 
 }

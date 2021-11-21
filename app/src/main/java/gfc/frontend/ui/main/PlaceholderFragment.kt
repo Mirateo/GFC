@@ -50,7 +50,7 @@ class PlaceholderFragment : Fragment() {
             tasksController.refreshTasks("unrepeatable")
         }
         else if(arguments?.getInt(ARG_SECTION_NUMBER) == 2) {
-            tasksController.refreshTasks("unrepeatable")
+            tasksController.refreshTasks("repeatable")
         }
     }
 

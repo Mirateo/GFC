@@ -13,7 +13,7 @@ import java.text.DateFormat
 @Entity
 @Serializable
 data class RepeatableTask(
-    @Id
+    @Id(assignable = true)
     var id: Long = 0,
     var ownerId: Long = 0,
     var name: String = "",
@@ -21,18 +21,19 @@ data class RepeatableTask(
     var points: Long = 0,
     var doneToday: Boolean = false,
     @Serializable(with = DateSerializer::class)
-    var lastDone: Date = Date()
+    var lastDone: Date? = Date()
 )
 
 
-object DateSerializer : KSerializer<Date> {
-    override val descriptor = PrimitiveSerialDescriptor("UUID", PrimitiveKind.STRING)
+object DateSerializer : KSerializer<Date?> {
+    override val descriptor = PrimitiveSerialDescriptor("DATE", PrimitiveKind.STRING)
 
-    override fun deserialize(decoder: Decoder): Date {
-        return DateFormat.getDateInstance().parse(decoder.decodeString()) ?: Date()
+    override fun deserialize(decoder: Decoder): Date? {
+        print("###############!!!!!!!!!!!########### " + DateFormat.getDateInstance().parse(decoder.decodeString()))
+        return DateFormat.getDateInstance().parse(decoder.decodeString())
     }
 
-    override fun serialize(encoder: Encoder, value: Date) {
+    override fun serialize(encoder: Encoder, value: Date?) {
         encoder.encodeString(value.toString())
     }
 }

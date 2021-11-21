@@ -31,10 +31,11 @@ class TasksController(val context: Context?) {
                 reTaskBox.put(result)
             }
             "unrepeatable" -> {
-                taskService.getData("$url/all/$userId")
+                val tmp = taskService.getData("$url/all/$userId")
                 taskBox.removeAll()
                 println("refresh task before await")
-                taskBox.put(taskService.result)
+                println("!!!!! putted: $tmp")
+                taskBox.put(tmp)
             }
             else -> {
                 println("Incorrect task type!")

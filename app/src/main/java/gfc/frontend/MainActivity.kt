@@ -1,7 +1,6 @@
 package gfc.frontend
 
 import android.os.Bundle
-import android.util.Log
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
@@ -11,7 +10,6 @@ import android.view.MenuItem
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.ActionBarDrawerToggle
-import gfc.frontend.controllers.TasksController
 import gfc.frontend.dataclasses.ObjectBox
 import gfc.frontend.ui.main.SectionsPagerAdapter
 import gfc.frontend.databinding.ActivityMainBinding
@@ -69,3 +67,5 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 }
+
+// TODO: daty, dodawanie tasków

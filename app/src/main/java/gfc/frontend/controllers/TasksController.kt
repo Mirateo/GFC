@@ -6,9 +6,8 @@ import gfc.frontend.dataclasses.RepeatableTask
 import gfc.frontend.dataclasses.Task
 import gfc.frontend.service.ReTasksService
 import gfc.frontend.service.TasksService
+import gfc.frontend.ui.main.ToDosAdapter
 import io.objectbox.Box
-import kotlinx.coroutines.*
-import kotlin.system.*
 
 class TasksController(val context: Context?) {
     val url = "https://gamefication-for-children.herokuapp.com/tasks"
@@ -19,6 +18,7 @@ class TasksController(val context: Context?) {
     val reTaskService = ReTasksService(this.context)
     val taskService = TasksService(this.context)
 
+    lateinit var notifier: ToDosAdapter
 
     fun refreshTasks(type : String) {
         println("refresh task started")
@@ -42,5 +42,27 @@ class TasksController(val context: Context?) {
             }
         }
         println("refresh task finished")
+        notifier.notifyDataSetChanged();
+    }
+
+    fun taskDone(task: Any) {
+        when (task) {
+            is Task -> {
+                taskService.taskDone("$url/done/${task.id}")
+                refreshTasks("unrepeatable")
+            }
+            is RepeatableTask -> {
+                reTaskService.taskDone("$url/done/${task.id}")
+                refreshTasks("repeatable")
+            }
+            else -> {
+                println("Incorrect Task type")
+            }
+        }
+    }
+
+    fun addThisRef(toDosAdapter: ToDosAdapter): TasksController {
+        notifier = toDosAdapter
+        return this
     }
 }

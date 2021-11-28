@@ -6,8 +6,6 @@ import android.os.Binder
 import android.os.IBinder
 import gfc.frontend.dataclasses.RepeatableTask
 import kotlinx.coroutines.runBlocking
-import org.json.JSONArray
-import java.text.DateFormat
 
 
 class ReTasksService(context: Context?) : KtorService(context) {
@@ -22,30 +20,9 @@ class ReTasksService(context: Context?) : KtorService(context) {
         return SimpleReTasksServiceBinder(this)
     }
 
-    fun toReList(jsonArray: JSONArray?): List<RepeatableTask>{
-        val list: ArrayList<RepeatableTask> = arrayListOf()
-
-        if (jsonArray != null) {
-            for (j in 0 until jsonArray.length()) {
-                val user = RepeatableTask(
-                    jsonArray.getJSONObject(j).getLong("id"),
-                    jsonArray.getJSONObject(j).getLong("ownerId"),
-                    jsonArray.getJSONObject(j).getString("name"),
-                    jsonArray.getJSONObject(j).getString("description"),
-                    jsonArray.getJSONObject(j).getLong("points"),
-                    jsonArray.getJSONObject(j).getBoolean("doneToday"),
-                    DateFormat.getDateInstance().parse(jsonArray.getJSONObject(j).getString("lastDone"))
-                )
-                list.add(user)
-            }
-        }
-        return list
-    }
 
     fun getData(url: String) =  runBlocking<List<RepeatableTask>>  {
-        volleyRequest <List<RepeatableTask>> ("GET", url, null)
-//        toReList(super.response)
-
+        ktorRequest <List<RepeatableTask>> ("GET", url, null)
         super.response as List<RepeatableTask>
     }
 

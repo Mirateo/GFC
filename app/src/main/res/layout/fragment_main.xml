@@ -5,12 +5,13 @@
     android:id="@+id/constraintLayoutList"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.PlaceholderFragment">
+    tools:context=".ui.main.ToDosFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewList"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="729dp"
+        android:padding="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/recycler_view_item" />

@@ -35,11 +35,6 @@
           "type": 6
         },
         {
-          "id": "6:4066526454731296430",
-          "name": "doneToday",
-          "type": 1
-        },
-        {
           "id": "7:5674314788287534317",
           "name": "lastDone",
           "type": 10
@@ -90,7 +85,9 @@
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    4066526454731296430
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

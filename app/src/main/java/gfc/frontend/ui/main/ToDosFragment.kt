@@ -7,21 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import gfc.frontend.R
 import gfc.frontend.controllers.TasksController
 import gfc.frontend.databinding.FragmentMainBinding
-import gfc.frontend.service.TasksService
 
-import kotlinx.coroutines.*
-
-class PlaceholderFragment : Fragment() {
+class ToDosFragment : Fragment() {
 
     private lateinit var pageViewModel: PageViewModel
     private var _binding: FragmentMainBinding? = null
-    private lateinit var tasksController: TasksController
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
+    private lateinit var tasksController: TasksController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +33,7 @@ class PlaceholderFragment : Fragment() {
         val root = binding.root
         this.tasksController = TasksController(this.context)
         binding.recyclerViewList.layoutManager = LinearLayoutManager(this.context)
-        binding.recyclerViewList.adapter = ListAdapter(arguments?.getInt(ARG_SECTION_NUMBER), tasksController)
+        binding.recyclerViewList.adapter = ToDosAdapter(arguments?.getInt(ARG_SECTION_NUMBER), tasksController)
         println("Ready-3")
         refreshList()
         return root
@@ -66,8 +61,8 @@ class PlaceholderFragment : Fragment() {
          * number.
          */
         @JvmStatic
-        fun newInstance(sectionNumber: Int): PlaceholderFragment {
-            return PlaceholderFragment().apply {
+        fun newInstance(sectionNumber: Int): ToDosFragment {
+            return ToDosFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_SECTION_NUMBER, sectionNumber)
                 }

@@ -22,8 +22,9 @@ class TasksService(context: Context?) : KtorService(context) {
         return SimpleTasksServiceBinder(this)
     }
 
-    fun getData(url: String) =  runBlocking<List<Task>>  {
-        volleyRequest <List<Task>>("GET", url, null)
+    fun getData(url: String) = runBlocking<List<Task>>  {
+        ktorRequest <List<Task>>("GET", url, null)
         super.response as List<Task>
     }
+
 }

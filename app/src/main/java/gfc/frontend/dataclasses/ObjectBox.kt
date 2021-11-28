@@ -12,8 +12,4 @@ object ObjectBox {
             .androidContext(context.applicationContext)
             .build()
     }
-
-    fun sync () {
-        store.syncClient
-    }
 }

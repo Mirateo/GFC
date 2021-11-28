@@ -29,7 +29,7 @@ object DateSerializer : KSerializer<Date?> {
     override val descriptor = PrimitiveSerialDescriptor("DATE", PrimitiveKind.STRING)
 
     override fun deserialize(decoder: Decoder): Date? {
-        return SimpleDateFormat("dd-mm-yyyy",Locale.ENGLISH).parse(decoder.decodeString())
+        return SimpleDateFormat("yyyy-MM-dd").parse(decoder.decodeString())
     }
 
     override fun serialize(encoder: Encoder, value: Date?) {

@@ -65,4 +65,21 @@ class TasksController(val context: Context?) {
         notifier = toDosAdapter
         return this
     }
+
+    fun addTask(task: Any) {
+        // TODO
+        when (task) {
+            is Task -> {
+                taskService.taskDone("$url/add")
+                refreshTasks("unrepeatable")
+            }
+            is RepeatableTask -> {
+                reTaskService.taskDone("$url/add")
+                refreshTasks("repeatable")
+            }
+            else -> {
+                println("Incorrect Task type")
+            }
+        }
+    }
 }

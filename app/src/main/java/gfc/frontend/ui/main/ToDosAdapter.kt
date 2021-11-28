@@ -61,10 +61,24 @@ class ToDosAdapter(section: Int?, tasksController: TasksController) :RecyclerVie
                 println("Last done: " + lastDone + "\n today is: " + today(Date()))
 
                 done.setOnClickListener { view ->
-                    Snackbar.make(view, "Task " + currentTask.name +  " Done!", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show()
-
+                if(done.isChecked) {
+                    Snackbar.make(
+                        view,
+                        "Task " + currentTask.name + " Done!",
+                        Snackbar.LENGTH_LONG
+                    ).setAction("Action", null).show()
                     tasksController.taskDone(currentTask)
+                }
+                else {
+//                    editTask to undone it
+//                    tasksController.editTask()
+                    Snackbar.make(
+                        view,
+                        "TODO: Task " + currentTask.name + " undone!",
+                        Snackbar.LENGTH_LONG
+                    ).setAction("Action", null).show()
+
+                }
                 }
 
             }

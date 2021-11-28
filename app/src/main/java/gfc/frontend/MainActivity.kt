@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.ActionBarDrawerToggle
+import gfc.frontend.controllers.TasksController
 import gfc.frontend.dataclasses.ObjectBox
 import gfc.frontend.ui.main.SectionsPagerAdapter
 import gfc.frontend.databinding.ActivityMainBinding
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         // Initialize lists
         val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
         val viewPager: ViewPager = binding.viewPager
@@ -37,7 +39,8 @@ class MainActivity : AppCompatActivity() {
 
         // Adder listener
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//            TasksController(applicationContext).addTask()
+            Snackbar.make(view, "Task Addded", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
 

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import gfc.frontend.R
@@ -32,7 +33,6 @@ public fun yesterday(date: Date?): Date? {
 
 class ToDosAdapter(private val section: Int?, tasksController: TasksController) :RecyclerView.Adapter<MyViewHolder>(){
     private val tasksController = tasksController.addThisRef(this)
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)

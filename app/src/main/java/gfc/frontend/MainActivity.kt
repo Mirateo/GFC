@@ -1,7 +1,7 @@
 package gfc.frontend
 
+import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import androidx.viewpager.widget.ViewPager
@@ -10,7 +10,6 @@ import android.view.MenuItem
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.ActionBarDrawerToggle
-import gfc.frontend.controllers.TasksController
 import gfc.frontend.dataclasses.ObjectBox
 import gfc.frontend.ui.main.SectionsPagerAdapter
 import gfc.frontend.databinding.ActivityMainBinding
@@ -26,12 +25,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Initialize lists
+        val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
+        val viewPager: ViewPager = binding.viewPager
+        viewPager.adapter = sectionsPagerAdapter
+        val tabs: TabLayout = binding.tabs
+        tabs.setupWithViewPager(viewPager)
+        println("ReadyStart")
+
 
         // Adder listener
         binding.fab.setOnClickListener { view ->
 //            TasksController(applicationContext).addTask()
-            Snackbar.make(view, "Task Addded!", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            startActivity(Intent(this, NewTaskActivity::class.java))
         }
 
         // Refresher listener

@@ -13,6 +13,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GFC">
         <activity
+            android:name=".NewTaskActivity"
+            android:exported="true" />
+        <activity
+            android:name=".AddTaskActivity"
+            android:exported="true"
+            android:label="@string/title_activity_edit_task" />
+        <activity
+            android:name=".ui.login.editTaskActivity"
+            android:exported="true"
+            android:label="@string/title_activity_edit_task" />
+        <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.GFC.NoActionBar">

@@ -27,22 +27,28 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        // Initialize lists
-        val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
-        val viewPager: ViewPager = binding.viewPager
-        viewPager.adapter = sectionsPagerAdapter
-        val tabs: TabLayout = binding.tabs
-        tabs.setupWithViewPager(viewPager)
-        println("ReadyStart")
-
-        val fab: FloatingActionButton = binding.fab
-
         // Adder listener
-        fab.setOnClickListener { view ->
+        binding.fab.setOnClickListener { view ->
 //            TasksController(applicationContext).addTask()
-            Snackbar.make(view, "Task Addded", Snackbar.LENGTH_LONG)
+            Snackbar.make(view, "Task Addded!", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
+
+        // Refresher listener
+        binding.fabRefresh.setOnClickListener { view ->
+            // Initialize lists
+            val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
+            val viewPager: ViewPager = binding.viewPager
+            viewPager.adapter = sectionsPagerAdapter
+            val tabs: TabLayout = binding.tabs
+            tabs.setupWithViewPager(viewPager)
+            println("ReadyStart")
+
+            Snackbar.make(view, "Tasks Refreshed!", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show()
+        }
+
+        binding.fabRefresh.performClick()
 
         //Slide menu Listener
         setSupportActionBar(binding.activityMainToolbar)

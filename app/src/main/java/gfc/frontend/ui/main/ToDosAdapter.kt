@@ -30,9 +30,8 @@ public fun yesterday(date: Date?): Date? {
     return Date(today.time - 1000 * 60 * 60 * 24)
 }
 
-class ToDosAdapter(section: Int?, tasksController: TasksController) :RecyclerView.Adapter<MyViewHolder>(){
+class ToDosAdapter(private val section: Int?, tasksController: TasksController) :RecyclerView.Adapter<MyViewHolder>(){
     private val tasksController = tasksController.addThisRef(this)
-    private val section = section
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {

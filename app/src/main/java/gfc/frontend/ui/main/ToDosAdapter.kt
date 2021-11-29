@@ -70,14 +70,12 @@ class ToDosAdapter(section: Int?, tasksController: TasksController) :RecyclerVie
                     tasksController.taskDone(currentTask)
                 }
                 else {
-//                    editTask to undone it
-//                    tasksController.editTask()
                     Snackbar.make(
                         view,
-                        "TODO: Task " + currentTask.name + " undone!",
+                        "Task " + currentTask.name + " is not done today anymore :(",
                         Snackbar.LENGTH_LONG
                     ).setAction("Action", null).show()
-
+                    tasksController.taskUndone(currentTask)
                 }
                 }
 

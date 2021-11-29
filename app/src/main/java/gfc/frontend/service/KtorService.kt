@@ -49,4 +49,9 @@ abstract class KtorService(context: Context?)  : Service()  {
         ktorRequest <Long>("GET", url, null)
         response as Long
     }
+
+    fun taskUndone(url: String) = runBlocking<Long>  {
+        ktorRequest <Long>("GET", url, null)
+        response as Long
+    }
 }

@@ -61,6 +61,22 @@ class TasksController(val context: Context?) {
         }
     }
 
+    fun taskUndone(task: Any) {
+        when (task) {
+            is Task -> {
+                taskService.taskUndone("$url/undone/${task.id}")
+                refreshTasks("unrepeatable")
+            }
+            is RepeatableTask -> {
+                reTaskService.taskUndone("$url/undone/${task.id}")
+                refreshTasks("repeatable")
+            }
+            else -> {
+                println("Incorrect Task type")
+            }
+        }
+    }
+
     fun addThisRef(toDosAdapter: ToDosAdapter): TasksController {
         notifier = toDosAdapter
         return this

@@ -13,4 +13,5 @@
     <string name="Logout">Wyloguj się</string>
     <string name="Profile">Profil</string>
     <string name="zero">0</string>
+    <string name="refresh_views">Refresh Views</string>
 </resources>

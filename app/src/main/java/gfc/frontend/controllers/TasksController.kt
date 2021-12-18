@@ -4,6 +4,7 @@ import android.content.Context
 import gfc.frontend.dataclasses.ObjectBox
 import gfc.frontend.dataclasses.RepeatableTask
 import gfc.frontend.dataclasses.Task
+import gfc.frontend.dataclasses.TaskDTO
 import gfc.frontend.service.ReTasksService
 import gfc.frontend.service.TasksService
 import gfc.frontend.ui.main.ToDosAdapter
@@ -20,28 +21,37 @@ class TasksController(val context: Context?) {
 
     lateinit var notifier: ToDosAdapter
 
-    fun refreshTasks(type : String) {
+    fun refreshTasks(type : String?) {
         println("refresh task started")
         when (type) {
+            null -> {
+                val result = reTaskService.getData("$url/allre/$userId")
+                reTaskBox.removeAll()
+                println("refresh task before put")
+                reTaskBox.put(result)
+
+                val tmp = taskService.getData("$url/all/$userId")
+                taskBox.removeAll()
+                println("refresh task before await")
+                println("!!!!! putted: $tmp")
+                taskBox.put(tmp)
+
+            }
             "repeatable" -> {
                 val result = reTaskService.getData("$url/allre/$userId")
 
                 reTaskBox.removeAll()
-                println("refresh task before put")
                 reTaskBox.put(result)
             }
             "unrepeatable" -> {
                 val tmp = taskService.getData("$url/all/$userId")
                 taskBox.removeAll()
-                println("refresh task before await")
-                println("!!!!! putted: $tmp")
                 taskBox.put(tmp)
             }
             else -> {
                 println("Incorrect task type!")
             }
         }
-        println("refresh task finished")
         notifier.notifyDataSetChanged();
     }
 
@@ -82,20 +92,8 @@ class TasksController(val context: Context?) {
         return this
     }
 
-    fun addTask(task: Any) {
-        // TODO
-        when (task) {
-            is Task -> {
-                taskService.taskDone("$url/add")
-                refreshTasks("unrepeatable")
-            }
-            is RepeatableTask -> {
-                reTaskService.taskDone("$url/add")
-                refreshTasks("repeatable")
-            }
-            else -> {
-                println("Incorrect Task type")
-            }
-        }
+    fun addTask(name: String, description: String, points: Long, repeatable: Boolean) {
+        taskService.addTask("$url/add", TaskDTO(this.userId, name, description, points, repeatable))
     }
+
 }

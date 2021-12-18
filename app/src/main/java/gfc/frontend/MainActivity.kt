@@ -33,10 +33,8 @@ class MainActivity : AppCompatActivity() {
         tabs.setupWithViewPager(viewPager)
         println("ReadyStart")
 
-
         // Adder listener
-        binding.fab.setOnClickListener { view ->
-//            TasksController(applicationContext).addTask()
+        binding.fab.setOnClickListener {
             startActivity(Intent(this, NewTaskActivity::class.java))
         }
 

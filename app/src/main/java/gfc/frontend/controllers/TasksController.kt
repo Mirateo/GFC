@@ -12,7 +12,7 @@ import io.objectbox.Box
 
 class TasksController(val context: Context?) {
     val url = "https://gamefication-for-children.herokuapp.com/tasks"
-    val userId : Long = 0
+    val userId = 0L
     var taskBox: Box<Task> = ObjectBox.store.boxFor(Task::class.java)
     var reTaskBox: Box<RepeatableTask> = ObjectBox.store.boxFor(RepeatableTask::class.java)
 
@@ -93,7 +93,7 @@ class TasksController(val context: Context?) {
     }
 
     fun addTask(name: String, description: String, points: Long, repeatable: Boolean) {
-        taskService.addTask("$url/add", TaskDTO(this.userId, name, description, points, repeatable))
+        taskService.addTask("$url/add", TaskDTO(ownerId = this.userId, name = name, description = description, points = points, repeatable = repeatable))
     }
 
 }

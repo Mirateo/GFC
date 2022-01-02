@@ -15,15 +15,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-
-
-
-
-
-
-
+import io.ktor.client.features.logging.*
+import io.ktor.http.content.*
 
 abstract class KtorService(context: Context?)  : Service()  {
     val queue = Volley.newRequestQueue(context)
@@ -35,26 +28,38 @@ abstract class KtorService(context: Context?)  : Service()  {
     }
 
     suspend inline fun <reified T: Any> ktorRequest(meth: String, url: String, json: Any?)  = coroutineScope<Unit> {
+        println("json: " + json.toString())
+        
         val httpClient = HttpClient(Android){
             expectSuccess = false
             install(JsonFeature) {
                 serializer = KotlinxSerializer()
             }
+            install(Logging) {
+                logger = Logger.DEFAULT
+                level = LogLevel.ALL
+            }
+//            install(JsonFeature) {
+//                serializer = KotlinxSerializer(kotlinx.serialization.json.Json {
+//                        ignoreUnknownKeys = true
+//                        isLenient = true
+//                        encodeDefaults = false
+//                    }
+//                )
+//            }
         }
+
         withContext(Dispatchers.Default) {
-            println(json)
             when (meth) {
                 "GET" -> {
                     httpClient.get<T>(url)
                 }
                 "POST" -> {
                     httpClient.post<T>(url) {
-                        headers{
-                            append(HttpHeaders.ContentType, ContentType.Application.Json)
-                        }
                         if (json != null) {
                             body = json
                         }
+                        contentType(ContentType.Application.Json)
                     }
                 }
                 else -> {
@@ -68,6 +73,7 @@ abstract class KtorService(context: Context?)  : Service()  {
         }.apply {
             callBack(this)
         }
+
         httpClient.close()
     }
 
@@ -82,11 +88,7 @@ abstract class KtorService(context: Context?)  : Service()  {
     }
 
     fun addTask(url: String, newTask: TaskDTO) = runBlocking<Long> {
-        val gson = Gson()
-        val jsonElement = gson.toJsonTree(newTask)
-        val jsonObject = jsonElement as JsonObject
-
-        ktorRequest<Long>("POST", url, gson.toJson(newTask))
+        ktorRequest<Long>("POST", url, newTask)
         response as Long
     }
 

@@ -18,19 +18,35 @@ class NewTaskActivity : AppCompatActivity() {
         binding = ActivityNewTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         val actionBar = supportActionBar
 
-        if (actionBar != null) {
-            actionBar.title = "Dodaj nowe zadanie"
+        if (intent.getBooleanExtra("edit", false)) {
+            if (actionBar != null) {
+                actionBar.title = "Edytuj zadanie"
+            }
+            actionBar!!.title = "Edytuj zadanie"
+
+            binding.name.setText(intent.getStringExtra("name"))
+            binding.describtion.setText(intent.getStringExtra("description"))
+            binding.points.setText(intent.getStringExtra("points"))
+            binding.repeteable.isChecked = intent.getBooleanExtra("repeatable", false)
+        }
+        else {
+            if (actionBar != null) {
+                actionBar.title = "Dodaj nowe zadanie"
+            }
+            actionBar!!.title = "Dodaj nowe zadanie"
         }
 
-        actionBar!!.title = "Dodaj nowe zadanie"
         actionBar.setDisplayHomeAsUpEnabled(false)
+
+        
 
         binding.acceptButton.setOnClickListener { view ->
             val tmp = TasksController(this)
             tmp.addTask(binding.name.text.toString(), binding.describtion.text.toString(),
-                binding.points.text.toString().toLong(), binding.repeteable.isActivated)
+                binding.points.text.toString().toLong(), binding.repeteable.isChecked)
             Snackbar.make(view, "Now zadanie dodane", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }

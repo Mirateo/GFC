@@ -1,6 +1,8 @@
 package gfc.frontend.ui.main
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +11,15 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import gfc.frontend.NewTaskActivity
 import gfc.frontend.R
 import gfc.frontend.controllers.TasksController
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
-
+import android.app.Activity
+import android.os.Bundle
+import androidx.core.content.ContextCompat.startActivity
 
 public fun today(date: Date?): Date? {
     if(date == null) return null
@@ -33,9 +38,11 @@ public fun yesterday(date: Date?): Date? {
 
 class ToDosAdapter(private val section: Int?, tasksController: TasksController) :RecyclerView.Adapter<MyViewHolder>(){
     private val tasksController = tasksController.addThisRef(this)
+    private lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
+        context = parent.context
+        val layoutInflater = LayoutInflater.from(context)
         val listRow = layoutInflater.inflate(R.layout.recycler_view_item, parent, false)
 
         return MyViewHolder(listRow)
@@ -60,24 +67,23 @@ class ToDosAdapter(private val section: Int?, tasksController: TasksController) 
                 println("Last done: " + lastDone + "\n today is: " + today(Date()))
 
                 done.setOnClickListener { view ->
-                if(done.isChecked) {
-                    Snackbar.make(
-                        view,
-                        "Task " + currentTask.name + " Done!",
-                        Snackbar.LENGTH_LONG
-                    ).setAction("Action", null).show()
-                    tasksController.taskDone(currentTask)
+                    if(done.isChecked) {
+                        Snackbar.make(
+                            view,
+                            "Task " + currentTask.name + " Done!",
+                            Snackbar.LENGTH_LONG
+                        ).setAction("Action", null).show()
+                        tasksController.taskDone(currentTask)
+                    }
+                    else {
+                        Snackbar.make(
+                            view,
+                            "Task " + currentTask.name + " is not done today anymore :(",
+                            Snackbar.LENGTH_LONG
+                        ).setAction("Action", null).show()
+                        tasksController.taskUndone(currentTask)
+                    }
                 }
-                else {
-                    Snackbar.make(
-                        view,
-                        "Task " + currentTask.name + " is not done today anymore :(",
-                        Snackbar.LENGTH_LONG
-                    ).setAction("Action", null).show()
-                    tasksController.taskUndone(currentTask)
-                }
-                }
-
             }
             2 -> {
                 val currentTask = tasksController.taskBox.all[position]
@@ -94,6 +100,17 @@ class ToDosAdapter(private val section: Int?, tasksController: TasksController) 
 
                 }
             }
+        }
+        holder.view.setOnClickListener{
+            val repeatable = (section == 1)
+
+            val intent = Intent(context, NewTaskActivity::class.java)
+            intent.putExtra("edit", true)
+            intent.putExtra("name", name.text)
+            intent.putExtra("description", description.text)
+            intent.putExtra("points", elementPoints.text.subSequence(1, elementPoints.text.length))
+            intent.putExtra("repeatable", repeatable)
+            startActivity(context, intent, null)
         }
     }
 
@@ -113,3 +130,7 @@ class MyViewHolder(val view: View):RecyclerView.ViewHolder(view){
     var elementCheck: CheckBox = itemView.findViewById(R.id.elementCheck)
     var elementPoints: TextView = itemView.findViewById(R.id.pointsAmount)
 }
+
+/* TO DO: edit task services.
+edit task values
+adding FIX */

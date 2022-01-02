@@ -1,3 +1,5 @@
 package gfc.frontend.dataclasses
+import kotlinx.serialization.Serializable
 
-data class TaskDTO(val ownerId: Long, val name: String, val description: String, val points: Long, val repeatable: Boolean)
+@Serializable
+data class TaskDTO(val ownerId: Long = 0, val name: String = "Default", val description: String = "", val points: Long = 0, val repeatable: Boolean = false)

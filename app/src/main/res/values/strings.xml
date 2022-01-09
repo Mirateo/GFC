@@ -38,4 +38,14 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="zaloguj_si_na_swoje_konto">Zaloguj się na swoje konto</string>
+    <string name="nazwa_u_ytkownika">Nazwa użytkownika</string>
+    <string name="has_o">Hasło</string>
+    <string name="zaloguj_si">Zaloguj się</string>
+    <string name="nie_posiadasz_konta">Nie posiadasz konta?</string>
+    <string name="zarejestruj_si">Zarejestruj się</string>
+    <string name="powt_rz_has_o">Powtórz hasło</string>
+    <string name="adres_e_mail">Adres e-mail</string>
+    <string name="rejestracja_konta_rodzica">Rejestracja konta rodzica</string>
+    <string name="passwordsIncorrect">Hasła nie są identyczne</string>
 </resources>

@@ -5,7 +5,6 @@ import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import gfc.frontend.controllers.TasksController
 import gfc.frontend.databinding.ActivityNewTaskBinding
-import gfc.frontend.dataclasses.TaskDTO
 
 class NewTaskActivity : AppCompatActivity() {
 

@@ -4,7 +4,7 @@ import android.content.Context
 import gfc.frontend.dataclasses.ObjectBox
 import gfc.frontend.dataclasses.RepeatableTask
 import gfc.frontend.dataclasses.Task
-import gfc.frontend.dataclasses.TaskDTO
+import gfc.frontend.requests.TaskDTO
 import gfc.frontend.service.ReTasksService
 import gfc.frontend.service.TasksService
 import gfc.frontend.ui.main.ToDosAdapter
@@ -20,6 +20,11 @@ class TasksController(val context: Context?) {
     val taskService = TasksService(this.context)
 
     lateinit var notifier: ToDosAdapter
+
+    fun addThisRef(toDosAdapter: ToDosAdapter): TasksController {
+        notifier = toDosAdapter
+        return this
+    }
 
     fun refreshTasks(type : String?) {
         println("refresh task started")
@@ -85,11 +90,6 @@ class TasksController(val context: Context?) {
                 println("Incorrect Task type")
             }
         }
-    }
-
-    fun addThisRef(toDosAdapter: ToDosAdapter): TasksController {
-        notifier = toDosAdapter
-        return this
     }
 
     fun addTask(name: String, description: String, points: Long, repeatable: Boolean) {

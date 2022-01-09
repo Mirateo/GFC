@@ -3,8 +3,7 @@ package gfc.frontend.service
 import android.app.Service
 import android.content.Context
 import com.android.volley.toolbox.Volley
-import com.google.gson.*
-import gfc.frontend.dataclasses.TaskDTO
+import gfc.frontend.requests.TaskDTO
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.features.json.*
@@ -16,20 +15,16 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import io.ktor.client.features.logging.*
-import io.ktor.http.content.*
 
 abstract class KtorService(context: Context?)  : Service()  {
     val queue = Volley.newRequestQueue(context)
     var response: Any? = null
 
     fun callBack (resp: Any) {
-        println("RESP: $resp")
         this.response =  resp
     }
 
     suspend inline fun <reified T: Any> ktorRequest(meth: String, url: String, json: Any?)  = coroutineScope<Unit> {
-        println("json: " + json.toString())
-        
         val httpClient = HttpClient(Android){
             expectSuccess = false
             install(JsonFeature) {

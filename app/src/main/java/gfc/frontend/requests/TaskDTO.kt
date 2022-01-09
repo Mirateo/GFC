@@ -1,4 +1,4 @@
-package gfc.frontend.dataclasses
+package gfc.frontend.requests
 import kotlinx.serialization.Serializable
 
 @Serializable

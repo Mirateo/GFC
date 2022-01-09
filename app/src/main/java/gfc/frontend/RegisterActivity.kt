@@ -26,7 +26,7 @@ class RegisterActivity : AppCompatActivity() {
             val username = binding.userName.text.trim().toString()
             val password = binding.userPassword.text.trim().toString()
             val password2 = binding.userPassword2.text.trim().toString()
-            val email = binding.userMail.text.trim().toString()
+            val email = binding.userMail.text.toString()
 
             if(password != password2) {
                 binding.monit.text = getString(R.string.passwordsIncorrect)
@@ -34,15 +34,17 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            val request: SignupRequest
             try {
-                SignupRequest(username, password, "PARENT", email)
+                request = SignupRequest(username, email, "PARENT", password)
             } catch (e: IllegalArgumentException) {
+                println("!!!!!!!!!!!!!!! " + email)
                 binding.monit.text = e.message
                 binding.monit.visibility = View.VISIBLE
                 return@setOnClickListener
             }
 
-            Toast.makeText(this, authController.registerParent(username, email, password), Toast.LENGTH_LONG).show()
+            Toast.makeText(this, authController.registerParent(request), Toast.LENGTH_LONG).show()
             finish()
         }
 

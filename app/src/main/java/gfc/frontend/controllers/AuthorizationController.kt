@@ -11,8 +11,7 @@ class AuthorizationController(val context: Context?){
 
     val authService = AuthorizationService(this.context)
 
-    fun registerParent(username: String, email: String, password: String): String{
-        return authService.registerParent(url + "auth/signup",
-            SignupRequest(username, email, "PARENT" ,password))
+    fun registerParent(user: SignupRequest): String{
+        return authService.registerParent(url + "auth/signup", user)
     }
 }

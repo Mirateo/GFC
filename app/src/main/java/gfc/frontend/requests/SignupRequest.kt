@@ -10,7 +10,7 @@ data class SignupRequest(val username: String, val email: String, val role: Stri
         require(username.length >= 3) {"Nazwa użytkownika musi składać się z co najmniej 3 znaków"}
         require(username.length <= 20) {"Nazwa użytkownika może się składać maksymalnie z 20 znaków"}
         require(email.isNotBlank()) { "Najpierw wprowadź adres Email" }
-        require(!EMAIL_ADDRESS.matcher(email).matches()) { "Adres Email musi być prawidłowy" }
+        require(EMAIL_ADDRESS.matcher(email).matches()) { "Adres Email musi być prawidłowy" }
         require(role.isNotBlank()) { "Role is blank" }
         require(role == "PARENT" || role == "CHILD") { "Niepoprawna rola" }
         require(password.isNotBlank()) { "Najpierw wprowadź hasło" }

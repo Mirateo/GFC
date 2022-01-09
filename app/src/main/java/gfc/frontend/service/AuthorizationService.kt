@@ -8,10 +8,10 @@ import gfc.frontend.dataclasses.Task
 import gfc.frontend.requests.SignupRequest
 import kotlinx.coroutines.runBlocking
 
-class AuthorizationService(context: Context?): KtorService(context)  {
+class AuthorizationService(context: Context?): KtorService(context) {
     lateinit var result: String
 
-    class SimpleAuthorizationServiceBinder(val servc: AuthorizationService): Binder() {
+    class SimpleAuthorizationServiceBinder(val servc: AuthorizationService) : Binder() {
         fun getService(): AuthorizationService {
             return servc
         }
@@ -21,7 +21,8 @@ class AuthorizationService(context: Context?): KtorService(context)  {
         return SimpleAuthorizationServiceBinder(this)
     }
 
-    fun registerParent(url: String, request: SignupRequest) = runBlocking<String>  {
+    fun registerParent(url: String, request: SignupRequest) = runBlocking<String> {
+        println("!!! $request")
         ktorRequest<String>("POST", url, request)
         super.response as String
     }

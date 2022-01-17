@@ -46,6 +46,7 @@ abstract class KtorService(val context: Context?)  : Service()  {
     }
 
     suspend inline fun <reified T: Any> ktorRequest(meth: String, url: String, json: Any?)  = coroutineScope<Unit> {
+        println("!!!!!!!!!!!!!!!!!!!!!!!!" + json.toString())
         val prefs = context!!.getSharedPreferences("credentials", MODE_PRIVATE)
 
         val username = prefs.getString("username", "")
@@ -65,24 +66,34 @@ abstract class KtorService(val context: Context?)  : Service()  {
                 logger = Logger.DEFAULT
                 level = LogLevel.ALL
             }
+//            install(Auth) {
+//                var newToken: String
+//
+//                bearer {
+//                    refreshTokens { unauthorizedResponse: HttpResponse ->
+//                        withContext(Dispatchers.Default) {
+//                            anonymousHttpClient.post<T>("https://gamefication-for-children.herokuapp.com/login") {
+//                                body = SigninRequest(username, password)
+//                                contentType(ContentType.Application.Json)
+//                            }
+//                        }.apply {
+//                            newToken = (this as HttpResponse).headers["Authorization"]!!
+//                            getSharedPreferences("credentials", MODE_PRIVATE).edit().putString("token", newToken).apply()
+//                        }
+//
+//                        BearerTokens(
+//                            accessToken = token,
+//                            refreshToken = newToken
+//                        )
+//                    }
+//                }
+//            }
             install(Auth) {
-                var newToken: String
-
                 bearer {
-                    refreshTokens { unauthorizedResponse: HttpResponse ->
-                        withContext(Dispatchers.Default) {
-                            anonymousHttpClient.post<T>("https://gamefication-for-children.herokuapp.com/login") {
-                                body = SigninRequest(username, password)
-                                contentType(ContentType.Application.Json)
-                            }
-                        }.apply {
-                            newToken = (this as HttpResponse).headers["Authorization"]!!
-                            getSharedPreferences("credentials", MODE_PRIVATE).edit().putString("token", newToken).apply()
-                        }
-
+                    loadTokens {
                         BearerTokens(
                             accessToken = token,
-                            refreshToken = newToken
+                            refreshToken = token
                         )
                     }
                 }
@@ -125,7 +136,7 @@ abstract class KtorService(val context: Context?)  : Service()  {
 
         withContext(Dispatchers.Default) {
             httpClient.post<T>(url) {
-                    body = json
+                body = json
                 contentType(ContentType.Application.Json)
             }
         }.apply {

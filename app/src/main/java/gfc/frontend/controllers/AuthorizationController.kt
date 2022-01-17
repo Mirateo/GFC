@@ -48,8 +48,6 @@ class AuthorizationController(val context: Context?) {
             return true
         }
 
-        val accManager = AccountManager.get(context)
-
         return false
     }
 

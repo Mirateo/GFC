@@ -51,8 +51,9 @@ class NewTaskActivity : AppCompatActivity() {
             val tmp = TasksController(this)
             tmp.addTask(binding.name.text.toString(), binding.describtion.text.toString(),
                 binding.points.text.toString().toLong(), binding.repeteable.isChecked)
-            Snackbar.make(view, "Now zadanie dodane", Snackbar.LENGTH_LONG)
+            Snackbar.make(view, "Nowe zadanie dodane", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
+            finish()
         }
 
         binding.cancelButton.setOnClickListener { view ->

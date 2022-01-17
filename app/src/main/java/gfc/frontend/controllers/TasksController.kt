@@ -12,7 +12,7 @@ import io.objectbox.Box
 
 class TasksController(val context: Context) {
     val url = "https://gamefication-for-children.herokuapp.com/tasks"
-    val userId = 0L
+    val userId = context!!.getSharedPreferences("userInfo", Context.MODE_PRIVATE).getLong("id", 0)
     var taskBox: Box<Task> = ObjectBox.store.boxFor(Task::class.java)
     var reTaskBox: Box<RepeatableTask> = ObjectBox.store.boxFor(RepeatableTask::class.java)
 
@@ -30,12 +30,12 @@ class TasksController(val context: Context) {
         println("refresh task started")
         when (type) {
             null -> {
-                val result = reTaskService.getData("$url/allre/$userId")
+                val result = reTaskService.getData("$url/allre")
                 reTaskBox.removeAll()
                 println("refresh task before put")
                 reTaskBox.put(result)
 
-                val tmp = taskService.getData("$url/all/$userId")
+                val tmp = taskService.getData("$url/all")
                 taskBox.removeAll()
                 println("refresh task before await")
                 println("!!!!! putted: $tmp")
@@ -43,13 +43,13 @@ class TasksController(val context: Context) {
 
             }
             "repeatable" -> {
-                val result = reTaskService.getData("$url/allre/$userId")
+                val result = reTaskService.getData("$url/allre")
 
                 reTaskBox.removeAll()
                 reTaskBox.put(result)
             }
             "unrepeatable" -> {
-                val tmp = taskService.getData("$url/all/$userId")
+                val tmp = taskService.getData("$url/all")
                 taskBox.removeAll()
                 taskBox.put(tmp)
             }
@@ -94,6 +94,7 @@ class TasksController(val context: Context) {
 
     fun addTask(name: String, description: String, points: Long, repeatable: Boolean) {
         taskService.addTask("$url/add", TaskDTO(ownerId = this.userId, name = name, description = description, points = points, repeatable = repeatable))
+
     }
 
 }

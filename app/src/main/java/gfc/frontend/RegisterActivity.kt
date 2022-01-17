@@ -8,7 +8,6 @@ import android.widget.Toast
 import gfc.frontend.controllers.AuthorizationController
 import gfc.frontend.databinding.ActivityRegisterBinding
 import gfc.frontend.requests.SignupRequest
-import gfc.frontend.service.AuthorizationService
 import java.lang.IllegalArgumentException
 
 class RegisterActivity : AppCompatActivity() {

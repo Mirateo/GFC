@@ -36,17 +36,27 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <EditText
             android:id="@+id/userPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="20sp"
             android:ems="10"
-            android:inputType="textPassword"
             android:hint="@string/has_o"
-            android:layout_margin="20sp" />
+            android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <TextView
+        android:id="@+id/monit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/red"
+        android:text=""
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/loginButton"
@@ -66,20 +76,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/nie_posiadasz_konta"
-        android:textSize="22sp"
         android:textAlignment="center"
-        />
+        android:textSize="22sp" />
 
     <Button
         android:id="@+id/registerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/zarejestruj_si"
-        android:textSize="20sp"
-        android:paddingLeft="15sp"
+        android:layout_gravity="center"
+        android:paddingLeft="5sp"
         android:paddingTop="10sp"
-        android:paddingRight="15sp"
+        android:paddingRight="5sp"
         android:paddingBottom="10sp"
-        android:layout_gravity="center" />
+        android:text="@string/zarejestruj_si"
+        android:textSize="20sp" />
 
 </LinearLayout>

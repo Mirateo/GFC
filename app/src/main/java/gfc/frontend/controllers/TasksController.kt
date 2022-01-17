@@ -10,7 +10,7 @@ import gfc.frontend.service.TasksService
 import gfc.frontend.ui.main.ToDosAdapter
 import io.objectbox.Box
 
-class TasksController(val context: Context?) {
+class TasksController(val context: Context) {
     val url = "https://gamefication-for-children.herokuapp.com/tasks"
     val userId = 0L
     var taskBox: Box<Task> = ObjectBox.store.boxFor(Task::class.java)

@@ -3,12 +3,14 @@ package gfc.frontend
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
+import gfc.frontend.controllers.AuthorizationController
 import gfc.frontend.controllers.TasksController
 import gfc.frontend.databinding.ActivityNewTaskBinding
 
 class NewTaskActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNewTaskBinding
+    private lateinit var authController: AuthorizationController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,6 +18,9 @@ class NewTaskActivity : AppCompatActivity() {
 
         binding = ActivityNewTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+        authController = AuthorizationController(this)
 
 
         val actionBar = supportActionBar

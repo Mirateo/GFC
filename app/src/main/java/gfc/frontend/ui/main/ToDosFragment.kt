@@ -1,5 +1,6 @@
 package gfc.frontend.ui.main
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +12,7 @@ import gfc.frontend.R
 import gfc.frontend.controllers.TasksController
 import gfc.frontend.databinding.FragmentMainBinding
 
-class ToDosFragment : Fragment() {
+class ToDosFragment(val parentContext: Context) : Fragment() {
 
     private lateinit var pageViewModel: PageViewModel
     private var _binding: FragmentMainBinding? = null
@@ -31,7 +32,7 @@ class ToDosFragment : Fragment() {
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val root = binding.root
-        this.tasksController = TasksController(this.context)
+        this.tasksController = TasksController(parentContext)
         binding.recyclerViewList.layoutManager = LinearLayoutManager(this.context)
         binding.recyclerViewList.adapter = ToDosAdapter(arguments?.getInt(ARG_SECTION_NUMBER), tasksController)
         println("Ready-3")
@@ -53,8 +54,8 @@ class ToDosFragment : Fragment() {
         const val ARG_SECTION_NUMBER = "section_number"
 
         @JvmStatic
-        fun newInstance(sectionNumber: Int): ToDosFragment {
-            return ToDosFragment().apply {
+        fun newInstance(sectionNumber: Int, parentContext: Context): ToDosFragment {
+            return ToDosFragment(parentContext).apply {
                 arguments = Bundle().apply {
                     putInt(ARG_SECTION_NUMBER, sectionNumber)
                 }

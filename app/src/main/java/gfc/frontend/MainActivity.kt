@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.ActionBarDrawerToggle
+import gfc.frontend.controllers.AuthorizationController
 import gfc.frontend.dataclasses.ObjectBox
 import gfc.frontend.ui.main.SectionsPagerAdapter
 import gfc.frontend.databinding.ActivityMainBinding
@@ -18,12 +19,20 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     lateinit var toggle: ActionBarDrawerToggle
+    private lateinit var authController: AuthorizationController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ObjectBox.init(this)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        authController = AuthorizationController(this)
+
+        println("!!!!!!!!!!3 " +  this.getSharedPreferences("credentials", MODE_PRIVATE).getString("username", "x ") +
+                this.getSharedPreferences("credentials", MODE_PRIVATE).getString("password", "x ") +
+                this.getSharedPreferences("credentials", MODE_PRIVATE).getString("token", "x "))
+
 
         // Initialize lists
         val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)

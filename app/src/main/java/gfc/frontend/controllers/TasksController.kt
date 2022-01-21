@@ -10,12 +10,11 @@ import gfc.frontend.service.TasksService
 import gfc.frontend.ui.main.ToDosAdapter
 import io.objectbox.Box
 
-class TasksController(val context: Context) {
+class TasksController (val context: Context) {
     val url = "https://gamefication-for-children.herokuapp.com/tasks"
-    val userId = context!!.getSharedPreferences("userInfo", Context.MODE_PRIVATE).getLong("id", 0)
+    val userId = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE).getLong("id", 0)
     var taskBox: Box<Task> = ObjectBox.store.boxFor(Task::class.java)
     var reTaskBox: Box<RepeatableTask> = ObjectBox.store.boxFor(RepeatableTask::class.java)
-
     val reTaskService = ReTasksService(this.context)
     val taskService = TasksService(this.context)
 
@@ -94,7 +93,13 @@ class TasksController(val context: Context) {
 
     fun addTask(name: String, description: String, points: Long, repeatable: Boolean) {
         taskService.addTask("$url/add", TaskDTO(ownerId = this.userId, name = name, description = description, points = points, repeatable = repeatable))
+    }
 
+    fun deleteData() {
+        taskBox.store.close()
+        taskBox.store.deleteAllFiles()
+        reTaskBox.store.close()
+        reTaskBox.store.deleteAllFiles()
     }
 
 }

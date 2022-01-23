@@ -36,8 +36,7 @@ public fun yesterday(date: Date?): Date? {
     return Date(today.time - 1000 * 60 * 60 * 24)
 }
 
-class ToDosAdapter(private val section: Int?, tasksController: TasksController) :RecyclerView.Adapter<MyViewHolder>(){
-    private val tasksController = tasksController.addThisRef(this)
+class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder>(){
     private lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -48,17 +47,16 @@ class ToDosAdapter(private val section: Int?, tasksController: TasksController) 
         return MyViewHolder(listRow)
     }
 
-
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val name = holder.elementTitle
         val description = holder.elementDescription
         val elementPoints = holder.elementPoints
         val done = holder.elementCheck
 
+
         when (section) {
             1 -> {
-                val currentTask = tasksController.reTaskBox.all[position]
+                val currentTask = TasksController.reTasksContainer[position]
                 name.text = currentTask.name
                 description.text = currentTask.description
                 elementPoints.text = "+${currentTask.points}"
@@ -73,7 +71,7 @@ class ToDosAdapter(private val section: Int?, tasksController: TasksController) 
                             "Task " + currentTask.name + " Done!",
                             Snackbar.LENGTH_LONG
                         ).setAction("Action", null).show()
-                        tasksController.taskDone(currentTask)
+                        TasksController.taskDone(currentTask)
                     }
                     else {
                         Snackbar.make(
@@ -81,12 +79,13 @@ class ToDosAdapter(private val section: Int?, tasksController: TasksController) 
                             "Task " + currentTask.name + " is not done today anymore :(",
                             Snackbar.LENGTH_LONG
                         ).setAction("Action", null).show()
-                        tasksController.taskUndone(currentTask)
+                        TasksController.taskUndone(currentTask)
+                        notifyDataSetChanged()
                     }
                 }
             }
             2 -> {
-                val currentTask = tasksController.taskBox.all[position]
+                val currentTask = TasksController.tasksContainer[position]
                 name.text = currentTask.name
                 description.text = currentTask.description
                 elementPoints.text = "+${currentTask.points}"
@@ -96,7 +95,8 @@ class ToDosAdapter(private val section: Int?, tasksController: TasksController) 
                     Snackbar.make(view, "Task " + currentTask.name +  " Done!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show()
 
-                tasksController.taskDone(currentTask)
+                    TasksController.taskDone(currentTask)
+                    notifyDataSetChanged()
 
                 }
             }
@@ -116,8 +116,8 @@ class ToDosAdapter(private val section: Int?, tasksController: TasksController) 
 
     override fun getItemCount(): Int {
         return when (section) {
-            1 -> this.tasksController.reTaskBox.count().toInt()
-            2 -> this.tasksController.taskBox.count().toInt()
+            1 -> TasksController.reTasksContainer.size
+            2 -> TasksController.tasksContainer.size
             else -> 0
         }
     }
@@ -130,7 +130,3 @@ class MyViewHolder(val view: View):RecyclerView.ViewHolder(view){
     var elementCheck: CheckBox = itemView.findViewById(R.id.elementCheck)
     var elementPoints: TextView = itemView.findViewById(R.id.pointsAmount)
 }
-
-/* TO DO: edit task services.
-edit task values
-adding FIX */

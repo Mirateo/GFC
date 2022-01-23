@@ -12,14 +12,13 @@ import java.lang.IllegalArgumentException
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
-    private lateinit var authController: AuthorizationController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        authController = AuthorizationController(this)
 
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        AuthorizationController.init(applicationContext)
 
         binding.registerButton.setOnClickListener{
             val username = binding.userName.text.trim().toString()
@@ -43,7 +42,7 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            Toast.makeText(this, authController.registerParent(request), Toast.LENGTH_LONG).show()
+            Toast.makeText(this, AuthorizationController.registerParent(request), Toast.LENGTH_LONG).show()
             finish()
         }
 

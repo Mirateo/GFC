@@ -3,6 +3,7 @@ package gfc.frontend.service
 import android.accounts.AccountManager
 import android.app.Service
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import com.android.volley.toolbox.Volley
@@ -19,6 +20,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import io.ktor.client.features.logging.*
 import android.content.SharedPreferences
+import android.os.IBinder
 import gfc.frontend.requests.SigninRequest
 import io.ktor.client.features.auth.*
 import io.ktor.client.features.auth.providers.*
@@ -27,8 +29,13 @@ import io.ktor.client.statement.*
 import kotlin.system.exitProcess
 
 
-abstract class KtorService(val context: Context?)  : Service()  {
+abstract class KtorService()  : Service()  {
     var response: Any? = null
+    lateinit var context: Context
+
+    fun init(context: Context){
+        this.context = context
+    }
 
     val anonymousHttpClient = HttpClient(Android){
         expectSuccess = false

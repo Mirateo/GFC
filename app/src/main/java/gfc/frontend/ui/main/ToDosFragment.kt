@@ -12,7 +12,7 @@ import gfc.frontend.R
 import gfc.frontend.controllers.TasksController
 import gfc.frontend.databinding.FragmentMainBinding
 
-class ToDosFragment(val tasksController: TasksController) : Fragment() {
+class ToDosFragment() : Fragment() {
 
     private lateinit var pageViewModel: PageViewModel
     private var _binding: FragmentMainBinding? = null
@@ -32,28 +32,25 @@ class ToDosFragment(val tasksController: TasksController) : Fragment() {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         val root = binding.root
         binding.recyclerViewList.layoutManager = LinearLayoutManager(this.context)
-        binding.recyclerViewList.adapter = ToDosAdapter(arguments?.getInt(ARG_SECTION_NUMBER), tasksController)
-        println("Ready-3")
+        binding.recyclerViewList.adapter = ToDosAdapter(arguments?.getInt(ARG_SECTION_NUMBER))
         refreshList()
         return root
     }
 
     private fun refreshList() {
-        println("Ready-1")
-        if (arguments?.getInt(ARG_SECTION_NUMBER) == 1) {
-            tasksController.refreshTasks("unrepeatable")
-        }
-        else if(arguments?.getInt(ARG_SECTION_NUMBER) == 2) {
-            tasksController.refreshTasks("repeatable")
-        }
+        if (arguments?.getInt(ARG_SECTION_NUMBER) == 1)
+            TasksController.refreshTasks("unrepeatable")
+        else if(arguments?.getInt(ARG_SECTION_NUMBER) == 2)
+            TasksController.refreshTasks("repeatable")
+        binding.recyclerViewList.adapter?.notifyDataSetChanged()
     }
 
     companion object {
         const val ARG_SECTION_NUMBER = "section_number"
 
         @JvmStatic
-        fun newInstance(sectionNumber: Int, tasksController: TasksController): ToDosFragment {
-            return ToDosFragment(tasksController).apply {
+        fun newInstance(sectionNumber: Int): ToDosFragment {
+            return ToDosFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_SECTION_NUMBER, sectionNumber)
                 }

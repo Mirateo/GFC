@@ -20,7 +20,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class AuthorizationService(context: Context?): KtorService(context) {
+object AuthorizationService: KtorService() {
     lateinit var result: String
 
     class SimpleAuthorizationServiceBinder(val servc: AuthorizationService) : Binder() {

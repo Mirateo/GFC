@@ -8,19 +8,19 @@ import android.widget.Toast
 import gfc.frontend.controllers.AuthorizationController
 import gfc.frontend.databinding.ActivityLoginBinding
 import gfc.frontend.requests.SigninRequest
+import gfc.frontend.service.AuthorizationService
 import java.lang.IllegalArgumentException
 
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var authController: AuthorizationController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        authController = AuthorizationController(this)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        AuthorizationController.init(applicationContext)
         applicationContext.getSharedPreferences("credentials", MODE_PRIVATE)
 
         binding.loginButton.setOnClickListener{
@@ -36,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            if(authController.login(request)){
+            if(AuthorizationController.login(request)){
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             }

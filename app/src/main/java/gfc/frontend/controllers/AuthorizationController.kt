@@ -11,30 +11,36 @@ import android.net.wifi.hotspot2.pps.Credential
 import android.widget.Toast
 import android.content.Context.MODE_PRIVATE
 import gfc.frontend.LoginActivity
+import gfc.frontend.controllers.AuthorizationController.registerParent
 
 
-class AuthorizationController(val context: Context?) {
+object AuthorizationController {
+    lateinit var context: Context
     val url = "https://gamefication-for-children.herokuapp.com"
     var response = ""
-    val authService = AuthorizationService(context)
+
+    fun init(context: Context){
+        this.context = context
+        AuthorizationService.init(context)
+    }
 
     fun registerParent(user: SignupRequest): String{
-        return authService.registerParent("$url/auth/signup", user)
+        return AuthorizationService.registerParent("$url/auth/signup", user)
     }
 
     fun login(credentials: SigninRequest): Boolean {
-        val token = authService.login("$url/login", credentials)
+        val token = AuthorizationService.login("$url/login", credentials)
         if(token != null){
-            context!!.getSharedPreferences("credentials", MODE_PRIVATE)
+            context.getSharedPreferences("credentials", MODE_PRIVATE)
                 .edit()
                 .putString("username", credentials.username)
                 .putString("password", credentials.password)
                 .putString("token", token)
                 .apply()
 
-            val userInfo = authService.getUserInfo("$url/auth/user_info")
+            val userInfo = AuthorizationService.getUserInfo("$url/auth/user_info")
 
-            context!!.getSharedPreferences("userInfo", MODE_PRIVATE)
+            context.getSharedPreferences("userInfo", MODE_PRIVATE)
                 .edit()
                 .putLong("id", userInfo.id)
                 .putString("username", userInfo.username)
@@ -43,7 +49,7 @@ class AuthorizationController(val context: Context?) {
                 .putString("friendlyName", userInfo.friendlyName)
                 .apply()
 
-            println(context!!.getSharedPreferences("userInfo", MODE_PRIVATE).getString("friendlyName", "nope:(").toString())
+            println(context.getSharedPreferences("userInfo", MODE_PRIVATE).getString("friendlyName", "nope:(").toString())
 
             return true
         }

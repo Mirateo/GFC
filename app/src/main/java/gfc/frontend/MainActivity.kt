@@ -1,5 +1,7 @@
 package gfc.frontend
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -13,37 +15,43 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
+import androidx.core.view.get
 import com.google.android.material.navigation.NavigationView
 import gfc.frontend.controllers.AuthorizationController
 import gfc.frontend.controllers.TasksController
 import gfc.frontend.dataclasses.ObjectBox
 import gfc.frontend.ui.main.SectionsPagerAdapter
 import gfc.frontend.databinding.ActivityMainBinding
+import gfc.frontend.service.AuthorizationService
+import gfc.frontend.service.ReTasksService
+import gfc.frontend.service.TasksService
+import androidx.activity.result.ActivityResultCallback
+
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     lateinit var toggle: ActionBarDrawerToggle
-    private lateinit var authController: AuthorizationController
-    private lateinit var tasksController: TasksController
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ObjectBox.init(this)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        authController = AuthorizationController(applicationContext)
-        tasksController = TasksController(applicationContext)
-
+        TasksController.init(applicationContext)
         // Initialize lists
         refreshLists()
 
         // Adder listener
         binding.fab.setOnClickListener {
-            startActivity(Intent(this, NewTaskActivity::class.java))
+            startActivityForResult(Intent(this, NewTaskActivity::class.java), 0)
         }
 
         // Refresher listener
@@ -62,10 +70,10 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        var username = getSharedPreferences("userInfo", MODE_PRIVATE).getString("username", "nope:(").toString()
-        var email = getSharedPreferences("userInfo", MODE_PRIVATE).getString("email", "nope:(").toString()
-        var role = getSharedPreferences("userInfo", MODE_PRIVATE).getString("role", "nope:(").toString()
-        var friendlyName = getSharedPreferences("userInfo", MODE_PRIVATE).getString("friendlyName", "nope:(").toString()
+        val username = getSharedPreferences("userInfo", MODE_PRIVATE).getString("username", "nope:(").toString()
+        val email = getSharedPreferences("userInfo", MODE_PRIVATE).getString("email", "nope:(").toString()
+        val role = getSharedPreferences("userInfo", MODE_PRIVATE).getString("role", "nope:(").toString()
+        val friendlyName = getSharedPreferences("userInfo", MODE_PRIVATE).getString("friendlyName", "nope:(").toString()
 
         val navigationView : NavigationView = findViewById(R.id.nav_view)
         val headerView : View = navigationView.getHeaderView(0)
@@ -81,9 +89,10 @@ class MainActivity : AppCompatActivity() {
         binding.navView.setNavigationItemSelectedListener {
             when(it.itemId) {
                 R.id.nav_home -> binding.drawerLayout.closeDrawer(GravityCompat.START)
-                R.id.nav_profile -> Toast.makeText(applicationContext, "Clicked profile", LENGTH_SHORT).show()
+                R.id.nav_profile -> {
+                    Toast.makeText(applicationContext, "Clicked profile", LENGTH_SHORT).show()
+                }
                 R.id.nav_logout -> {
-                    tasksController.deleteData()
                     getSharedPreferences("userInfo", MODE_PRIVATE).edit().clear().apply()
                     getSharedPreferences("credentials", MODE_PRIVATE).edit().clear().apply()
                     startActivity(Intent(this, LoginActivity::class.java))
@@ -95,19 +104,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (toggle.onOptionsItemSelected(item)){
-            return true
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     private fun refreshLists(){
-        val sectionsPagerAdapter = SectionsPagerAdapter(this, tasksController, supportFragmentManager)
-        val viewPager: ViewPager = binding.viewPager
-        viewPager.adapter = sectionsPagerAdapter
-        val tabs: TabLayout = binding.tabs
-        tabs.setupWithViewPager(viewPager)
+        val currentPage = binding.viewPager.currentItem
+        binding.viewPager.adapter = SectionsPagerAdapter(this, supportFragmentManager)
+        binding.tabs.setupWithViewPager(binding.viewPager)
+        binding.viewPager.currentItem = currentPage
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -115,10 +116,9 @@ class MainActivity : AppCompatActivity() {
 
         if (requestCode == 0) {
             if (resultCode == RESULT_OK) {
-                if(intent.getBooleanExtra("finished", false)){
-                    refreshLists()
-                }
+                refreshLists()
             }
         }
     }
+
 }

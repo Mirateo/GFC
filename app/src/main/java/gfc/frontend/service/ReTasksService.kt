@@ -8,7 +8,7 @@ import gfc.frontend.dataclasses.RepeatableTask
 import kotlinx.coroutines.runBlocking
 
 
-class ReTasksService(context: Context?) : KtorService(context) {
+object ReTasksService : KtorService() {
 
     class SimpleReTasksServiceBinder(val servc: ReTasksService): Binder() {
         fun getService(): ReTasksService {

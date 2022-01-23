@@ -8,7 +8,7 @@ import gfc.frontend.dataclasses.Task
 import kotlinx.coroutines.*
 
 
-class TasksService(context: Context) : KtorService(context) {
+object TasksService : KtorService() {
 
     lateinit var result: ArrayList<Task>
 

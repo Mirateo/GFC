@@ -19,6 +19,7 @@ class NewTaskActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_task)
+        TasksController.init(applicationContext)
 
         binding = ActivityNewTaskBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -42,8 +43,7 @@ class NewTaskActivity : AppCompatActivity() {
         
 
         binding.acceptButton.setOnClickListener { view ->
-            val tmp = TasksService(this)
-            tmp.addTask(
+            TasksService.addTask(
                 "https://gamefication-for-children.herokuapp.com/tasks/add",
                 TaskDTO(
                     ownerId = this.getSharedPreferences("userInfo", Context.MODE_PRIVATE).getLong("id", 0),
@@ -55,9 +55,7 @@ class NewTaskActivity : AppCompatActivity() {
             )
             Snackbar.make(view, "Nowe zadanie dodane", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
-            val data = Intent()
-            data.putExtra("finished", true)
-            setResult(RESULT_OK, data)
+            setResult(RESULT_OK, Intent())
             finish()
         }
 

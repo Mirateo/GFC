@@ -12,7 +12,7 @@ import gfc.frontend.R
 import gfc.frontend.controllers.TasksController
 import gfc.frontend.databinding.FragmentMainBinding
 
-class ToDosFragment() : Fragment() {
+class ToDosFragment : Fragment() {
 
     private lateinit var pageViewModel: PageViewModel
     private var _binding: FragmentMainBinding? = null

@@ -36,7 +36,6 @@ class RegisterActivity : AppCompatActivity() {
             try {
                 request = SignupRequest(username, email, "PARENT", password)
             } catch (e: IllegalArgumentException) {
-                println("!!!!!!!!!!!!!!! " + email)
                 binding.monit.text = e.message
                 binding.monit.visibility = View.VISIBLE
                 return@setOnClickListener
@@ -48,6 +47,7 @@ class RegisterActivity : AppCompatActivity() {
 
         binding.loginButton.setOnClickListener{
             startActivity(Intent(this, LoginActivity::class.java))
+            finish()
         }
     }
 }

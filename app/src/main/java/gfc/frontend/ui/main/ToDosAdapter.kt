@@ -21,13 +21,13 @@ import android.app.Activity
 import android.os.Bundle
 import androidx.core.content.ContextCompat.startActivity
 
-public fun today(date: Date?): Date? {
+fun today(date: Date?): Date? {
     if(date == null) return null
     val formatter: DateFormat = SimpleDateFormat("dd/MM/yyyy")
     return formatter.parse(formatter.format(date))
 }
 
-public fun yesterday(date: Date?): Date? {
+fun yesterday(date: Date?): Date? {
     if(date == null) return null
 
     val formatter: DateFormat = SimpleDateFormat("dd/MM/yyyy")

@@ -29,7 +29,7 @@ import io.ktor.client.statement.*
 import kotlin.system.exitProcess
 
 
-abstract class KtorService()  : Service()  {
+abstract class KtorService : Service()  {
     var response: Any? = null
     lateinit var context: Context
 
@@ -53,8 +53,7 @@ abstract class KtorService()  : Service()  {
     }
 
     suspend inline fun <reified T: Any> ktorRequest(meth: String, url: String, json: Any?)  = coroutineScope<Unit> {
-        println("!!!!!!!!!!!!!!!!!!!!!!!!" + json.toString())
-        val prefs = context!!.getSharedPreferences("credentials", MODE_PRIVATE)
+        val prefs = context.getSharedPreferences("credentials", MODE_PRIVATE)
 
         val username = prefs.getString("username", "")
         val password = prefs.getString("password", "")

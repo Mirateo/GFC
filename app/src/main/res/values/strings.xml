@@ -48,4 +48,19 @@
     <string name="adres_e_mail">Adres e-mail</string>
     <string name="rejestracja_konta_rodzica">Rejestracja konta rodzica</string>
     <string name="passwordsIncorrect">Hasła nie są identyczne</string>
+    <string name="title_activity_settings">settingsActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="ustawienia_konta">Ustawienia konta</string>
+    <string name="login">login</string>
+    <string name="aktualne_has_o">Aktualne hasło</string>
+    <string name="powt_rz_nowe_has_o">powtórz nowe hasło</string>
+    <string name="nowe_has_o">nowe hasło</string>
+    <string name="title_activity_settings2">Settings2Activity</string>
 </resources>

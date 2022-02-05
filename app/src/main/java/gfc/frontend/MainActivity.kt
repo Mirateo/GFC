@@ -1,37 +1,19 @@
 package gfc.frontend
 
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.text.method.TextKeyListener.clear
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.tabs.TabLayout
-import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
-import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
-import androidx.core.view.get
 import com.google.android.material.navigation.NavigationView
-import gfc.frontend.controllers.AuthorizationController
 import gfc.frontend.controllers.TasksController
-import gfc.frontend.dataclasses.ObjectBox
 import gfc.frontend.ui.main.SectionsPagerAdapter
 import gfc.frontend.databinding.ActivityMainBinding
-import gfc.frontend.service.AuthorizationService
-import gfc.frontend.service.ReTasksService
-import gfc.frontend.service.TasksService
-import androidx.activity.result.ActivityResultCallback
-
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 
 
 class MainActivity : AppCompatActivity() {
@@ -41,7 +23,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ObjectBox.init(this)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -90,13 +71,15 @@ class MainActivity : AppCompatActivity() {
             when(it.itemId) {
                 R.id.nav_home -> binding.drawerLayout.closeDrawer(GravityCompat.START)
                 R.id.nav_profile -> {
-                    Toast.makeText(applicationContext, "Clicked profile", LENGTH_SHORT).show()
+//                    Toast.makeText(applicationContext, "Aby zarządzać ustawieniami konta, zaloguj się jako rodzic.", LENGTH_LONG).show()
+                    startActivity(Intent(this, SettingsActivity::class.java))
+                    binding.drawerLayout.closeDrawer(GravityCompat.START)
                 }
                 R.id.nav_logout -> {
                     getSharedPreferences("userInfo", MODE_PRIVATE).edit().clear().apply()
                     getSharedPreferences("credentials", MODE_PRIVATE).edit().clear().apply()
                     startActivity(Intent(this, LoginActivity::class.java))
-                    Toast.makeText(applicationContext, "Poprawnie wylogowano", LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "Wylogowano poprawnie", LENGTH_SHORT).show()
                     finish()
                 }
             }
@@ -104,7 +87,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun refreshLists(){
+    public fun refreshLists(){
         val currentPage = binding.viewPager.currentItem
         binding.viewPager.adapter = SectionsPagerAdapter(this, supportFragmentManager)
         binding.tabs.setupWithViewPager(binding.viewPager)

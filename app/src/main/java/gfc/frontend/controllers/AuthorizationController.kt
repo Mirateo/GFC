@@ -12,11 +12,14 @@ import android.widget.Toast
 import android.content.Context.MODE_PRIVATE
 import gfc.frontend.LoginActivity
 import gfc.frontend.controllers.AuthorizationController.registerParent
+import gfc.frontend.dataclasses.UserInfo
+import gfc.frontend.service.ProfileService
 
 
 object AuthorizationController {
     lateinit var context: Context
-    val url = "https://gamefication-for-children.herokuapp.com"
+    val url = "https://gamefication-for-children.herokuapp.com/auth"
+    val loginUrl = "https://gamefication-for-children.herokuapp.com/login"
     var response = ""
 
     fun init(context: Context){
@@ -25,11 +28,11 @@ object AuthorizationController {
     }
 
     fun registerParent(user: SignupRequest): String{
-        return AuthorizationService.registerParent("$url/auth/signup", user)
+        return AuthorizationService.registerParent("$url/signup", user)
     }
 
     fun login(credentials: SigninRequest): Boolean {
-        val token = AuthorizationService.login("$url/login", credentials)
+        val token = AuthorizationService.login(loginUrl, credentials)
         if(token != null){
             context.getSharedPreferences("credentials", MODE_PRIVATE)
                 .edit()
@@ -38,7 +41,7 @@ object AuthorizationController {
                 .putString("token", token)
                 .apply()
 
-            val userInfo = AuthorizationService.getUserInfo("$url/auth/user_info")
+            val userInfo = AuthorizationService.getUserInfo("$url/user_info")
 
             context.getSharedPreferences("userInfo", MODE_PRIVATE)
                 .edit()
@@ -55,6 +58,10 @@ object AuthorizationController {
         }
 
         return false
+    }
+
+    fun editProfile(newUser: UserInfo): String {
+        return AuthorizationService.editProfile("$url/user_info/edit", newUser)
     }
 
 }

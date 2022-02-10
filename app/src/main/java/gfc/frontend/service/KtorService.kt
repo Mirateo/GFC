@@ -1,12 +1,7 @@
 package gfc.frontend.service
 
-import android.accounts.AccountManager
 import android.app.Service
 import android.content.Context
-import android.content.Intent
-import android.os.Bundle
-import android.os.Handler
-import com.android.volley.toolbox.Volley
 import gfc.frontend.requests.TaskDTO
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
@@ -19,13 +14,8 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import io.ktor.client.features.logging.*
-import android.content.SharedPreferences
-import android.os.IBinder
-import gfc.frontend.requests.SigninRequest
 import io.ktor.client.features.auth.*
 import io.ktor.client.features.auth.providers.*
-import io.ktor.client.request.forms.*
-import io.ktor.client.statement.*
 import kotlin.system.exitProcess
 
 
@@ -43,8 +33,8 @@ abstract class KtorService : Service()  {
             serializer = KotlinxSerializer()
         }
         install(Logging) {
-            logger = Logger.DEFAULT
-            level = LogLevel.ALL
+//            logger = Logger.DEFAULT
+//            level = LogLevel.ALL
         }
     }
 
@@ -69,8 +59,8 @@ abstract class KtorService : Service()  {
                 serializer = KotlinxSerializer()
             }
             install(Logging) {
-                logger = Logger.DEFAULT
-                level = LogLevel.ALL
+//                logger = Logger.DEFAULT
+//                level = LogLevel.ALL
             }
 //            install(Auth) {
 //                var newToken: String

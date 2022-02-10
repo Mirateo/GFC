@@ -20,11 +20,4 @@ object ProfileService : KtorService() {
     override fun onBind(intent: Intent?): IBinder {
         return SimpleProfileServiceBinder(this)
     }
-
-    fun editCredentials(url: String, data: AccountRequest) = runBlocking<List<Task>>  {
-        ktorRequest <List<Task>>("GET", url, null)
-        super.response as List<Task>
-    }
-    
-
 }

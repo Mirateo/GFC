@@ -50,7 +50,7 @@ object AuthorizationService: KtorService() {
 
     fun login(loginUrl: String, credentials: SigninRequest) = runBlocking<String?> {
         loginRequest<Any>(loginUrl, credentials)
-        super.response as String?
+        return@runBlocking super.response as String?
     }
 
     private suspend inline fun <reified T: Any> loginRequest(url: String, credentials: SigninRequest)  = coroutineScope<Unit> {
@@ -71,5 +71,10 @@ object AuthorizationService: KtorService() {
     fun getUserInfo(url: String) = runBlocking<UserInfo> {
         ktorRequest<UserInfo>("GET", url, null)
         super.response as UserInfo
+    }
+
+    fun editProfile(url: String, newUser: UserInfo) = runBlocking<String>  {
+        ktorRequest<UserInfo>("POST", url, newUser)
+        super.response as String
     }
 }

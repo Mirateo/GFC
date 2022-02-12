@@ -21,9 +21,9 @@ object ReTasksService : KtorService() {
     }
 
 
-    fun getData(url: String) =  runBlocking<List<RepeatableTask>>  {
+    fun getData(url: String) =  runBlocking<List<RepeatableTask>?>  {
         ktorRequest <List<RepeatableTask>> ("GET", url, null)
-        super.response as List<RepeatableTask>
+        super.response as List<RepeatableTask>?
     }
 
 }

@@ -40,18 +40,26 @@ class NewTaskActivity : AppCompatActivity() {
 
         actionBar.setDisplayHomeAsUpEnabled(false)
 
-        
-
         binding.acceptButton.setOnClickListener { view ->
+            val ownerId = this.getSharedPreferences("userInfo", Context.MODE_PRIVATE).getLong("id", 0)
+            var name = binding.name.text.toString()
+            val description = binding.describtion.text.toString()
+            val points = binding.points.text.toString()
+            val repeatable = binding.repeteable.isChecked
+
+            if (name == "") {
+                name = "Zadanie bez nazwy"
+            }
+
+            var pointsL = 0L
+
+            if (points != "") {
+                pointsL = points.toLong()
+            }
+
             TasksService.addTask(
                 "https://gamefication-for-children.herokuapp.com/tasks/add",
-                TaskDTO(
-                    ownerId = this.getSharedPreferences("userInfo", Context.MODE_PRIVATE).getLong("id", 0),
-                    name = binding.name.text.toString(),
-                    description = binding.describtion.text.toString(),
-                    points = binding.points.text.toString().toLong(),
-                    repeatable = binding.repeteable.isChecked
-                )
+                TaskDTO(ownerId, name, description, pointsL, repeatable)
             )
             Snackbar.make(view, "Nowe zadanie dodane", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()

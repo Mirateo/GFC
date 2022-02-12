@@ -2,6 +2,11 @@ package gfc.frontend.controllers
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import androidx.core.content.ContextCompat.startActivity
+import com.google.android.material.internal.ContextUtils.getActivity
+import gfc.frontend.LoginActivity
+import gfc.frontend.MainActivity
 import gfc.frontend.dataclasses.ObjectBox
 import gfc.frontend.dataclasses.RepeatableTask
 import gfc.frontend.dataclasses.Task
@@ -17,11 +22,6 @@ object TasksController {
     lateinit var context: Context
     var userId = -1L
     val url = "https://gamefication-for-children.herokuapp.com/tasks"
-//    var taskBox: Box<Task> = ObjectBox.store.boxFor(Task::class.java)
-//    var reTaskBox: Box<RepeatableTask> = ObjectBox.store.boxFor(RepeatableTask::class.java)
-//    lateinit var tasksContainer: ArrayList<Task>
-//    lateinit var notifier: ToDosAdapter
-
     var tasksContainer by Delegates.observable(ArrayList<Task>()) { _, _, _ ->
 //        notifier.notifyDataSetChanged()
     }
@@ -35,13 +35,8 @@ object TasksController {
         ReTasksService.init(context)
         TasksService.init(context)
     }
-//
-//    fun addThisRef(toDosAdapter: ToDosAdapter) {
-//        notifier = toDosAdapter
-//    }
 
     fun refreshTasks(type : String?) {
-        println("refresh task started")
         when (type) {
             null -> {
                 reTasksContainer = ArrayList(ReTasksService.getData("$url/allre"))
@@ -49,7 +44,6 @@ object TasksController {
             }
             "repeatable" -> reTasksContainer = ArrayList(ReTasksService.getData("$url/allre"))
             "unrepeatable" -> tasksContainer = ArrayList(TasksService.getData("$url/all"))
-            else -> println("Incorrect task type!")
         }
     }
 

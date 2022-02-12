@@ -5,6 +5,7 @@ import android.content.Context
 import gfc.frontend.requests.TaskDTO
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
+import io.ktor.client.features.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.client.request.*
@@ -16,6 +17,7 @@ import kotlinx.coroutines.withContext
 import io.ktor.client.features.logging.*
 import io.ktor.client.features.auth.*
 import io.ktor.client.features.auth.providers.*
+import io.ktor.client.statement.*
 import kotlin.system.exitProcess
 
 
@@ -28,21 +30,21 @@ abstract class KtorService : Service()  {
     }
 
     val anonymousHttpClient = HttpClient(Android){
-        expectSuccess = false
+        expectSuccess = true
         install(JsonFeature) {
             serializer = KotlinxSerializer()
         }
         install(Logging) {
-//            logger = Logger.DEFAULT
-//            level = LogLevel.ALL
+            logger = Logger.DEFAULT
+            level = LogLevel.ALL
         }
     }
 
-    fun callBack (resp: Any) {
+    fun callBack (resp: Any?) {
         this.response =  resp
     }
 
-    suspend inline fun <reified T: Any> ktorRequest(meth: String, url: String, json: Any?)  = coroutineScope<Unit> {
+    suspend inline fun <reified T: Any?> ktorRequest(meth: String, url: String, json: Any?)  = coroutineScope<Unit> {
         val prefs = context.getSharedPreferences("credentials", MODE_PRIVATE)
 
         val username = prefs.getString("username", "")
@@ -54,36 +56,14 @@ abstract class KtorService : Service()  {
         }
 
         val httpClient = HttpClient(Android){
-            expectSuccess = false
+            expectSuccess = true
             install(JsonFeature) {
                 serializer = KotlinxSerializer()
             }
             install(Logging) {
-//                logger = Logger.DEFAULT
-//                level = LogLevel.ALL
+                logger = Logger.DEFAULT
+                level = LogLevel.ALL
             }
-//            install(Auth) {
-//                var newToken: String
-//
-//                bearer {
-//                    refreshTokens { unauthorizedResponse: HttpResponse ->
-//                        withContext(Dispatchers.Default) {
-//                            anonymousHttpClient.post<T>("https://gamefication-for-children.herokuapp.com/login") {
-//                                body = SigninRequest(username, password)
-//                                contentType(ContentType.Application.Json)
-//                            }
-//                        }.apply {
-//                            newToken = (this as HttpResponse).headers["Authorization"]!!
-//                            getSharedPreferences("credentials", MODE_PRIVATE).edit().putString("token", newToken).apply()
-//                        }
-//
-//                        BearerTokens(
-//                            accessToken = token,
-//                            refreshToken = newToken
-//                        )
-//                    }
-//                }
-//            }
             install(Auth) {
                 bearer {
                     loadTokens {
@@ -96,7 +76,7 @@ abstract class KtorService : Service()  {
             }
         }
 
-        withContext(Dispatchers.Default) {
+        response = try {
             when (meth) {
                 "GET" -> {
                     httpClient.get<T>(url) {
@@ -120,8 +100,21 @@ abstract class KtorService : Service()  {
                     }
                 }
             }
-        }.apply {
-            callBack(this)
+        } catch (ex: RedirectResponseException) {
+            // 3xx - responses
+            println("Error: ${ex.response.status.description}")
+            null
+        } catch (ex: ClientRequestException) {
+            // 4xx - responses
+            println("Error: ${ex.response.status.description}")
+            null
+        } catch (ex: ServerResponseException) {
+            // 5xx - response
+            println("Error: ${ex.response.status.description}")
+            null
+        } catch (ex: Exception) {
+            println("Error: $ex")
+            null
         }
 
         httpClient.close()
@@ -130,13 +123,26 @@ abstract class KtorService : Service()  {
     suspend inline fun <reified T: Any> ktorAnonymousRequest(url: String, json: Any)  = coroutineScope<Unit> {
         val httpClient = anonymousHttpClient
 
-        withContext(Dispatchers.Default) {
+        response = try {
             httpClient.post<T>(url) {
                 body = json
                 contentType(ContentType.Application.Json)
             }
-        }.apply {
-            callBack(this)
+        } catch (ex: RedirectResponseException) {
+            // 3xx - responses
+            println("Error: ${ex.response.status.description}")
+            null
+        } catch (ex: ClientRequestException) {
+            // 4xx - responses
+            println("Error: ${ex.response.status.description}")
+            null
+        } catch (ex: ServerResponseException) {
+            // 5xx - response
+            println("Error: ${ex.response.status.description}")
+            null
+        } catch (ex: ServerResponseException) {
+            println("Error: ${ex.response.status.description}")
+            null
         }
 
         httpClient.close()

@@ -14,6 +14,12 @@ import com.google.android.material.navigation.NavigationView
 import gfc.frontend.controllers.TasksController
 import gfc.frontend.ui.main.SectionsPagerAdapter
 import gfc.frontend.databinding.ActivityMainBinding
+import android.app.AlarmManager
+
+import android.app.PendingIntent
+
+
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -92,6 +98,12 @@ class MainActivity : AppCompatActivity() {
         binding.viewPager.adapter = SectionsPagerAdapter(this, supportFragmentManager)
         binding.tabs.setupWithViewPager(binding.viewPager)
         binding.viewPager.currentItem = currentPage
+    }
+
+    public fun restartApp() {
+        val intent = Intent(this, LoginActivity::class.java)
+        this.startActivity(intent)
+        finishAffinity()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

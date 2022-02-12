@@ -13,8 +13,6 @@ data class UserInfo(val id: Long, val username: String, val email:String, val pa
         require(role.isNotBlank()) { "Role is blank" }
         require(role == "PARENT" || role == "CHILD") { "Niepoprawna rola" }
         require(password.isNotBlank()) { "Najpierw wprowadź hasło" }
-        require(password.length >= 6) {"Hasło musi składać się z co najmniej 6 znaków"}
-        require(password.length <= 40) {"Hasło może się składać maksymalnie z 40 znaków"}
         require(friendlyName.isNotBlank()) { "Najpierw wprowadź przyjazną nazwę." }
         require(friendlyName.length >= 3) {"Przyjazna nazwa musi składać się z co najmniej 3 znaków"}
         require(friendlyName.length <= 20) {"Przyjazna nazwa może się składać maksymalnie z 20 znaków"}

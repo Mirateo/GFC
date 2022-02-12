@@ -22,9 +22,10 @@ object TasksService : KtorService() {
         return SimpleTasksServiceBinder(this)
     }
 
-    fun getData(url: String) = runBlocking<List<Task>>  {
+    fun getData(url: String) = runBlocking<List<Task>?>  {
         ktorRequest <List<Task>>("GET", url, null)
-        super.response as List<Task>
+
+        super.response as List<Task>?
     }
 
 }

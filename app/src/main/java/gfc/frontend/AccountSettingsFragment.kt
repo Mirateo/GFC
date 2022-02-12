@@ -2,6 +2,8 @@ package gfc.frontend
 
 import android.app.Service
 import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -29,6 +31,35 @@ class AccountSettingsFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    private lateinit var userInfoPreferences: SharedPreferences
+    private var userId: Long? = null
+    private var realUsername: String? = null
+    private var realEmail: String? = null
+    private var role: String? = null
+    private var friendlyName: String? = null
+    private var realPasswd: String? = null
+
+    private fun refreshRealData() {
+        userInfoPreferences = requireContext().getSharedPreferences("userInfo", AppCompatActivity.MODE_PRIVATE)
+        userId = userInfoPreferences.getLong("id", 0)
+        realUsername = userInfoPreferences.getString("username", "nope:(")
+        realEmail = userInfoPreferences.getString("email", "nope:(")
+        role = userInfoPreferences.getString("role", "nope:(")
+        friendlyName = userInfoPreferences.getString("friendlyName", "nope:(")
+        realPasswd = requireContext().getSharedPreferences("credentials", AppCompatActivity.MODE_PRIVATE).getString("password", "")
+
+        loadInfos()
+    }
+
+    private fun loadInfos() {
+        val textEmail : TextView = binding.email
+        val textLogin : TextView = binding.login
+
+        textLogin.text = "Login: $realUsername"
+        textEmail.text = "E-mail: $realEmail"
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,21 +73,9 @@ class AccountSettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val userInfoPreferences = requireContext().getSharedPreferences("userInfo", AppCompatActivity.MODE_PRIVATE)
+        refreshRealData()
 
-        val userId = userInfoPreferences.getLong("id", 0)
-        val realUsername = userInfoPreferences.getString("username", "nope:(").toString()
-        val email = userInfoPreferences.getString("email", "nope:(").toString()
-        val role = userInfoPreferences.getString("role", "nope:(").toString()
-        val friendlyName = userInfoPreferences.getString("friendlyName", "nope:(").toString()
-
-        val realPasswd = requireContext().getSharedPreferences("credentials", AppCompatActivity.MODE_PRIVATE).getString("password", "")
-
-        val textEmail : TextView = binding.email
-        val textLogin : TextView = binding.login
-
-        textLogin.text = "Login: $realUsername"
-        textEmail.text = "E-mail: $email"
+        loadInfos()
 
         binding.newLoginSave.setOnClickListener{
             val newLogin = binding.newLogin.text
@@ -69,7 +88,7 @@ class AccountSettingsFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            if(password.toString() != realPasswd)  {
+            if(password.toString().trim() != realPasswd)  {
                 binding.monit2.setBackgroundColor(Color.RED)
                 binding.monit2.text = "Hasło niepoprawne"
                 binding.monit2.visibility = View.VISIBLE
@@ -78,82 +97,128 @@ class AccountSettingsFragment : Fragment() {
 
             val request: UserInfo
             try {
-                request = UserInfo(userId, realUsername, email, password.toString() ,role, friendlyName)
+                request = UserInfo(userId!!, newLogin.toString().trim(), realEmail!!, realPasswd!!, role!!, friendlyName!!)
             } catch (e: IllegalArgumentException) {
                 binding.monit2.setBackgroundColor(Color.RED)
                 binding.monit2.text = e.message
                 binding.monit2.visibility = View.VISIBLE
                 return@setOnClickListener
             }
-            binding.monit2.visibility = View.INVISIBLE
 
-            binding.monit2.text = AuthorizationController.editProfile(request) + "Poczekaj na odświeżenie informacji."
+            if( AuthorizationController.editProfile(request) == null ) {
+                binding.monit2.setBackgroundColor(Color.RED)
+                binding.monit2.text = "Zmiana nazwy użytkownika nie powiodła się. Spróbuj ponownie później."
+                binding.monit2.visibility = View.VISIBLE
+
+                return@setOnClickListener
+            }
+            binding.monit2.text = "Nazwa użytkownika zmieniona."
             binding.monit2.setBackgroundColor(Color.GREEN)
             binding.monit2.visibility = View.VISIBLE
 
-            AuthorizationController.login(SigninRequest(realUsername, realPasswd))
-            activity?.finish()
-            println("Should be closed")
-//            activity?.parent?.finish()
-//            println("Parent closed")
+            AuthorizationController.login(SigninRequest(newLogin.toString().trim(), realPasswd!!))
+            refreshRealData()
+
+            startActivity(Intent(context, MainActivity::class.java))
+            activity?.finishAffinity()
         }
-//        // here
-//        binding.newEmailSave.setOnClickListener{
-//            val newEmail = binding.newEmail.text
-//            val password = binding.newEmailPass.text
-//
-//            if(newEmail == null || password == null)  {
-//                binding.monit2.text = "Należy podać nowy email i hasło"
-//                binding.monit2.visibility = View.VISIBLE
-//                return@setOnClickListener
-//            }
-//
-//            val request: SignupRequest
-//            try {
-//                request = SignupRequest(username, newEmail.trim().toString(), "PARENT", password.toString())
-//            } catch (e: IllegalArgumentException) {
-//                binding.monit2.text = e.message
-//                binding.monit2.visibility = View.VISIBLE
-//                return@setOnClickListener
-//            }
-//            binding.monit2.visibility = View.INVISIBLE
-//
-//            println("Edit: " + request.toString())
-////            Toast.makeText(this, AuthorizationController.registerParent(request), Toast.LENGTH_LONG).show()
-//        }
-//
-//
-//        binding.newPassSave.setOnClickListener {
-//            val password = binding.newPass.text
-//            val newPass1 = binding.newPassOldOne1.text
-//            val newPass2 = binding.newPassOldOne2.text
-//
-//            if (password == null || newPass1 == null || newPass2 == null) {
-//                binding.monit2.text = "Należy podać stare i nowe hasło"
-//                binding.monit2.visibility = View.VISIBLE
-//                return@setOnClickListener
-//            }
-//            if  (newPass1 !=  newPass2) {
-//                binding.monit2.text = "Nowe hasła nie są takie same"
-//                binding.monit2.visibility = View.VISIBLE
-//                return@setOnClickListener
-//            }
-//            val request: SignupRequest
-//            try {
-//                request = SignupRequest(
-//                    username, email, "PARENT", newPass1.toString()
-//                )
-//            } catch (e: IllegalArgumentException) {
-//                binding.monit2.text = e.message
-//                binding.monit2.visibility = View.VISIBLE
-//                return@setOnClickListener
-//            }
-//            binding.monit2.visibility = View.INVISIBLE
-//
-//            println("Edit: " + request.toString())
-//
-////            Toast.makeText(this, AuthorizationController.registerParent(request), Toast.LENGTH_LONG).show()
-//        }
+
+        binding.newEmailSave.setOnClickListener{
+            val newEmail = binding.newEmail.text
+            val password = binding.newEmailPass.text
+
+            if(newEmail == null || password == null)  {
+                binding.monit2.text = "Należy podać nowy email i hasło"
+                binding.monit2.visibility = View.VISIBLE
+                return@setOnClickListener
+            }
+
+            val request: UserInfo
+            try {
+                request = UserInfo(userId!!, realUsername!!, newEmail.toString().trim(), realPasswd!!, role!!, friendlyName!!)
+            } catch (e: IllegalArgumentException) {
+                binding.monit2.setBackgroundColor(Color.RED)
+                binding.monit2.text = e.message
+                binding.monit2.visibility = View.VISIBLE
+                return@setOnClickListener
+            }
+
+
+            if( AuthorizationController.editProfile(request) == null ) {
+                binding.monit2.setBackgroundColor(Color.RED)
+                binding.monit2.text = "Zmiana nazwy użytkownika nie powiodła się. Spróbuj ponownie później."
+                binding.monit2.visibility = View.VISIBLE
+
+                return@setOnClickListener
+            }
+            binding.monit2.text = "E-mail zmieniony."
+            binding.monit2.setBackgroundColor(Color.GREEN)
+            binding.monit2.visibility = View.VISIBLE
+
+            AuthorizationController.login(SigninRequest(realUsername!!, realPasswd!!))
+            refreshRealData()
+
+            startActivity(Intent(context, MainActivity::class.java))
+            activity?.finishAffinity()
+        }
+
+
+        binding.newPassSave.setOnClickListener {
+            val password = binding.newPass.text
+            val newPass1 = binding.newPassOldOne1.text
+            val newPass2 = binding.newPassOldOne2.text
+
+            if (password == null || newPass1 == null || newPass2 == null) {
+                binding.monit2.text = "Należy podać stare i nowe hasło"
+                binding.monit2.visibility = View.VISIBLE
+                return@setOnClickListener
+            }
+            if  (newPass1.toString() !=  newPass2.toString()) {
+                binding.monit2.text = "Nowe hasła nie są takie same"
+                binding.monit2.visibility = View.VISIBLE
+                return@setOnClickListener
+            }
+
+            if (newPass1.length < 6) {
+                binding.monit2.setBackgroundColor(Color.RED)
+                binding.monit2.text = "Hasło musi składać się z co najmniej 6 znaków"
+                binding.monit2.visibility = View.VISIBLE
+                return@setOnClickListener
+            }
+            if (newPass1.length >= 40) {
+                binding.monit2.setBackgroundColor(Color.RED)
+                binding.monit2.text = "Hasło może się składać maksymalnie z 40 znaków"
+                binding.monit2.visibility = View.VISIBLE
+                return@setOnClickListener
+            }
+
+            val request: UserInfo
+            try {
+                request = UserInfo(userId!!, realUsername!!, realEmail!!, newPass1.toString().trim(), role!!, friendlyName!!)
+            } catch (e: IllegalArgumentException) {
+                binding.monit2.setBackgroundColor(Color.RED)
+                binding.monit2.text = e.message
+                binding.monit2.visibility = View.VISIBLE
+                return@setOnClickListener
+            }
+
+            if( AuthorizationController.editProfile(request) == null ) {
+                binding.monit2.setBackgroundColor(Color.RED)
+                binding.monit2.text = "Zmiana hasła nie powiodła się. Spróbuj ponownie później."
+                binding.monit2.visibility = View.VISIBLE
+
+                return@setOnClickListener
+            }
+            binding.monit2.text = "Hasło zmienione."
+            binding.monit2.setBackgroundColor(Color.GREEN)
+            binding.monit2.visibility = View.VISIBLE
+
+            AuthorizationController.login(SigninRequest(realUsername!!, newPass1.toString()))
+            refreshRealData()
+
+            startActivity(Intent(context, MainActivity::class.java))
+            activity?.finishAffinity()
+        }
 
         binding.accountHome.setOnClickListener {
             activity?.finish()

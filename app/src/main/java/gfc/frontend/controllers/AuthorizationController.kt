@@ -52,15 +52,20 @@ object AuthorizationController {
                 .putString("friendlyName", userInfo.friendlyName)
                 .apply()
 
-            println(context.getSharedPreferences("userInfo", MODE_PRIVATE).getString("friendlyName", "nope:(").toString())
-
             return true
         }
 
         return false
     }
 
-    fun editProfile(newUser: UserInfo): String {
+    fun relogin(): Boolean {
+        val username = context.getSharedPreferences("credentials", MODE_PRIVATE).getString("username", "")
+        val password = context.getSharedPreferences("credentials", MODE_PRIVATE).getString("password", "")
+
+        return login(SigninRequest(username!!, password!!))
+    }
+
+    fun editProfile(newUser: UserInfo): String? {
         return AuthorizationService.editProfile("$url/user_info/edit", newUser)
     }
 

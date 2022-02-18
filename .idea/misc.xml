@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/Users/muraw/Desktop/GFCclient/app/src/main/res/drawable/ic_baseline_account_circle_24.xml" value="0.23148148148148148" />
         <entry key="..\:/Users/muraw/Desktop/GFCclient/app/src/main/res/drawable/ic_baseline_emoji_emotions_24.xml" value="0.23148148148148148" />
+        <entry key="..\:/Users/muraw/Desktop/GFCclient/app/src/main/res/layout/activity_edit_child.xml" value="0.20168066580377575" />
         <entry key="..\:/Users/muraw/Desktop/GFCclient/app/src/main/res/layout/activity_login.xml" value="0.2578125" />
         <entry key="..\:/Users/muraw/Desktop/GFCclient/app/src/main/res/layout/activity_main.xml" value="0.26621847886098404" />
         <entry key="..\:/Users/muraw/Desktop/GFCclient/app/src/main/res/layout/activity_new_task.xml" value="0.25" />
@@ -13,15 +14,16 @@
         <entry key="..\:/Users/muraw/Desktop/GFCclient/app/src/main/res/layout/activity_settings2.xml" value="0.2578125" />
         <entry key="..\:/Users/muraw/Desktop/GFCclient/app/src/main/res/layout/content_settings.xml" value="0.2578125" />
         <entry key="..\:/Users/muraw/Desktop/GFCclient/app/src/main/res/layout/content_settings2.xml" value="0.2578125" />
+        <entry key="..\:/Users/muraw/Desktop/GFCclient/app/src/main/res/layout/family_member.xml" value="0.4033613316075515" />
         <entry key="..\:/Users/muraw/Desktop/GFCclient/app/src/main/res/layout/fragment_account_settings.xml" value="0.2578125" />
         <entry key="..\:/Users/muraw/Desktop/GFCclient/app/src/main/res/layout/fragment_family_settings.xml" value="0.2578125" />
         <entry key="..\:/Users/muraw/Desktop/GFCclient/app/src/main/res/layout/fragment_first.xml" value="0.2578125" />
         <entry key="..\:/Users/muraw/Desktop/GFCclient/app/src/main/res/layout/fragment_main.xml" value="0.23007246376811594" />
         <entry key="..\:/Users/muraw/Desktop/GFCclient/app/src/main/res/layout/fragment_second.xml" value="0.2578125" />
         <entry key="..\:/Users/muraw/Desktop/GFCclient/app/src/main/res/layout/nav_header.xml" value="0.26621847886098404" />
-        <entry key="..\:/Users/muraw/Desktop/GFCclient/app/src/main/res/layout/recycler_view_item.xml" value="0.26621847886098404" />
+        <entry key="..\:/Users/muraw/Desktop/GFCclient/app/src/main/res/layout/recycler_view_item.xml" value="0.1" />
         <entry key="..\:/Users/muraw/Desktop/GFCclient/app/src/main/res/layout/settings_activity.xml" value="0.2578125" />
-        <entry key="..\:/Users/muraw/Desktop/GFCclient/app/src/main/res/menu/nav_menu.xml" value="0.13229166666666667" />
+        <entry key="..\:/Users/muraw/Desktop/GFCclient/app/src/main/res/menu/nav_menu.xml" value="0.4033613316075515" />
         <entry key="..\:/Users/muraw/Desktop/GFCclient/app/src/main/res/xml/new_task.xml" value="0.26621847886098404" />
         <entry key="..\:/Users/muraw/Desktop/GFCclient/app/src/main/res/xml/root_preferences.xml" value="0.2578125" />
         <entry key="..\:/Users/muraw/OneDrive/Dokumenty/PracaInzynierska/Projekt/GFC/app/src/main/res/layout/activity_main.xml" value="0.2578125" />

@@ -1,13 +1,11 @@
 package gfc.frontend
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import gfc.frontend.controllers.ProfileController
 import gfc.frontend.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
@@ -18,7 +16,6 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        ProfileController.init(this)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

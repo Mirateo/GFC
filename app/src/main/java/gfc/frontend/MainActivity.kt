@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     lateinit var toggle: ActionBarDrawerToggle
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -57,28 +56,43 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val username = getSharedPreferences("userInfo", MODE_PRIVATE).getString("username", "nope:(").toString()
-        val email = getSharedPreferences("userInfo", MODE_PRIVATE).getString("email", "nope:(").toString()
-        val role = getSharedPreferences("userInfo", MODE_PRIVATE).getString("role", "nope:(").toString()
-        val friendlyName = getSharedPreferences("userInfo", MODE_PRIVATE).getString("friendlyName", "nope:(").toString()
+        val username =
+            getSharedPreferences("userInfo", MODE_PRIVATE).getString("username", "nope:(")
+                .toString()
+        val email =
+            getSharedPreferences("userInfo", MODE_PRIVATE).getString("email", "nope:(").toString()
+        val role =
+            getSharedPreferences("userInfo", MODE_PRIVATE).getString("role", "nope:(").toString()
+        val friendlyName =
+            getSharedPreferences("userInfo", MODE_PRIVATE).getString("friendlyName", "nope:(")
+                .toString()
 
-        val navigationView : NavigationView = findViewById(R.id.nav_view)
-        val headerView : View = navigationView.getHeaderView(0)
+        val navigationView: NavigationView = findViewById(R.id.nav_view)
+        val headerView: View = navigationView.getHeaderView(0)
 
-        val navWelcome : TextView = headerView.findViewById(R.id.nav_welcome_text)
-        val navUsername : TextView = headerView.findViewById(R.id.nav_username)
-        val navUserEmail : TextView = headerView.findViewById(R.id.nav_email)
+        val navWelcome: TextView = headerView.findViewById(R.id.nav_welcome_text)
+        val navUsername: TextView = headerView.findViewById(R.id.nav_username)
+        val navUserEmail: TextView = headerView.findViewById(R.id.nav_email)
 
         navWelcome.text = "Cześć, $friendlyName!"
         navUsername.text = "Nazwa użytkownika: $username"
         navUserEmail.text = "Adres e-mail: $email"
 
         binding.navView.setNavigationItemSelectedListener {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.nav_home -> binding.drawerLayout.closeDrawer(GravityCompat.START)
                 R.id.nav_profile -> {
+                    val intent = Intent(this, SettingsActivity::class.java)
+                    intent.putExtra("family", false)
 //                    Toast.makeText(applicationContext, "Aby zarządzać ustawieniami konta, zaloguj się jako rodzic.", LENGTH_LONG).show()
-                    startActivity(Intent(this, SettingsActivity::class.java))
+                    startActivity(intent)
+                    binding.drawerLayout.closeDrawer(GravityCompat.START)
+                }
+                R.id.nav_family -> {
+                    val intent = Intent(this, SettingsActivity::class.java)
+                    intent.putExtra("family", true)
+//                    Toast.makeText(applicationContext, "Aby zarządzać ustawieniami konta, zaloguj się jako rodzic.", LENGTH_LONG).show()
+                    startActivity(intent)
                     binding.drawerLayout.closeDrawer(GravityCompat.START)
                 }
                 R.id.nav_logout -> {
@@ -93,7 +107,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    public fun refreshLists(){
+    public fun refreshLists() {
         val currentPage = binding.viewPager.currentItem
         binding.viewPager.adapter = SectionsPagerAdapter(this, supportFragmentManager)
         binding.tabs.setupWithViewPager(binding.viewPager)
@@ -115,5 +129,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 }

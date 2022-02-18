@@ -1,7 +1,5 @@
-package gfc.frontend
+package gfc.frontend.settings
 
-import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
@@ -13,8 +11,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
+import gfc.frontend.MainActivity
+import gfc.frontend.R
 import gfc.frontend.controllers.AuthorizationController
-import gfc.frontend.controllers.TasksController
 import gfc.frontend.databinding.FragmentAccountSettingsBinding
 import gfc.frontend.dataclasses.UserInfo
 import gfc.frontend.requests.SigninRequest
@@ -71,6 +70,9 @@ class AccountSettingsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        if(activity?.intent?.getBooleanExtra("family", false) == true) {
+            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        }
         super.onViewCreated(view, savedInstanceState)
 
         refreshRealData()
@@ -109,7 +111,6 @@ class AccountSettingsFragment : Fragment() {
                 binding.monit2.setBackgroundColor(Color.RED)
                 binding.monit2.text = "Zmiana nazwy użytkownika nie powiodła się. Spróbuj ponownie później."
                 binding.monit2.visibility = View.VISIBLE
-
                 return@setOnClickListener
             }
             binding.monit2.text = "Nazwa użytkownika zmieniona."
@@ -225,6 +226,7 @@ class AccountSettingsFragment : Fragment() {
         }
 
         binding.familySettings.setOnClickListener {
+            activity?.intent?.putExtra("family", true)
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
     }

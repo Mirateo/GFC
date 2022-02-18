@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".EditChildActivity" >
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20sp"
+        android:layout_marginTop="30sp"
+        android:layout_marginRight="20sp"
+        android:layout_marginBottom="30sp"
+        android:text="Ustawienia dziecka"
+        android:textSize="26sp" />
+
+    <TextView
+        android:id="@+id/monit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/red"
+        android:text=""
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:visibility="invisible" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/userName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20sp"
+            android:layout_marginTop="0sp"
+            android:layout_marginRight="20sp"
+            android:layout_marginBottom="20sp"
+            android:ems="10"
+            android:hint="@string/nazwa_u_ytkownika"
+            android:inputType="textPersonName" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/userFN"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20sp"
+            android:layout_marginTop="0sp"
+            android:layout_marginRight="20sp"
+            android:layout_marginBottom="20sp"
+            android:ems="10"
+            android:hint="Przyjazna nazwa"
+            android:inputType="textEmailAddress" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/userPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20sp"
+            android:layout_marginTop="0sp"
+            android:layout_marginRight="20sp"
+            android:layout_marginBottom="20sp"
+            android:ems="10"
+            android:hint="@string/has_o"
+            android:inputType="textPassword" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/userPassword2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20sp"
+            android:layout_marginTop="0sp"
+            android:layout_marginRight="20sp"
+            android:layout_marginBottom="20sp"
+            android:ems="10"
+            android:hint="@string/powt_rz_has_o"
+            android:inputType="textPassword" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom">
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="wrap_content"
+            android:layout_height="75dp"
+            android:text="Anuluj"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/delButton"
+            android:layout_width="wrap_content"
+            android:layout_height="75dp"
+            android:clickable="false"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="Usuń"
+            android:textSize="24sp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/acceptButton"
+            app:layout_constraintStart_toEndOf="@+id/cancelButton" />
+
+        <Button
+            android:id="@+id/acceptButton"
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:text="Zapisz"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

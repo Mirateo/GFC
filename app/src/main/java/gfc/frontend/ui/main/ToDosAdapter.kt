@@ -1,6 +1,5 @@
 package gfc.frontend.ui.main
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -8,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import gfc.frontend.NewTaskActivity
@@ -17,8 +15,6 @@ import gfc.frontend.controllers.TasksController
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
-import android.app.Activity
-import android.os.Bundle
 import androidx.core.content.ContextCompat.startActivity
 
 fun today(date: Date?): Date? {
@@ -128,5 +124,5 @@ class MyViewHolder(val view: View):RecyclerView.ViewHolder(view){
     var elementTitle: TextView = itemView.findViewById(R.id.elementTitle)
     var elementDescription: TextView = itemView.findViewById(R.id.elementDescription)
     var elementCheck: CheckBox = itemView.findViewById(R.id.elementCheck)
-    var elementPoints: TextView = itemView.findViewById(R.id.pointsAmount)
+    var elementPoints: TextView = itemView.findViewById(R.id.userRole)
 }

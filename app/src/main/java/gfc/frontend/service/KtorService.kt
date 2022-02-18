@@ -162,5 +162,4 @@ abstract class KtorService : Service()  {
         ktorRequest<Long>("POST", url, newTask)
         response as Long
     }
-
 }

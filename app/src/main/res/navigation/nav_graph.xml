@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="gfc.frontend.AccountSettingsFragment"
+        android:name="gfc.frontend.settings.AccountSettingsFragment"
         android:label="Ustawienia konta rodzica"
         tools:layout="@layout/fragment_account_settings">
 
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="gfc.frontend.FamilySettingsFragment"
+        android:name="gfc.frontend.settings.FamilySettingsFragment"
         android:label="Ustawienia rodziny"
         tools:layout="@layout/fragment_family_settings">
 

@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-              android:orientation="vertical"
-              android:padding="8dp"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
   <androidx.constraintlayout.widget.ConstraintLayout
       android:id="@+id/listElement"
@@ -21,7 +21,7 @@
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/pointsAmount"
+        app:layout_constraintEnd_toStartOf="@+id/userRole"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/pointsAmount"
+        app:layout_constraintEnd_toStartOf="@+id/userRole"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="@tools:sample/lorem" />
@@ -47,7 +47,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/pointsAmount"
+        android:id="@+id/userRole"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/zero"

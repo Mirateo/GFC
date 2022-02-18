@@ -4,16 +4,8 @@ import android.content.Context
 import gfc.frontend.requests.SigninRequest
 import gfc.frontend.requests.SignupRequest
 import gfc.frontend.service.AuthorizationService
-import android.R.attr.password
-import android.accounts.AccountManager
-import android.content.SharedPreferences
-import android.net.wifi.hotspot2.pps.Credential
-import android.widget.Toast
 import android.content.Context.MODE_PRIVATE
-import gfc.frontend.LoginActivity
-import gfc.frontend.controllers.AuthorizationController.registerParent
 import gfc.frontend.dataclasses.UserInfo
-import gfc.frontend.service.ProfileService
 
 
 object AuthorizationController {

@@ -19,7 +19,7 @@ object FamilyController {
         FamilyService.init(context)
     }
 
-    fun getAll(): List<UserInfo>{
+    fun getAll(): List<UserInfo> {
         return FamilyService.getAll(url + "/")
     }
 

@@ -56,6 +56,16 @@
         android:text="Zadanie codzienne        "
         />
 
+    <Spinner
+        android:id="@+id/childrenChoice"
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:layout_margin="20sp"
+        android:visibility="invisible"
+        android:theme="@style/Spinner"
+        android:text="Wybierz dziecko"
+        />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
@@ -79,6 +89,7 @@
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

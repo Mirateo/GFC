@@ -7,4 +7,5 @@ data class TaskDTO(@Required val ownerId: Long = 0,
                    @Required val name: String = "Default",
                    @Required val description: String = "",
                    @Required val points: Long = 0,
-                   @Required val repeatable: Boolean = false)
+                   @Required val repeatable: Boolean = false,
+                   @Required val own: Boolean = false)

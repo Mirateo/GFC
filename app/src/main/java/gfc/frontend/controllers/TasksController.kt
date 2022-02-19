@@ -37,14 +37,63 @@ object TasksController {
     }
 
     fun refreshTasks(type : String?) {
-        when (type) {
-            null -> {
-                reTasksContainer = ArrayList(ReTasksService.getData("$url/allre"))
-                tasksContainer = ArrayList(TasksService.getData("$url/all"))
+        var temp: List<Any>?
+
+        if(AuthorizationController.userIsParent) {
+            when (type) {
+                null -> {
+                    temp = ReTasksService.getData("$url/")
+                    if( temp != null){
+                        reTasksContainer = ArrayList(temp)
+                    }
+                    temp = TasksService.getData("$url/")
+                    if( temp != null){
+                        tasksContainer = ArrayList(temp)
+                    }
+
+                }
+                "repeatable" -> {
+                    temp = ReTasksService.getData("$url/")
+                    if( temp != null){
+                        reTasksContainer = ArrayList(temp)
+                    }
+                }
+                "unrepeatable" -> {
+                    temp = TasksService.getData("$url/")
+                    if( temp != null){
+                        tasksContainer = ArrayList(temp)
+                    }
+                }
             }
-            "repeatable" -> reTasksContainer = ArrayList(ReTasksService.getData("$url/allre"))
-            "unrepeatable" -> tasksContainer = ArrayList(TasksService.getData("$url/all"))
         }
+        else {
+            when (type) {
+                null -> {
+                    temp = ReTasksService.getData("$url/allre")
+                    if( temp != null){
+                        reTasksContainer = ArrayList(temp)
+                    }
+                    temp = TasksService.getData("$url/all")
+                    if( temp != null){
+                        tasksContainer = ArrayList(temp)
+                    }
+
+                }
+                "repeatable" -> {
+                    temp = ReTasksService.getData("$url/allre")
+                    if( temp != null){
+                        reTasksContainer = ArrayList(temp)
+                    }
+                }
+                "unrepeatable" -> {
+                    temp = TasksService.getData("$url/allre")
+                    if( temp != null){
+                        tasksContainer = ArrayList(temp)
+                    }
+                }
+            }
+        }
+
     }
 
     fun taskDone(task: Any) {

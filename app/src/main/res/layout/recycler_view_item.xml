@@ -38,6 +38,16 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:text="@tools:sample/lorem" />
 
+    <TextView
+        android:id="@+id/taskOwner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="prywatne"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/userRole"
+        app:layout_constraintStart_toEndOf="@+id/elementDescription" />
+
     <CheckBox
         android:id="@+id/elementCheck"
         android:layout_width="48dp"

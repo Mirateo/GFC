@@ -48,7 +48,7 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
         val description = holder.elementDescription
         val elementPoints = holder.elementPoints
         val done = holder.elementCheck
-
+        val owner = holder.taskOwner
 
         when (section) {
             1 -> {
@@ -56,6 +56,12 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
                 name.text = currentTask.name
                 description.text = currentTask.description
                 elementPoints.text = "+${currentTask.points}"
+                if(currentTask.own) {
+                    owner.text = "prywatne"
+                }
+                else {
+                    owner.text = "od Rodzica"
+                }
                 val lastDone = currentTask.lastDone
                 done.isChecked = lastDone != null && lastDone >= today(Date())
                 println("Last done: " + lastDone + "\n today is: " + today(Date()))
@@ -85,6 +91,12 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
                 name.text = currentTask.name
                 description.text = currentTask.description
                 elementPoints.text = "+${currentTask.points}"
+                if(currentTask.own) {
+                    owner.text = "prywatne"
+                }
+                else {
+                    owner.text = "od Rodzica"
+                }
                 done.isChecked = false
 
                 done.setOnClickListener { view ->
@@ -125,4 +137,5 @@ class MyViewHolder(val view: View):RecyclerView.ViewHolder(view){
     var elementDescription: TextView = itemView.findViewById(R.id.elementDescription)
     var elementCheck: CheckBox = itemView.findViewById(R.id.elementCheck)
     var elementPoints: TextView = itemView.findViewById(R.id.userRole)
+    var taskOwner: TextView = itemView.findViewById(R.id.taskOwner)
 }

@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:8265050419559435734",
-      "lastPropertyId": "7:5674314788287534317",
+      "lastPropertyId": "8:7253063648964516041",
       "name": "RepeatableTask",
       "properties": [
         {
@@ -38,13 +38,18 @@
           "id": "7:5674314788287534317",
           "name": "lastDone",
           "type": 10
+        },
+        {
+          "id": "8:7253063648964516041",
+          "name": "own",
+          "type": 1
         }
       ],
       "relations": []
     },
     {
       "id": "2:4867449207946054530",
-      "lastPropertyId": "5:7839944977234843254",
+      "lastPropertyId": "6:2694736754215241820",
       "name": "Task",
       "properties": [
         {
@@ -72,6 +77,11 @@
           "id": "5:7839944977234843254",
           "name": "points",
           "type": 6
+        },
+        {
+          "id": "6:2694736754215241820",
+          "name": "own",
+          "type": 1
         }
       ],
       "relations": []

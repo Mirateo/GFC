@@ -21,7 +21,8 @@ data class RepeatableTask(
     var description: String = "",
     var points: Long = 0,
     @Serializable(with = DateSerializer::class)
-    var lastDone: Date? = null
+    var lastDone: Date? = null,
+    val own: Boolean = false
 )
 
 

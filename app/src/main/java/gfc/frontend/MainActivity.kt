@@ -14,12 +14,6 @@ import com.google.android.material.navigation.NavigationView
 import gfc.frontend.controllers.TasksController
 import gfc.frontend.ui.main.SectionsPagerAdapter
 import gfc.frontend.databinding.ActivityMainBinding
-import android.app.AlarmManager
-
-import android.app.PendingIntent
-
-
-
 
 
 class MainActivity : AppCompatActivity() {
@@ -28,6 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

@@ -4,8 +4,11 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ArrayAdapter
+import androidx.core.view.isVisible
 import com.google.android.material.snackbar.Snackbar
 import gfc.frontend.controllers.AuthorizationController
+import gfc.frontend.controllers.FamilyController
 import gfc.frontend.controllers.TasksController
 import gfc.frontend.databinding.ActivityNewTaskBinding
 import gfc.frontend.requests.TaskDTO
@@ -39,6 +42,17 @@ class NewTaskActivity : AppCompatActivity() {
         }
 
         actionBar.setDisplayHomeAsUpEnabled(false)
+
+        if(AuthorizationController.userIsParent){
+            FamilyController.init(this)
+            val childrenList = FamilyController.getAll()
+            val list = ArrayList<String>()
+            childrenList.forEach { e -> list.add(e.friendlyName) }
+
+            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, list)
+            binding.childrenChoice.adapter = adapter
+            binding.childrenChoice.isVisible = true
+        }
 
         binding.acceptButton.setOnClickListener { view ->
             val ownerId = this.getSharedPreferences("userInfo", Context.MODE_PRIVATE).getLong("id", 0)

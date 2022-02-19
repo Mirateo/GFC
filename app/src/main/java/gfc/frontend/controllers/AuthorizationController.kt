@@ -6,6 +6,7 @@ import gfc.frontend.requests.SignupRequest
 import gfc.frontend.service.AuthorizationService
 import android.content.Context.MODE_PRIVATE
 import gfc.frontend.dataclasses.UserInfo
+import kotlin.properties.Delegates
 
 
 object AuthorizationController {
@@ -13,6 +14,7 @@ object AuthorizationController {
     val url = "https://gamefication-for-children.herokuapp.com/auth"
     val loginUrl = "https://gamefication-for-children.herokuapp.com/login"
     var response = ""
+    var userIsParent = true
 
     fun init(context: Context){
         this.context = context
@@ -43,6 +45,8 @@ object AuthorizationController {
                 .putString("role", userInfo.role)
                 .putString("friendlyName", userInfo.friendlyName)
                 .apply()
+
+            userIsParent = (userInfo.role == "PARENT")
 
             return true
         }

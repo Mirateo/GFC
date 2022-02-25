@@ -42,24 +42,24 @@ object TasksController {
         if(AuthorizationController.userIsParent) {
             when (type) {
                 null -> {
-                    temp = ReTasksService.getData("$url/")
+                    temp = ReTasksService.getData("$url/fullRe")
                     if( temp != null){
                         reTasksContainer = ArrayList(temp)
                     }
-                    temp = TasksService.getData("$url/")
+                    temp = TasksService.getData("$url/full")
                     if( temp != null){
                         tasksContainer = ArrayList(temp)
                     }
 
                 }
                 "repeatable" -> {
-                    temp = ReTasksService.getData("$url/")
+                    temp = ReTasksService.getData("$url/fullRe")
                     if( temp != null){
                         reTasksContainer = ArrayList(temp)
                     }
                 }
                 "unrepeatable" -> {
-                    temp = TasksService.getData("$url/")
+                    temp = TasksService.getData("$url/full")
                     if( temp != null){
                         tasksContainer = ArrayList(temp)
                     }
@@ -96,47 +96,52 @@ object TasksController {
 
     }
 
-    fun taskDone(task: Any) {
+    fun taskDone(task: Any): Long? {
+        var ret: Long? = null
         when (task) {
             is Task -> {
-                TasksService.taskDone("$url/done/${task.id}")
+                ret = TasksService.taskDone("$url/done/${task.id}")
                 refreshTasks("unrepeatable")
             }
             is RepeatableTask -> {
-                ReTasksService.taskDone("$url/done/${task.id}")
+                ret = ReTasksService.taskDone("$url/done/${task.id}")
                 refreshTasks("repeatable")
             }
             else -> {
                 println("Incorrect Task type")
             }
         }
+        return ret
     }
 
-    fun taskUndone(task: Any) {
+    fun taskUndone(task: Any): Long? {
+        var ret: Long? = null
         when (task) {
             is Task -> {
-                TasksService.taskUndone("$url/undone/${task.id}")
+                ret = TasksService.taskUndone("$url/undone/${task.id}")
                 refreshTasks("unrepeatable")
             }
             is RepeatableTask -> {
-                ReTasksService.taskUndone("$url/undone/${task.id}")
+                ret = ReTasksService.taskUndone("$url/undone/${task.id}")
                 refreshTasks("repeatable")
             }
             else -> {
                 println("Incorrect Task type")
             }
         }
+        return ret
     }
 
-    fun addTask(name: String, description: String, points: Long, repeatable: Boolean) {
-        val ret = TasksService.addTask("$url/add", TaskDTO(ownerId = this.userId, name = name, description = description, points = points, repeatable = repeatable))
-        if(ret >= 0) {
-            if( repeatable == false) {
-                tasksContainer.add(Task(id = ret, ownerId = userId, name = name, description = description, points = points))
-            }
-            else {
-                reTasksContainer.add(RepeatableTask(id = ret, ownerId = userId, name = name, description = description, points = points, lastDone = null))
-            }
-        }
-    }
+//    fun addTask(name: String, description: String, points: Long, repeatable: Boolean) {
+//        val ret = TasksService.addTask("$url/add", TaskDTO(ownerId = this.userId, name = name, description = description, points = points, repeatable = repeatable))
+//
+//        if(ret >= 0) {
+//            if( repeatable == false) {
+//                tasksContainer.add(Task(id = ret, ownerId = userId, name = name, description = description, points = points))
+//            }
+//            else {
+//                reTasksContainer.add(RepeatableTask(id = ret, ownerId = userId, name = name, description = description, points = points, lastDone = null))
+//            }
+//        }
+//    }
 }

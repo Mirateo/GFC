@@ -14,6 +14,8 @@ import gfc.frontend.databinding.ActivityNewTaskBinding
 import gfc.frontend.requests.TaskDTO
 import gfc.frontend.service.KtorService
 import gfc.frontend.service.TasksService
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 class NewTaskActivity : AppCompatActivity() {
 
@@ -29,6 +31,7 @@ class NewTaskActivity : AppCompatActivity() {
 
         val actionBar = supportActionBar
 
+
         if (intent.getBooleanExtra("edit", false)) {
             actionBar!!.title = "Edytuj zadanie"
 
@@ -36,23 +39,24 @@ class NewTaskActivity : AppCompatActivity() {
             binding.describtion.setText(intent.getStringExtra("description"))
             binding.points.setText(intent.getStringExtra("points"))
             binding.repeteable.isChecked = intent.getBooleanExtra("repeatable", false)
+            val list = ArrayList<String>()
+            intent.getStringExtra("selectedChild")?.let { list.add(it) }
+            binding.childrenChoice.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, list)
+            binding.childrenChoice.isVisible = true
         }
         else {
             actionBar!!.title = "Dodaj nowe zadanie"
+
+            if(AuthorizationController.userIsParent){
+                FamilyController.init(this)
+                val list = ArrayList<String>()
+                FamilyController.familyList.forEach { e -> list.add("${e.friendlyName} (${e.username})") }
+                binding.childrenChoice.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, list)
+                binding.childrenChoice.isVisible = true
+            }
         }
 
         actionBar.setDisplayHomeAsUpEnabled(false)
-
-        if(AuthorizationController.userIsParent){
-            FamilyController.init(this)
-            val childrenList = FamilyController.getAll()
-            val list = ArrayList<String>()
-            childrenList.forEach { e -> list.add(e.friendlyName) }
-
-            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, list)
-            binding.childrenChoice.adapter = adapter
-            binding.childrenChoice.isVisible = true
-        }
 
         binding.acceptButton.setOnClickListener { view ->
             val ownerId = this.getSharedPreferences("userInfo", Context.MODE_PRIVATE).getLong("id", 0)
@@ -60,6 +64,7 @@ class NewTaskActivity : AppCompatActivity() {
             val description = binding.describtion.text.toString()
             val points = binding.points.text.toString()
             val repeatable = binding.repeteable.isChecked
+            var ret: Long?
 
             if (name == "") {
                 name = "Zadanie bez nazwy"
@@ -71,12 +76,53 @@ class NewTaskActivity : AppCompatActivity() {
                 pointsL = points.toLong()
             }
 
-            TasksService.addTask(
-                "https://gamefication-for-children.herokuapp.com/tasks/add",
-                TaskDTO(ownerId, name, description, pointsL, repeatable)
-            )
-            Snackbar.make(view, "Nowe zadanie dodane", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            if(AuthorizationController.userIsParent){
+                val label = binding.childrenChoice.selectedItem.toString()
+                var response = ""
+                var childId = -1L
+
+                for(s in label.reversed()) {
+                    if(s == ')'){
+                        continue
+                    }
+                    if(s != '('){
+                        response += s
+                        continue
+                    }
+                    if (s == '(') {
+                        childId = FamilyController.getChildrenId(response.reversed())
+                        if(childId != -1L) {
+                            break
+                        }
+                    }
+                }
+                ret = if(childId == ownerId){
+                    TasksService.addTask(
+                        "https://gamefication-for-children.herokuapp.com/tasks/add",
+                        TaskDTO(childId, name, description, pointsL, repeatable, true)
+                    )
+                } else {
+                    TasksService.addTask(
+                        "https://gamefication-for-children.herokuapp.com/tasks/add",
+                        TaskDTO(childId, name, description, pointsL, repeatable, false)
+                    )
+                }
+
+            } else {
+                ret = TasksService.addTask(
+                    "https://gamefication-for-children.herokuapp.com/tasks/add",
+                    TaskDTO(ownerId, name, description, pointsL, repeatable, true)
+                )
+            }
+
+            if (ret != null) {
+                Snackbar.make(view, "Nowe zadanie dodane", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
+            }
+            else {
+                Snackbar.make(view, "Błąd serwera! Zadanie nie zostało dodane.", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
+            }
             setResult(RESULT_OK, Intent())
             finish()
         }

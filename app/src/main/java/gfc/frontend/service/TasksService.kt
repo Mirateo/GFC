@@ -23,7 +23,7 @@ object TasksService : KtorService() {
     }
 
     fun getData(url: String) = runBlocking<List<Task>?>  {
-        ktorRequest <List<Task>>("GET", url, null)
+        ktorRequest <List<Task>?>("GET", url, null)
 
         super.response as List<Task>?
     }

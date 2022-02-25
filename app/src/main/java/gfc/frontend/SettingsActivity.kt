@@ -25,7 +25,10 @@ class SettingsActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_settings2)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
+    }
 
+    override fun onBackPressed() {
+        finish()
     }
 
     override fun onSupportNavigateUp(): Boolean {

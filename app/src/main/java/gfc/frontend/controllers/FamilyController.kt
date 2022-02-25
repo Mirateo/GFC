@@ -13,14 +13,36 @@ object FamilyController {
     lateinit var context: Context
     val url = "https://gamefication-for-children.herokuapp.com/family"
     var response = ""
+    var familyList = ArrayList<UserInfo>()
 
     fun init(context: Context){
         this.context = context
         FamilyService.init(context)
+        getAll()
+    }
+
+    fun getChildrenName(id: Long): String {
+        for (child in familyList) {
+            if (child.id == id) {
+                return child.friendlyName
+            }
+        }
+        return "dziecko"
+    }
+
+    fun getChildrenId(response: String): Long {
+        for (child in familyList) {
+            if (child.username == response) {
+                return child.id
+            }
+        }
+
+        return -1
     }
 
     fun getAll(): List<UserInfo> {
-        return FamilyService.getAll(url + "/")
+        familyList = FamilyService.getAll(url + "/") as ArrayList<UserInfo>
+        return familyList
     }
 
     fun addChild(username: String, friendlyName: String, password: String): String? {
@@ -32,6 +54,7 @@ object FamilyController {
     fun delChild(childId: Long): String? {
         return FamilyService.delChild("$url/remove/${childId}")
     }
+
 
 //    fun editChild(user: UserInfo): String? {
 //        return FamilyService.editChild("$url/edit", user)

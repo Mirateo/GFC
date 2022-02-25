@@ -16,6 +16,8 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.core.content.ContextCompat.startActivity
+import gfc.frontend.controllers.AuthorizationController
+import gfc.frontend.controllers.FamilyController
 
 fun today(date: Date?): Date? {
     if(date == null) return null
@@ -49,6 +51,7 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
         val elementPoints = holder.elementPoints
         val done = holder.elementCheck
         val owner = holder.taskOwner
+        var ret: Long?
 
         when (section) {
             1 -> {
@@ -56,11 +59,21 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
                 name.text = currentTask.name
                 description.text = currentTask.description
                 elementPoints.text = "+${currentTask.points}"
-                if(currentTask.own) {
-                    owner.text = "prywatne"
+                if(AuthorizationController.userIsParent){
+                    if(currentTask.own) {
+                        owner.text = "prywatne"
+                    }
+                    else {
+                        owner.text = FamilyController.getChildrenName(currentTask.ownerId)
+                    }
                 }
                 else {
-                    owner.text = "od Rodzica"
+                    if(currentTask.own) {
+                        owner.text = "prywatne"
+                    }
+                    else {
+                        owner.text = "od Rodzica"
+                    }
                 }
                 val lastDone = currentTask.lastDone
                 done.isChecked = lastDone != null && lastDone >= today(Date())
@@ -68,22 +81,16 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
 
                 done.setOnClickListener { view ->
                     if(done.isChecked) {
-                        Snackbar.make(
-                            view,
-                            "Task " + currentTask.name + " Done!",
-                            Snackbar.LENGTH_LONG
-                        ).setAction("Action", null).show()
-                        TasksController.taskDone(currentTask)
+                        ret = TasksController.taskDone(currentTask)
                     }
                     else {
-                        Snackbar.make(
-                            view,
-                            "Task " + currentTask.name + " is not done today anymore :(",
-                            Snackbar.LENGTH_LONG
-                        ).setAction("Action", null).show()
-                        TasksController.taskUndone(currentTask)
-                        notifyDataSetChanged()
+                        ret = TasksController.taskUndone(currentTask)
                     }
+                    if (ret == null) {
+                        Snackbar.make(view, "Status zadania nie został zmieniony. Błąd serwera.", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                    }
+                    notifyDataSetChanged()
                 }
             }
             2 -> {
@@ -91,24 +98,39 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
                 name.text = currentTask.name
                 description.text = currentTask.description
                 elementPoints.text = "+${currentTask.points}"
-                if(currentTask.own) {
-                    owner.text = "prywatne"
+                if(AuthorizationController.userIsParent){
+                    if(currentTask.own) {
+                        owner.text = "prywatne"
+                    }
+                    else {
+                        owner.text = FamilyController.getChildrenName(currentTask.ownerId)
+                    }
                 }
                 else {
-                    owner.text = "od Rodzica"
+                    if(currentTask.own) {
+                        owner.text = "prywatne"
+                    }
+                    else {
+                        owner.text = "od Rodzica"
+                    }
                 }
                 done.isChecked = false
 
                 done.setOnClickListener { view ->
-                    Snackbar.make(view, "Task " + currentTask.name +  " Done!", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show()
-
-                    TasksController.taskDone(currentTask)
+                    ret = TasksController.taskDone(currentTask)
+                    if (ret != null) {
+                        Snackbar.make(view, "Task " + currentTask.name +  " Done!", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                    }
+                    else {
+                        Snackbar.make(view, "Status zadania nie został zmieniony. Błąd serwera.", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                    }
                     notifyDataSetChanged()
-
                 }
             }
         }
+
         holder.view.setOnClickListener{
             val repeatable = (section == 1)
 
@@ -118,6 +140,7 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
             intent.putExtra("description", description.text)
             intent.putExtra("points", elementPoints.text.subSequence(1, elementPoints.text.length))
             intent.putExtra("repeatable", repeatable)
+            intent.putExtra("selectedChild", owner.text)
             startActivity(context, intent, null)
         }
     }

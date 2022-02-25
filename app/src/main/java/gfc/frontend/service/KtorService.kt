@@ -148,18 +148,18 @@ abstract class KtorService : Service()  {
         httpClient.close()
     }
 
-    fun taskDone(url: String) = runBlocking<Long>  {
-        ktorRequest <Long>("GET", url, null)
-        response as Long
+    fun taskDone(url: String) = runBlocking<Long?>  {
+        ktorRequest <Long?>("GET", url, null)
+        response as Long?
     }
 
-    fun taskUndone(url: String) = runBlocking<Long>  {
-        ktorRequest <Long>("GET", url, null)
-        response as Long
+    fun taskUndone(url: String) = runBlocking<Long?>  {
+        ktorRequest <Long?>("GET", url, null)
+        response as Long?
     }
 
-    fun addTask(url: String, newTask: TaskDTO) = runBlocking<Long> {
-        ktorRequest<Long>("POST", url, newTask)
-        response as Long
+    fun addTask(url: String, newTask: TaskDTO) = runBlocking<Long?> {
+        ktorRequest<Long?>("POST", url, newTask)
+        response as Long?
     }
 }

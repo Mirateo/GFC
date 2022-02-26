@@ -80,17 +80,18 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
                 println("Last done: " + lastDone + "\n today is: " + today(Date()))
 
                 done.setOnClickListener { view ->
-                    if(done.isChecked) {
-                        ret = TasksController.taskDone(currentTask)
-                    }
-                    else {
-                        ret = TasksController.taskUndone(currentTask)
+                    ret = if(done.isChecked) {
+                        TasksController.taskDone(currentTask)
+                    } else {
+                        TasksController.taskUndone(currentTask)
                     }
                     if (ret == null) {
                         Snackbar.make(view, "Status zadania nie został zmieniony. Błąd serwera.", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show()
                     }
-                    notifyDataSetChanged()
+                    else {
+                        notifyDataSetChanged()
+                    }
                 }
             }
             2 -> {
@@ -118,15 +119,13 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
 
                 done.setOnClickListener { view ->
                     ret = TasksController.taskDone(currentTask)
-                    if (ret != null) {
-                        Snackbar.make(view, "Task " + currentTask.name +  " Done!", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show()
-                    }
-                    else {
+                    if (ret == null) {
                         Snackbar.make(view, "Status zadania nie został zmieniony. Błąd serwera.", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show()
                     }
-                    notifyDataSetChanged()
+                    else {
+                        notifyDataSetChanged()
+                    }
                 }
             }
         }

@@ -7,10 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import com.google.android.material.navigation.NavigationView
+import gfc.frontend.controllers.AuthorizationController
 import gfc.frontend.controllers.FamilyController
 import gfc.frontend.controllers.TasksController
 import gfc.frontend.ui.main.SectionsPagerAdapter
@@ -86,18 +88,27 @@ class MainActivity : AppCompatActivity() {
                     binding.drawerLayout.closeDrawer(GravityCompat.START)
                 }
                 R.id.nav_family -> {
-                    val intent = Intent(this, SettingsActivity::class.java)
-                    intent.putExtra("family", true)
-//                    Toast.makeText(applicationContext, "Aby zarządzać ustawieniami konta, zaloguj się jako rodzic.", LENGTH_LONG).show()
-                    startActivity(intent)
-                    binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    if(AuthorizationController.userIsParent){
+                        val intent = Intent(this, SettingsActivity::class.java)
+                        intent.putExtra("family", true)
+                        startActivity(intent)
+                        binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    }
+                    else {
+                        Toast.makeText(applicationContext, "Poproś rodzica o zmianę ustawień.", LENGTH_LONG).show()
+                    }
                 }
                 R.id.nav_logout -> {
-                    getSharedPreferences("userInfo", MODE_PRIVATE).edit().clear().apply()
-                    getSharedPreferences("credentials", MODE_PRIVATE).edit().clear().apply()
-                    startActivity(Intent(this, LoginActivity::class.java))
-                    Toast.makeText(applicationContext, "Wylogowano poprawnie", LENGTH_SHORT).show()
-                    finish()
+                    if(AuthorizationController.userIsParent){
+                        getSharedPreferences("userInfo", MODE_PRIVATE).edit().clear().apply()
+                        getSharedPreferences("credentials", MODE_PRIVATE).edit().clear().apply()
+                        startActivity(Intent(this, LoginActivity::class.java))
+                        Toast.makeText(applicationContext, "Wylogowano poprawnie", LENGTH_SHORT).show()
+                        finish()
+                    }
+                    else {
+                        Toast.makeText(applicationContext, "Poproś rodzica o zmianę ustawień.", LENGTH_LONG).show()
+                    }
                 }
             }
             true

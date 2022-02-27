@@ -16,6 +16,7 @@ import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import gfc.frontend.EditChildActivity
+import gfc.frontend.EditFamilySettings
 import gfc.frontend.NewTaskActivity
 import gfc.frontend.R
 import gfc.frontend.dataclasses.UserInfo
@@ -44,8 +45,7 @@ class FamilySettingsFragment : Fragment() {
 
         familyList.adapter = ListViewAdapter(requireContext(), family)
         familyList.setOnItemClickListener { _: AdapterView<*>, _: View, i: Int, _: Long ->
-            val intent = Intent(requireContext(), EditChildActivity::class.java)
-            intent.putExtra("edit", true)
+            val intent = Intent(requireContext(), EditFamilySettings::class.java)
             intent.putExtra("id", family[i].id)
             intent.putExtra("username", family[i].username)
             intent.putExtra("email", family[i].email)

@@ -17,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GFC">
         <activity
+            android:name=".EditFamilySettings"
+            android:exported="true" />
+        <activity
             android:name=".EditChildActivity"
             android:exported="true" />
         <activity

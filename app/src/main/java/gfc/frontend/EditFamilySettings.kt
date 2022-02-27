@@ -1,32 +1,23 @@
-package gfc.frontend.settings
+package gfc.frontend
 
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 import androidx.navigation.fragment.findNavController
-import gfc.frontend.MainActivity
-import gfc.frontend.R
 import gfc.frontend.controllers.AuthorizationController
+import gfc.frontend.databinding.ActivityEditChildBinding
+import gfc.frontend.databinding.ActivityEditFamilySettingsBinding
 import gfc.frontend.databinding.FragmentAccountSettingsBinding
 import gfc.frontend.dataclasses.UserInfo
 import gfc.frontend.requests.SigninRequest
 import java.lang.IllegalArgumentException
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
-class AccountSettingsFragment : Fragment() {
-
-    private var _binding: FragmentAccountSettingsBinding? = null
-
-    private val binding get() = _binding!!
+class EditFamilySettings : AppCompatActivity() {
+    private lateinit var binding: ActivityEditFamilySettingsBinding
 
     private lateinit var userInfoPreferences: SharedPreferences
     private var userId: Long? = null
@@ -36,41 +27,12 @@ class AccountSettingsFragment : Fragment() {
     private var friendlyName: String? = null
     private var realPasswd: String? = null
 
-    private fun refreshRealData() {
-        userInfoPreferences = requireContext().getSharedPreferences("userInfo", AppCompatActivity.MODE_PRIVATE)
-        userId = userInfoPreferences.getLong("id", 0)
-        realUsername = userInfoPreferences.getString("username", "nope:(")
-        realEmail = userInfoPreferences.getString("email", "nope:(")
-        role = userInfoPreferences.getString("role", "nope:(")
-        friendlyName = userInfoPreferences.getString("friendlyName", "nope:(")
-        realPasswd = requireContext().getSharedPreferences("credentials", AppCompatActivity.MODE_PRIVATE).getString("password", "")
 
-        loadInfos()
-    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    private fun loadInfos() {
-        val textEmail : TextView = binding.email
-        val textLogin : TextView = binding.login
-
-        textLogin.text = "Login: $realUsername"
-        textEmail.text = "E-mail: $realEmail"
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-        _binding = FragmentAccountSettingsBinding.inflate(inflater, container, false)
-        return binding.root
-
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        if(activity?.intent?.getBooleanExtra("family", false) == true) {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-        }
-        super.onViewCreated(view, savedInstanceState)
+        binding = ActivityEditFamilySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         refreshRealData()
 
@@ -115,15 +77,15 @@ class AccountSettingsFragment : Fragment() {
             AuthorizationController.login(SigninRequest(newLogin.toString().trim(), realPasswd!!))
             refreshRealData()
 
-            startActivity(Intent(context, MainActivity::class.java))
-            activity?.finishAffinity()
+            startActivity(Intent(this, MainActivity::class.java))
+            finishAffinity()
         }
 
-        binding.newEmailSave.setOnClickListener{
-            val newEmail = binding.newEmail.text
-            val password = binding.newEmailPass.text
+        binding.newFnSave.setOnClickListener{
+            val newFN = binding.newEmail.text
+            val password = binding.newFnPass.text
 
-            if(newEmail == null || password == null)  {
+            if(newFN == null || password == null)  {
                 binding.monit2.text = "Należy podać nowy email i hasło"
                 binding.monit2.visibility = View.VISIBLE
                 return@setOnClickListener
@@ -131,7 +93,7 @@ class AccountSettingsFragment : Fragment() {
 
             val request: UserInfo
             try {
-                request = UserInfo(userId!!, realUsername!!, newEmail.toString().trim(), realPasswd!!, role!!, friendlyName!!)
+                request = UserInfo(userId!!, realUsername!!, realEmail!!, realPasswd!!, role!!, newFN.trim().toString())
             } catch (e: IllegalArgumentException) {
                 binding.monit2.setBackgroundColor(Color.RED)
                 binding.monit2.text = e.message
@@ -147,15 +109,14 @@ class AccountSettingsFragment : Fragment() {
 
                 return@setOnClickListener
             }
-            binding.monit2.text = "E-mail zmieniony."
+            binding.monit2.text = "Przyjazna nazwa zmieniona."
             binding.monit2.setBackgroundColor(Color.GREEN)
             binding.monit2.visibility = View.VISIBLE
 
-            AuthorizationController.login(SigninRequest(realUsername!!, realPasswd!!))
             refreshRealData()
 
-            startActivity(Intent(context, MainActivity::class.java))
-            activity?.finishAffinity()
+            startActivity(Intent(this, MainActivity::class.java))
+            finishAffinity()
         }
 
 
@@ -212,22 +173,34 @@ class AccountSettingsFragment : Fragment() {
             AuthorizationController.login(SigninRequest(realUsername!!, newPass1.toString()))
             refreshRealData()
 
-            startActivity(Intent(context, MainActivity::class.java))
-            activity?.finishAffinity()
+            startActivity(Intent(this, MainActivity::class.java))
+            finishAffinity()
         }
 
         binding.accountHome.setOnClickListener {
-            activity?.finish()
-        }
-
-        binding.familySettings.setOnClickListener {
-            activity?.intent?.putExtra("family", true)
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            finish()
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun refreshRealData() {
+        userId = intent.getLongExtra("id", 0L)
+        realUsername = intent.getStringExtra("username")
+        realEmail = intent.getStringExtra("email")
+        role = intent.getStringExtra("role")
+        friendlyName = intent.getStringExtra("friendlyName")
+        realPasswd = intent.getStringExtra("password")
+
+        loadInfos()
+    }
+
+    private fun loadInfos() {
+        val textLogin : TextView = binding.login
+        val textFriendlyName : TextView = binding.friendlyName
+
+        textLogin.text = "Login: $realUsername"
+        textFriendlyName.text = "Przyjazna nazwa: $friendlyName"
     }
 }
+
+
+

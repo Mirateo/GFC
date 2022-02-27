@@ -148,6 +148,9 @@ abstract class KtorService : Service()  {
         httpClient.close()
     }
 
+
+    // Helper methods for *TasksServices. It should be moved to common abstract class
+
     fun taskDone(url: String) = runBlocking<Long?>  {
         ktorRequest <Long?>("GET", url, null)
         response as Long?
@@ -160,6 +163,11 @@ abstract class KtorService : Service()  {
 
     fun addTask(url: String, newTask: TaskDTO) = runBlocking<Long?> {
         ktorRequest<Long?>("POST", url, newTask)
+        response as Long?
+    }
+
+    fun deleteTask(url: String): Long?  = runBlocking<Long?> {
+        ktorRequest<Long?>("GET", url, null)
         response as Long?
     }
 }

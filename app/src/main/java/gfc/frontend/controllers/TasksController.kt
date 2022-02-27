@@ -86,7 +86,7 @@ object TasksController {
                     }
                 }
                 "unrepeatable" -> {
-                    temp = TasksService.getData("$url/allre")
+                    temp = TasksService.getData("$url/all")
                     if( temp != null){
                         tasksContainer = ArrayList(temp)
                     }
@@ -132,16 +132,7 @@ object TasksController {
         return ret
     }
 
-//    fun addTask(name: String, description: String, points: Long, repeatable: Boolean) {
-//        val ret = TasksService.addTask("$url/add", TaskDTO(ownerId = this.userId, name = name, description = description, points = points, repeatable = repeatable))
-//
-//        if(ret >= 0) {
-//            if( repeatable == false) {
-//                tasksContainer.add(Task(id = ret, ownerId = userId, name = name, description = description, points = points))
-//            }
-//            else {
-//                reTasksContainer.add(RepeatableTask(id = ret, ownerId = userId, name = name, description = description, points = points, lastDone = null))
-//            }
-//        }
-//    }
+    fun deleteTask(id: Long): Long? {
+        return TasksService.deleteTask("$url/remove/${id}")
+    }
 }

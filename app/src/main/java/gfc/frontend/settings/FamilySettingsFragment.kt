@@ -44,17 +44,15 @@ class FamilySettingsFragment : Fragment() {
 
         familyList.adapter = ListViewAdapter(requireContext(), family)
         familyList.setOnItemClickListener { _: AdapterView<*>, _: View, i: Int, _: Long ->
-            if(family[i].role == "CHILD") {
-                val intent = Intent(requireContext(), EditChildActivity::class.java)
-                intent.putExtra("edit", true)
-                intent.putExtra("id", family[i].id)
-                intent.putExtra("username", family[i].username)
-                intent.putExtra("email", family[i].email)
-                intent.putExtra("password", family[i].password)
-                intent.putExtra("role", family[i].role)
-                intent.putExtra("friendlyName", family[i].friendlyName)
-                startActivityForResult(intent, 1)
-            }
+            val intent = Intent(requireContext(), EditChildActivity::class.java)
+            intent.putExtra("edit", true)
+            intent.putExtra("id", family[i].id)
+            intent.putExtra("username", family[i].username)
+            intent.putExtra("email", family[i].email)
+            intent.putExtra("password", family[i].password)
+            intent.putExtra("role", family[i].role)
+            intent.putExtra("friendlyName", family[i].friendlyName)
+            startActivityForResult(intent, 1)
         }
     }
 

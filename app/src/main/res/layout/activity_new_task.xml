@@ -74,17 +74,32 @@
 
         <Button
             android:id="@+id/cancelButton"
-            android:layout_width="150dp"
+            android:layout_width="140dp"
             android:layout_height="75dp"
+            android:paddingLeft="14dp"
+            android:paddingRight="14dp"
             android:text="Anuluj"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
-            android:id="@+id/acceptButton"
-            android:layout_width="150dp"
+            android:id="@+id/deleteButton"
+            android:layout_width="140dp"
             android:layout_height="75dp"
+            android:paddingLeft="14dp"
+            android:text="Usuń"
+            android:textSize="24sp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/acceptButton"
+            app:layout_constraintStart_toEndOf="@+id/cancelButton" />
+
+        <Button
+            android:id="@+id/acceptButton"
+            android:layout_width="140dp"
+            android:layout_height="75dp"
+            android:paddingLeft="14dp"
             android:text="Zapisz"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"

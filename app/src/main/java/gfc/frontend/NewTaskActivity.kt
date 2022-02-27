@@ -30,7 +30,7 @@ class NewTaskActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val actionBar = supportActionBar
-
+        var taskID = 0L
 
         if (intent.getBooleanExtra("edit", false)) {
             actionBar!!.title = "Edytuj zadanie"
@@ -40,9 +40,11 @@ class NewTaskActivity : AppCompatActivity() {
             binding.points.setText(intent.getStringExtra("points"))
             binding.repeteable.isChecked = intent.getBooleanExtra("repeatable", false)
             val list = ArrayList<String>()
+            taskID = intent.getLongExtra("taskId", 0)
             intent.getStringExtra("selectedChild")?.let { list.add(it) }
             binding.childrenChoice.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, list)
             binding.childrenChoice.isVisible = true
+            binding.deleteButton.isVisible = true
         }
         else {
             actionBar!!.title = "Dodaj nowe zadanie"
@@ -125,6 +127,17 @@ class NewTaskActivity : AppCompatActivity() {
             }
             setResult(RESULT_OK, Intent())
             finish()
+        }
+
+        binding.deleteButton.setOnClickListener { view ->
+            val ret = TasksController.deleteTask(taskID)
+            if (ret == null || ret == -1L) {
+                Snackbar.make(view, "Błąd serwera! Zadanie nie zostało usunięte.", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
+            } else {
+                setResult(RESULT_OK, Intent())
+                finish()
+            }
         }
 
         binding.cancelButton.setOnClickListener { view ->

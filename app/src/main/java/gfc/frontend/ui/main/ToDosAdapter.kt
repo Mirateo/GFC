@@ -1,5 +1,6 @@
 package gfc.frontend.ui.main
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -7,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import gfc.frontend.NewTaskActivity
@@ -140,9 +143,16 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
             intent.putExtra("points", elementPoints.text.subSequence(1, elementPoints.text.length))
             intent.putExtra("repeatable", repeatable)
             intent.putExtra("selectedChild", owner.text)
-            startActivity(context, intent, null)
+            if(repeatable) {
+                intent.putExtra("taskId", TasksController.reTasksContainer[position].id)
+            }
+            else {
+                intent.putExtra("taskId", TasksController.tasksContainer[position].id)
+            }
+            (context as Activity).startActivityForResult(intent, 0)
         }
     }
+
 
     override fun getItemCount(): Int {
         return when (section) {

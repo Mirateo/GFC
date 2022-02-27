@@ -1,5 +1,6 @@
 package gfc.frontend
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
@@ -9,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
 import android.widget.Toast.LENGTH_SHORT
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import com.google.android.material.navigation.NavigationView
@@ -22,6 +24,14 @@ import gfc.frontend.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     lateinit var toggle: ActionBarDrawerToggle
+
+    val getResult = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            refreshLists()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,11 +91,16 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.nav_home -> binding.drawerLayout.closeDrawer(GravityCompat.START)
                 R.id.nav_profile -> {
-                    val intent = Intent(this, SettingsActivity::class.java)
-                    intent.putExtra("family", false)
-//                    Toast.makeText(applicationContext, "Aby zarządzać ustawieniami konta, zaloguj się jako rodzic.", LENGTH_LONG).show()
-                    startActivity(intent)
-                    binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    if(AuthorizationController.userIsParent) {
+                        val intent = Intent(this, SettingsActivity::class.java)
+                        intent.putExtra("family", false)
+                        startActivity(intent)
+                        binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    } else {
+                        Toast.makeText(applicationContext, "Poproś rodzica o zmianę ustawień.",
+                            android.widget.Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
                 R.id.nav_family -> {
                     if(AuthorizationController.userIsParent){
@@ -99,16 +114,11 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 R.id.nav_logout -> {
-                    if(AuthorizationController.userIsParent){
-                        getSharedPreferences("userInfo", MODE_PRIVATE).edit().clear().apply()
-                        getSharedPreferences("credentials", MODE_PRIVATE).edit().clear().apply()
-                        startActivity(Intent(this, LoginActivity::class.java))
-                        Toast.makeText(applicationContext, "Wylogowano poprawnie", LENGTH_SHORT).show()
-                        finish()
-                    }
-                    else {
-                        Toast.makeText(applicationContext, "Poproś rodzica o zmianę ustawień.", LENGTH_LONG).show()
-                    }
+                    getSharedPreferences("userInfo", MODE_PRIVATE).edit().clear().apply()
+                    getSharedPreferences("credentials", MODE_PRIVATE).edit().clear().apply()
+                    startActivity(Intent(this, LoginActivity::class.java))
+                    Toast.makeText(applicationContext, "Wylogowano poprawnie", LENGTH_SHORT).show()
+                    finish()
                 }
             }
             true

@@ -19,6 +19,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import androidx.core.content.ContextCompat.startActivity
+import gfc.frontend.MainActivity
 import gfc.frontend.controllers.AuthorizationController
 import gfc.frontend.controllers.FamilyController
 
@@ -128,6 +129,7 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
                     }
                     else {
                         notifyDataSetChanged()
+                        (context as MainActivity).notifyPointsUpdated(ret!!)
                     }
                 }
             }

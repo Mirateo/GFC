@@ -54,9 +54,6 @@ object FamilyController {
     fun delChild(childId: Long): String? {
         return FamilyService.delChild("$url/remove/${childId}")
     }
-
-
-//    fun editChild(user: UserInfo): String? {
-//        return FamilyService.editChild("$url/edit", user)
-//    }
 }
+
+// server: task done and return points of user

@@ -44,6 +44,7 @@ object AuthorizationController {
                 .putString("email", userInfo.email)
                 .putString("role", userInfo.role)
                 .putString("friendlyName", userInfo.friendlyName)
+                .putLong("points", userInfo.points)
                 .apply()
 
             userIsParent = (userInfo.role == "PARENT")

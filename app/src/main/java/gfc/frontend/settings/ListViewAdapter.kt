@@ -36,8 +36,10 @@ internal class ListViewAdapter(private val context: Context, private val data: A
         val fn = convertView.findViewById<View>(R.id.userFriendlyName) as TextView
         val un = convertView.findViewById<View>(R.id.userName) as TextView
         val role = convertView.findViewById<View>(R.id.userRole) as TextView
+        val points = convertView.findViewById<View>(R.id.childPoints) as TextView
         fn.text = data[position].friendlyName
         un.text = data[position].username
+        points.text = "Punkty: " + data[position].points.toString()
         if(data[position].role == "PARENT"){
             role.text = "RODZIC"
         }

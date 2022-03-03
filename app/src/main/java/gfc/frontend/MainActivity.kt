@@ -13,6 +13,7 @@ import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
+import androidx.core.view.children
 import com.google.android.material.navigation.NavigationView
 import gfc.frontend.controllers.AuthorizationController
 import gfc.frontend.controllers.FamilyController
@@ -24,6 +25,7 @@ import gfc.frontend.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     lateinit var toggle: ActionBarDrawerToggle
+    lateinit var navPoints: TextView
 
     val getResult = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -75,6 +77,8 @@ class MainActivity : AppCompatActivity() {
         val friendlyName =
             getSharedPreferences("userInfo", MODE_PRIVATE).getString("friendlyName", "nope:(")
                 .toString()
+        val points =
+            getSharedPreferences("userInfo", MODE_PRIVATE).getLong("points", 0).toString()
 
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         val headerView: View = navigationView.getHeaderView(0)
@@ -82,10 +86,12 @@ class MainActivity : AppCompatActivity() {
         val navWelcome: TextView = headerView.findViewById(R.id.nav_welcome_text)
         val navUsername: TextView = headerView.findViewById(R.id.nav_username)
         val navUserEmail: TextView = headerView.findViewById(R.id.nav_email)
+        navPoints = headerView.findViewById(R.id.nav_points)
 
         navWelcome.text = "Cześć, $friendlyName!"
         navUsername.text = "Nazwa użytkownika: $username"
         navUserEmail.text = "Adres e-mail: $email"
+        navPoints.text = points.toString()
 
         binding.navView.setNavigationItemSelectedListener {
             when (it.itemId) {
@@ -146,5 +152,9 @@ class MainActivity : AppCompatActivity() {
                 refreshLists()
             }
         }
+    }
+
+    fun notifyPointsUpdated(points: Long) {
+        navPoints.text = points.toString()
     }
 }

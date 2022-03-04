@@ -5,7 +5,10 @@ import gfc.frontend.requests.SigninRequest
 import gfc.frontend.requests.SignupRequest
 import gfc.frontend.service.AuthorizationService
 import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
+import android.text.method.TextKeyListener.clear
 import gfc.frontend.dataclasses.UserInfo
+import org.slf4j.MDC.clear
 import kotlin.properties.Delegates
 
 
@@ -26,7 +29,9 @@ object AuthorizationController {
     }
 
     fun login(credentials: SigninRequest): Boolean {
+        println("Teraz")
         val token = AuthorizationService.login(loginUrl, credentials)
+        println("Teraz2")
         if(token != null){
             context.getSharedPreferences("credentials", MODE_PRIVATE)
                 .edit()
@@ -51,8 +56,12 @@ object AuthorizationController {
 
             return true
         }
+        else {
+            context.getSharedPreferences("userInfo", MODE_PRIVATE).edit().clear().apply()
+            context.getSharedPreferences("credentials", MODE_PRIVATE).edit().clear().apply()
 
-        return false
+            return false
+        }
     }
 
     fun relogin(): Boolean {

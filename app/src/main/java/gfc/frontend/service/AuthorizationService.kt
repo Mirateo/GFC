@@ -23,10 +23,7 @@ import io.ktor.client.features.logging.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 object AuthorizationService: KtorService() {
     lateinit var result: String
@@ -41,12 +38,11 @@ object AuthorizationService: KtorService() {
         return SimpleAuthorizationServiceBinder(this)
     }
 
-    private fun saveToken (resp: Any) {
+    private fun saveToken(resp: Any) {
         val httpResponse = (resp as HttpResponse)
-        if (httpResponse.status.isSuccess()){
+        if (httpResponse.status.isSuccess()) {
             super.response = httpResponse.headers["Authorization"]
-        }
-        else {
+        } else {
             super.response = null
         }
     }
@@ -57,46 +53,56 @@ object AuthorizationService: KtorService() {
     }
 
     fun login(loginUrl: String, credentials: SigninRequest) = runBlocking<String?> {
-        return@runBlocking loginRequest(loginUrl, credentials)
-    }
+        println("Teraz3")
 
-    private suspend fun loginRequest(url: String, credentials: SigninRequest): String? {
-        val httpClient = super.anonymousHttpClient
-
-        return try {
-            val httpResponse = httpClient.post (url) {
-                body = credentials
-                contentType(ContentType.Application.Json)
-            } as HttpResponse
-
-            return if (httpResponse.status.isSuccess()){
-                httpResponse.headers["Authorization"]
-            }
-            else {
-                null
-            }
+        try {
+            loginRequest(loginUrl, credentials)
         } catch (ex: RedirectResponseException) {
             // 3xx - responses
             println("Error: ${ex.response.status.description}")
-            httpClient.close()
-            null
+            super.response = null
         } catch (ex: ClientRequestException) {
             // 4xx - responses
             println("Error: ${ex.response.status.description}")
-            httpClient.close()
-
-//            context.startActivity(Intent(context, LoginActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-//            (context as Application).finishAffinity()
-            null
+            super.response = null
         } catch (ex: ServerResponseException) {
             // 5xx - response
-            println("Error: ${ex.response.status.description}")
-            httpClient.close()
-            null
+            super.response = null
+        } catch(ex: CancellationException) {
+            println("!!!!!!!!!!!!!!!!!!!!!Error: ${ex}")
+            super.response = null
         } catch(ex: Exception) {
             println("!!!!!!!!!!!!!!!!!!!!!Error: ${ex}")
-            httpClient.close()
-            null
+            super.response = null
+        }
+        super.response as String?
+    }
+
+
+    private suspend fun loginRequest(url: String, credentials: SigninRequest) = coroutineScope<Unit> {
+        println("Teraz4")
+        val httpClient = HttpClient(Android){
+        expectSuccess = true
+        install(JsonFeature) {
+            serializer = KotlinxSerializer()
+        }
+        install(Logging) {
+            logger = Logger.DEFAULT
+            level = LogLevel.ALL
+        }
+    }
+        val httpResponse = httpClient.post (url) {
+            body = credentials
+            contentType(ContentType.Application.Json)
+        } as HttpResponse
+
+        if (httpResponse.status.isSuccess()){
+            println("Teraz7")
+             super.response = httpResponse.headers["Authorization"]
+        }
+        else {
+            println("Teraz8")
+             super.response = null
         }
     }
 

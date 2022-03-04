@@ -19,17 +19,18 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        AuthorizationController.init(applicationContext)
+        AuthorizationController.init(this)
         val credentials = applicationContext.getSharedPreferences("credentials", MODE_PRIVATE)
         val username = credentials.getString("username", null)
         val pass = credentials.getString("password", null)
 
-        if (username != null && pass != null && AuthorizationController.login(SigninRequest(username, pass))){
+        if (username != null && pass != null && AuthorizationController.login(SigninRequest(username, pass))) {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
 
         binding.loginButton.setOnClickListener{
+            AuthorizationController.init(this)
             val username = binding.userName.text.trim().toString()
             val password = binding.userPassword.text.trim().toString()
             val request: SigninRequest

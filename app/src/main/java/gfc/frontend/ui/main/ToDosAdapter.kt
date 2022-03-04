@@ -95,6 +95,7 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
                     }
                     else {
                         notifyDataSetChanged()
+                        (context as MainActivity).notifyPointsUpdated(ret!!)
                     }
                 }
             }

@@ -15,15 +15,25 @@ import java.util.*
 @Serializable
 data class RepeatableTask(
     @Id(assignable = true)
-    var id: Long = 0,
-    var ownerId: Long = 0,
-    var name: String = "",
-    var description: String = "",
-    var points: Long = 0,
+    @Required var id: Long = 0,
+    @Required var ownerId: Long = 0,
+    @Required var name: String = "",
+    @Required var description: String = "",
+    @Required var points: Long = 0,
     @Serializable(with = DateSerializer::class)
-    var lastDone: Date? = null,
-    val own: Boolean = false
-)
+    @Required var lastDone: Date? = null,
+    @Required var own: Boolean = false
+) {
+    constructor(task: Task) : this() {
+        id = task.id
+        ownerId = task.ownerId
+        name = task.name
+        description = task.description
+        points = task.points
+        lastDone = null
+        own = task.own
+    }
+}
 
 
 object DateSerializer : KSerializer<Date?> {

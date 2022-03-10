@@ -22,6 +22,7 @@ import androidx.core.content.ContextCompat.startActivity
 import gfc.frontend.MainActivity
 import gfc.frontend.controllers.AuthorizationController
 import gfc.frontend.controllers.FamilyController
+import gfc.frontend.controllers.RewardsController
 
 fun today(date: Date?): Date? {
     if(date == null) return null
@@ -103,6 +104,7 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
                 val currentTask = TasksController.tasksContainer[position]
                 name.text = currentTask.name
                 description.text = currentTask.description
+                println("!!!!!" + currentTask + ":" + currentTask.points + ":" + currentTask.points.toString())
                 elementPoints.text = "+${currentTask.points}"
                 if(AuthorizationController.userIsParent){
                     if(currentTask.own) {
@@ -134,25 +136,57 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
                     }
                 }
             }
+            3 -> {
+                val currentReward = RewardsController.rewardsContainer[position]
+                name.text = currentReward.title
+                description.text = currentReward.description
+                elementPoints.text = "${currentReward.points}"
+                if(currentReward.owner == currentReward.reporter){
+                    owner.text = "prywatne"
+                }
+                else {
+                    if(AuthorizationController.userIsParent){
+                        owner.text = FamilyController.getChildrenName(currentReward.owner.id)
+                    }
+                }
+                done.isChecked = false
+
+                done.setOnClickListener { view ->
+//                    ret = TasksController.taskDone(currentTask)
+//                    if (ret == null) {
+//                        Snackbar.make(view, "Status zadania nie został zmieniony. Błąd serwera.", Snackbar.LENGTH_LONG)
+//                            .setAction("Action", null).show()
+//                    }
+//                    else {
+//                        notifyDataSetChanged()
+//                        (context as MainActivity).notifyPointsUpdated(ret!!)
+//                    }
+                }
+            }
         }
 
         holder.view.setOnClickListener{
-            val repeatable = (section == 1)
+            if (section == 3 ) {
 
-            val intent = Intent(context, NewTaskActivity::class.java)
-            intent.putExtra("edit", true)
-            intent.putExtra("name", name.text)
-            intent.putExtra("description", description.text)
-            intent.putExtra("points", elementPoints.text.subSequence(1, elementPoints.text.length))
-            intent.putExtra("repeatable", repeatable)
-            intent.putExtra("selectedChild", owner.text)
-            if(repeatable) {
-                intent.putExtra("taskId", TasksController.reTasksContainer[position].id)
             }
             else {
-                intent.putExtra("taskId", TasksController.tasksContainer[position].id)
+                val repeatable = (section == 1)
+
+                val intent = Intent(context, NewTaskActivity::class.java)
+                intent.putExtra("edit", true)
+                intent.putExtra("name", name.text)
+                intent.putExtra("description", description.text)
+                intent.putExtra("points", elementPoints.text.subSequence(1, elementPoints.text.length))
+                intent.putExtra("repeatable", repeatable)
+                intent.putExtra("selectedChild", owner.text)
+                if(repeatable) {
+                    intent.putExtra("taskId", TasksController.reTasksContainer[position].id)
+                }
+                else {
+                    intent.putExtra("taskId", TasksController.tasksContainer[position].id)
+                }
+                (context as Activity).startActivityForResult(intent, 0)
             }
-            (context as Activity).startActivityForResult(intent, 0)
         }
     }
 
@@ -161,6 +195,7 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
         return when (section) {
             1 -> TasksController.reTasksContainer.size
             2 -> TasksController.tasksContainer.size
+            3 -> RewardsController.rewardsContainer.size
             else -> 0
         }
     }

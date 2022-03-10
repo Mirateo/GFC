@@ -40,6 +40,34 @@ object FamilyController {
         return -1
     }
 
+    fun getChildrenUsername(fn: String): String {
+        if(fn == "prywatne") {
+            for (child in familyList) {
+                if (child.role == "PARENT") {
+                    return child.username
+                }
+            }
+            return "---"
+        }
+        for (child in familyList) {
+            if (child.friendlyName == fn) {
+                return child.username
+            }
+        }
+        return "---"
+    }
+
+
+    fun uniqFriendlyName(friendlyName: String): Boolean {
+        for (child in familyList) {
+            if (child.friendlyName == friendlyName) {
+                return false
+            }
+        }
+        return true
+
+    }
+
     fun getAll(): List<UserInfo> {
         familyList = FamilyService.getAll(url + "/") as ArrayList<UserInfo>
         return familyList
@@ -54,6 +82,5 @@ object FamilyController {
     fun delChild(childId: Long): String? {
         return FamilyService.delChild("$url/remove/${childId}")
     }
+    
 }
-
-// server: task done and return points of user

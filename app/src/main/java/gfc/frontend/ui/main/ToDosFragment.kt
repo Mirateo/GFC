@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import gfc.frontend.R
+import gfc.frontend.controllers.RewardsController
 import gfc.frontend.controllers.TasksController
 import gfc.frontend.databinding.FragmentMainBinding
 
@@ -34,14 +35,17 @@ class ToDosFragment : Fragment() {
         binding.recyclerViewList.layoutManager = LinearLayoutManager(this.context)
         binding.recyclerViewList.adapter = ToDosAdapter(arguments?.getInt(ARG_SECTION_NUMBER))
         refreshList()
+
         return root
     }
 
     private fun refreshList() {
-        if (arguments?.getInt(ARG_SECTION_NUMBER) == 1)
-            TasksController.refreshTasks("unrepeatable")
-        else if(arguments?.getInt(ARG_SECTION_NUMBER) == 2)
-            TasksController.refreshTasks("repeatable")
+        when (arguments?.getInt(ARG_SECTION_NUMBER)) {
+            1 -> TasksController.refreshTasks("unrepeatable")
+            2 -> TasksController.refreshTasks("repeatable")
+            3 -> RewardsController.refreshRewards()
+        }
+
         binding.recyclerViewList.adapter?.notifyDataSetChanged()
     }
 

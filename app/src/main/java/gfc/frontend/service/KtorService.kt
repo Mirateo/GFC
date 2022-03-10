@@ -2,6 +2,7 @@ package gfc.frontend.service
 
 import android.app.Service
 import android.content.Context
+import gfc.frontend.dataclasses.Task
 import gfc.frontend.requests.TaskDTO
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
@@ -121,6 +122,8 @@ abstract class KtorService : Service()  {
 //    }
 
     suspend inline fun <reified T: Any?> ktorRequest(meth: String, url: String, json: Any?): Any? {
+
+        println("!!!!!!!!!!!!!!!!!!!!!! $json")
         val prefs = context.getSharedPreferences("credentials", MODE_PRIVATE)
 
         val username = prefs.getString("username", "")

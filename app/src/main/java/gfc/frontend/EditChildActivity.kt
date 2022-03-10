@@ -100,6 +100,14 @@ class EditChildActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            if (!FamilyController.uniqFriendlyName(friendlyName)) {
+                binding.monit.setBackgroundColor(Color.RED)
+                binding.monit.text = "Przyjazna nazwa powinna być unikalna w rodzinie."
+                binding.monit.visibility = View.VISIBLE
+
+                return@setOnClickListener
+            }
+
             try {
                 val resp = FamilyController.addChild(username, friendlyName, pass1)
                 if( resp == null ) {

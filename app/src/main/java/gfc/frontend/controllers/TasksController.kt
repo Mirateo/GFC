@@ -93,7 +93,6 @@ object TasksController {
                 }
             }
         }
-
     }
 
     fun taskDone(task: Any): Long? {
@@ -134,5 +133,12 @@ object TasksController {
 
     fun deleteTask(id: Long): Long? {
         return TasksService.deleteTask("$url/remove/${id}")
+    }
+
+    fun editTask(task: Task, repeatable: Boolean): Long? {
+        if (repeatable) {
+            return ReTasksService.editTask("$url/editRe", RepeatableTask(task))
+        }
+        return TasksService.editTask("$url/edit", task)
     }
 }

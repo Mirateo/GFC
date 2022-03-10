@@ -17,6 +17,7 @@ import androidx.core.view.children
 import com.google.android.material.navigation.NavigationView
 import gfc.frontend.controllers.AuthorizationController
 import gfc.frontend.controllers.FamilyController
+import gfc.frontend.controllers.RewardsController
 import gfc.frontend.controllers.TasksController
 import gfc.frontend.ui.main.SectionsPagerAdapter
 import gfc.frontend.databinding.ActivityMainBinding
@@ -43,20 +44,9 @@ class MainActivity : AppCompatActivity() {
 
         FamilyController.init(applicationContext)
         TasksController.init(applicationContext)
+        RewardsController.init(applicationContext)
         // Initialize lists
         refreshLists()
-
-        // Adder listener
-        binding.fab.setOnClickListener {
-            startActivityForResult(Intent(this, NewTaskActivity::class.java), 0)
-        }
-
-        // Refresher listener
-        binding.fabRefresh.setOnClickListener { view ->
-            refreshLists()
-            Snackbar.make(view, "Tasks Refreshed!", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
 
         //Slide menu Listener
         setSupportActionBar(binding.activityMainToolbar)
@@ -78,7 +68,7 @@ class MainActivity : AppCompatActivity() {
             getSharedPreferences("userInfo", MODE_PRIVATE).getString("friendlyName", "nope:(")
                 .toString()
         val points =
-            getSharedPreferences("userInfo", MODE_PRIVATE).getLong("points", 0).toString()
+            getSharedPreferences("userInfo", MODE_PRIVATE).getLong("points", 0)
 
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         val headerView: View = navigationView.getHeaderView(0)
@@ -129,16 +119,37 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+
+        // Adder listener
+        binding.fab.setOnClickListener {
+            if(binding.viewPager.currentItem == 2) {
+                val intent = Intent(this, NewTaskActivity::class.java)
+                intent.putExtra("rewards", true)
+                startActivityForResult(intent, 0)
+            }
+            else {
+                val intent = Intent(this, NewTaskActivity::class.java)
+                intent.putExtra("rewards", false)
+                startActivityForResult(Intent(this, NewTaskActivity::class.java), 0)
+            }
+        }
+
+        // Refresher listener
+        binding.fabRefresh.setOnClickListener { view ->
+            refreshLists()
+            Snackbar.make(view, "Tasks Refreshed!", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show()
+        }
     }
 
-    public fun refreshLists() {
+    fun refreshLists() {
         val currentPage = binding.viewPager.currentItem
         binding.viewPager.adapter = SectionsPagerAdapter(this, supportFragmentManager)
         binding.tabs.setupWithViewPager(binding.viewPager)
         binding.viewPager.currentItem = currentPage
     }
 
-    public fun restartApp() {
+    fun restartApp() {
         val intent = Intent(this, LoginActivity::class.java)
         this.startActivity(intent)
         finishAffinity()

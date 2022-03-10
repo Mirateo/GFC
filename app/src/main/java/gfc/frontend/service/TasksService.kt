@@ -28,4 +28,9 @@ object TasksService : KtorService() {
         super.response as List<Task>?
     }
 
+    fun editTask(url: String, task: Task) = runBlocking<Long?> {
+        ktorRequest<Long?>("POST", url, task)
+        response as Long?
+    }
+
 }

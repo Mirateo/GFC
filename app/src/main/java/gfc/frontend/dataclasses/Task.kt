@@ -9,10 +9,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Task (
     @Id(assignable = true)
-    var id: Long = 0,
-    var ownerId: Long = 0,
-    var name: String = "",
-    var description: String = "",
-    var points: Long = 0,
-    val own: Boolean = false
+    @Required var id: Long = 0,
+    @Required var ownerId: Long = 0,
+    @Required var name: String = "",
+    @Required var description: String = "",
+    @Required var points: Long = 0,
+    @Required  val own: Boolean = false
 )

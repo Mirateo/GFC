@@ -25,9 +25,14 @@ object RewardsService : KtorService(){
         super.response as List<Reward>?
     }
 
-    fun add(url: String, rewardDTO: RewardDTO): Long? {
-        return 0L
+    fun add(url: String, rewardDTO: RewardDTO) = runBlocking<Long?>  {
+        ktorRequest <Long?>("POST", url, rewardDTO)
+        super.response as Long?
     }
 
+    fun delete(url: String) = runBlocking<Long?>  {
+        ktorRequest <Long?>("GET", url, null)
+        super.response as Long?
+    }
 
 }

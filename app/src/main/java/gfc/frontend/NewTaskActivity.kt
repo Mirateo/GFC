@@ -41,24 +41,30 @@ class NewTaskActivity : AppCompatActivity() {
         FamilyController.init(this)
 
         var taskID = 0L
+        var rewardID = 0L
 
         if (edit) {
-            actionBar!!.title = "Edytuj zadanie"
-
+            if (rewards) {
+                actionBar!!.title = "Edytuj nagrodę"
+                rewardID = intent.getLongExtra("rewardId", 0)
+                binding.repeteable.isVisible = false
+            } else {
+                actionBar!!.title = "Edytuj zadanie"
+                taskID = intent.getLongExtra("taskId", 0)
+            }
             binding.name.setText(intent.getStringExtra("name"))
             binding.describtion.setText(intent.getStringExtra("description"))
             binding.points.setText(intent.getStringExtra("points"))
             binding.repeteable.isChecked = intent.getBooleanExtra("repeatable", false)
             val list = ArrayList<String>()
-            taskID = intent.getLongExtra("taskId", 0)
             intent.getStringExtra("selectedChild")?.let { list.add("$it (${FamilyController.getChildrenUsername(it)})") }
             binding.childrenChoice.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, list)
             binding.childrenChoice.isVisible = true
             binding.deleteButton.isVisible = true
-        }
-        else {
+        } else {
             if(rewards) {
                 actionBar!!.title = "Dodaj nową nagrodę"
+                binding.repeteable.isVisible = false
             }
             else {
                 actionBar!!.title = "Dodaj nowe zadanie"
@@ -122,9 +128,9 @@ class NewTaskActivity : AppCompatActivity() {
                 }
                 if(edit) {
                     if(rewards) {
-                        ret = RewardsController.editReward (
-                            Reward(rewardId, name, description, reporter, owner, false, points)
-                        ) // verify if parent
+//                        ret = RewardsController.editReward (
+//                            Reward(rewardId, name, description, reporter, owner, false, points)
+//                        ) // verify if parent
                     }
                     else {
                         ret = TasksController.editTask (
@@ -158,9 +164,9 @@ class NewTaskActivity : AppCompatActivity() {
             } else {
                 if(edit) {
                     if(rewards) {
-                        ret = RewardsController.editReward (
-                            Reward(rewardId, name, description, reporter, owner, false, points)
-                        ) // verify if parent
+//                        ret = RewardsController.editReward (
+//                            Reward(rewardId, name, description, reporter, owner, false, points)
+//                        ) // verify if parent
                     } else{
                         ret = TasksController.editTask(
                             Task(taskID, ownerId, name, description, pointsL, true),
@@ -195,7 +201,7 @@ class NewTaskActivity : AppCompatActivity() {
 
         binding.deleteButton.setOnClickListener { view ->
             if (rewards) {
-                val ret = RewardsControllerd.deleteReward( rewardId )
+                val ret = RewardsController.deleteReward( rewardID )
                 if (ret == null || ret == -1L) {
                     Snackbar.make(view, "Błąd serwera! Nagroda nie została usunięta.", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show()

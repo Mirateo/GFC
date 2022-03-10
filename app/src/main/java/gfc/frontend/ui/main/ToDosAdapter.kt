@@ -165,9 +165,23 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
             }
         }
 
-        holder.view.setOnClickListener{
-            if (section == 3 ) {
+        holder.view.setOnClickListener{ view ->
+            if(!AuthorizationController.userIsParent && owner.text != "prywatne") {
+                Snackbar.make(view, "Poproś rodzica o zmianę ustawień zadania/nagrody.", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
 
+                return@setOnClickListener
+            }
+
+            if (section == 3 ) {
+                val intent = Intent(context, NewTaskActivity::class.java)
+                intent.putExtra("edit", true)
+                intent.putExtra("name", name.text)
+                intent.putExtra("description", description.text)
+                intent.putExtra("points", elementPoints.text.subSequence(1, elementPoints.text.length))
+                intent.putExtra("selectedChild", owner.text)
+                intent.putExtra("rewardId", RewardsController.rewardsContainer[position].rewardId)
+                (context as Activity).startActivityForResult(intent, 0)
             }
             else {
                 val repeatable = (section == 1)

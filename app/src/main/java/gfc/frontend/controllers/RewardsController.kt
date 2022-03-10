@@ -28,4 +28,8 @@ object RewardsController {
     fun addReward(rewardDTO: RewardDTO): Long? {
         return RewardsService.add("${url}/add",rewardDTO)
     }
+
+    fun deleteReward(rewardId: Any): Any? {
+        return RewardsService.delete("${url}/delete/$rewardId")
+    }
 }

@@ -15,10 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
-import gfc.frontend.EditChildActivity
-import gfc.frontend.EditFamilySettings
-import gfc.frontend.NewTaskActivity
-import gfc.frontend.R
+import gfc.frontend.*
 import gfc.frontend.dataclasses.UserInfo
 
 
@@ -79,6 +76,7 @@ class FamilySettingsFragment : Fragment() {
             activity?.intent?.putExtra("family", false)
             findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
         }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

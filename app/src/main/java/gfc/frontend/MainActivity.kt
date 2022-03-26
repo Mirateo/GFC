@@ -3,6 +3,7 @@ package gfc.frontend
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
@@ -21,12 +22,14 @@ import gfc.frontend.controllers.RewardsController
 import gfc.frontend.controllers.TasksController
 import gfc.frontend.ui.main.SectionsPagerAdapter
 import gfc.frontend.databinding.ActivityMainBinding
+import android.widget.LinearLayout
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     lateinit var toggle: ActionBarDrawerToggle
     lateinit var navPoints: TextView
+    lateinit var coins: TextView
 
     val getResult = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -48,14 +51,18 @@ class MainActivity : AppCompatActivity() {
         // Initialize lists
         refreshLists()
 
-        //Slide menu Listener
         setSupportActionBar(binding.activityMainToolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        val coin = binding.coin.layoutParams
+
+        coin.width = (coin.width * 0.75).toInt()
+        coin.height = (coin.height * 0.75).toInt()
 
         toggle = ActionBarDrawerToggle(this, binding.drawerLayout, R.string.open, R.string.close)
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val username =
             getSharedPreferences("userInfo", MODE_PRIVATE).getString("username", "nope:(")
@@ -77,11 +84,13 @@ class MainActivity : AppCompatActivity() {
         val navUsername: TextView = headerView.findViewById(R.id.nav_username)
         val navUserEmail: TextView = headerView.findViewById(R.id.nav_email)
         navPoints = headerView.findViewById(R.id.nav_points)
+        coins = binding.coins
 
         navWelcome.text = "Cześć, $friendlyName!"
         navUsername.text = "Nazwa użytkownika: $username"
         navUserEmail.text = "Adres e-mail: $email"
         navPoints.text = points.toString()
+        coins.text = points.toString()
 
         binding.navView.setNavigationItemSelectedListener {
             when (it.itemId) {
@@ -137,7 +146,8 @@ class MainActivity : AppCompatActivity() {
         // Refresher listener
         binding.fabRefresh.setOnClickListener { view ->
             refreshLists()
-            Snackbar.make(view, "Tasks Refreshed!", Snackbar.LENGTH_LONG)
+            FamilyController.init(this)
+            Snackbar.make(view, "Jesteś na bieżąco!", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
     }
@@ -147,12 +157,6 @@ class MainActivity : AppCompatActivity() {
         binding.viewPager.adapter = SectionsPagerAdapter(this, supportFragmentManager)
         binding.tabs.setupWithViewPager(binding.viewPager)
         binding.viewPager.currentItem = currentPage
-    }
-
-    fun restartApp() {
-        val intent = Intent(this, LoginActivity::class.java)
-        this.startActivity(intent)
-        finishAffinity()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -167,5 +171,24 @@ class MainActivity : AppCompatActivity() {
 
     fun notifyPointsUpdated(points: Long) {
         navPoints.text = points.toString()
+        coins.text = points.toString()
+    }
+
+
+    private fun openDrawer() {
+        val drawer = binding.drawerLayout
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START)
+        } else {
+            drawer.openDrawer(GravityCompat.START)
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            openDrawer()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

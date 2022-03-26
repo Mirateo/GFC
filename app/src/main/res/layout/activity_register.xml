@@ -126,8 +126,9 @@
             android:paddingRight="10sp"
             android:text="Posiadasz już konto?"
             android:textAlignment="gravity"
-            android:textSize="22sp"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/loginButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

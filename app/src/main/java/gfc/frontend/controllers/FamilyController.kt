@@ -58,6 +58,24 @@ object FamilyController {
     }
 
 
+    fun getMemberById(id: Long): UserInfo? {
+        for(member in familyList) {
+            if (member.id == id){
+                return member
+            }
+        }
+        return null
+    }
+
+    fun getFamilyParent(): UserInfo? {
+        for(member in familyList) {
+            if (member.role == "PARENT"){
+                return member
+            }
+        }
+        return null
+    }
+
     fun uniqFriendlyName(friendlyName: String): Boolean {
         for (child in familyList) {
             if (child.friendlyName == friendlyName) {
@@ -82,5 +100,5 @@ object FamilyController {
     fun delChild(childId: Long): String? {
         return FamilyService.delChild("$url/remove/${childId}")
     }
-    
+
 }

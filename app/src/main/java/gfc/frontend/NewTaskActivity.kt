@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import com.google.android.material.snackbar.Snackbar
@@ -58,8 +60,10 @@ class NewTaskActivity : AppCompatActivity() {
             binding.repeteable.isChecked = intent.getBooleanExtra("repeatable", false)
             val list = ArrayList<String>()
             intent.getStringExtra("selectedChild")?.let { list.add("$it (${FamilyController.getChildrenUsername(it)})") }
-            binding.childrenChoice.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, list)
-            binding.childrenChoice.isVisible = true
+            val childrenChoice = binding.childrenChoice
+            childrenChoice.isVisible = true
+            childrenChoice.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, list)
+            childrenChoice.isEnabled = false
             binding.deleteButton.isVisible = true
         } else {
             if(rewards) {
@@ -73,7 +77,7 @@ class NewTaskActivity : AppCompatActivity() {
             if(AuthorizationController.userIsParent){
                 val list = ArrayList<String>()
                 FamilyController.familyList.forEach { e -> list.add("${e.friendlyName} (${e.username})") }
-                binding.childrenChoice.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, list)
+                binding.childrenChoice.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, list)
                 binding.childrenChoice.isVisible = true
             }
         }
@@ -107,7 +111,7 @@ class NewTaskActivity : AppCompatActivity() {
                 var response = ""
                 var childId = -1L
 
-                if(label != "prywatne") {
+                if(!label.startsWith("prywatne")) {
                     for(s in label.reversed()) {
                         if(s == ')'){
                             continue
@@ -128,9 +132,15 @@ class NewTaskActivity : AppCompatActivity() {
                 }
                 if(edit) {
                     if(rewards) {
-//                        ret = RewardsController.editReward (
-//                            Reward(rewardId, name, description, reporter, owner, false, points)
-//                        ) // verify if parent
+                        val reporter = FamilyController.getMemberById(ownerId)
+                        val owner = FamilyController.getMemberById(childId)
+                        if(reporter == null || owner == null) {
+                            println("ERR: Error: reporter: $reporter and owner: $owner")
+                            return@setOnClickListener
+                        }
+                        ret = RewardsController.editReward (
+                            Reward(rewardID, name, description, reporter, owner, false, pointsL)
+                        )
                     }
                     else {
                         ret = TasksController.editTask (
@@ -163,19 +173,25 @@ class NewTaskActivity : AppCompatActivity() {
                 }
             } else {
                 if(edit) {
-                    if(rewards) {
-//                        ret = RewardsController.editReward (
-//                            Reward(rewardId, name, description, reporter, owner, false, points)
-//                        ) // verify if parent
+                    ret = if(rewards) {
+                        val reporter = FamilyController.getFamilyParent()
+                        val owner = FamilyController.getMemberById(ownerId)
+                        if(reporter == null || owner == null) {
+                            println("ERR: Error: reporter: $reporter and owner: $owner")
+                            return@setOnClickListener
+                        }
+                        RewardsController.editReward (
+                            Reward(rewardID, name, description, reporter, owner, false, pointsL)
+                        )
                     } else{
-                        ret = TasksController.editTask(
+                        TasksController.editTask(
                             Task(taskID, ownerId, name, description, pointsL, true),
                             repeatable
                         )
                     }
                 } else {
                     ret = if(rewards) {
-                        val reward = RewardDTO(name, description, null, ownerId, false, pointsL)
+                        val reward = RewardDTO(name, description, ownerId, ownerId, false, pointsL)
                         RewardsController.addReward( reward )
                     } else{
                         TasksService.addTask(

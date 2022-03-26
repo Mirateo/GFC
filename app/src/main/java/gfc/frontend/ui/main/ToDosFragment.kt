@@ -44,6 +44,7 @@ class ToDosFragment : Fragment() {
             1 -> TasksController.refreshTasks("unrepeatable")
             2 -> TasksController.refreshTasks("repeatable")
             3 -> RewardsController.refreshRewards()
+            4 -> TasksController.refreshTasks("done")
         }
 
         binding.recyclerViewList.adapter?.notifyDataSetChanged()

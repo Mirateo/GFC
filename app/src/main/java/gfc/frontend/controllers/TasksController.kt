@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat.startActivity
 import com.google.android.material.internal.ContextUtils.getActivity
 import gfc.frontend.LoginActivity
 import gfc.frontend.MainActivity
+import gfc.frontend.dataclasses.DoneTask
 import gfc.frontend.dataclasses.ObjectBox
 import gfc.frontend.dataclasses.RepeatableTask
 import gfc.frontend.dataclasses.Task
@@ -22,12 +23,9 @@ object TasksController {
     lateinit var context: Context
     var userId = -1L
     val url = "https://gamefication-for-children.herokuapp.com/tasks"
-    var tasksContainer by Delegates.observable(ArrayList<Task>()) { _, _, _ ->
-//        notifier.notifyDataSetChanged()
-    }
-    var reTasksContainer by Delegates.observable(ArrayList<RepeatableTask>()) { _, _, _ ->
-//        notifier.notifyDataSetChanged()
-    }
+    lateinit var tasksContainer: ArrayList<Task>
+    lateinit var reTasksContainer: ArrayList<RepeatableTask>
+    lateinit var doneTasksContainer:  ArrayList<DoneTask>
 
     fun init(context: Context) {
         this.context = context
@@ -50,7 +48,10 @@ object TasksController {
                     if( temp != null){
                         tasksContainer = ArrayList(temp)
                     }
-
+                    temp = TasksService.getDoneTasks("$url/fullDone")
+                    if( temp != null){
+                        doneTasksContainer = ArrayList(temp)
+                    }
                 }
                 "repeatable" -> {
                     temp = ReTasksService.getData("$url/fullRe")
@@ -62,6 +63,12 @@ object TasksController {
                     temp = TasksService.getData("$url/full")
                     if( temp != null){
                         tasksContainer = ArrayList(temp)
+                    }
+                }
+                "done" -> {
+                    temp = TasksService.getDoneTasks("$url/fullDone")
+                    if( temp != null){
+                        doneTasksContainer = ArrayList(temp)
                     }
                 }
             }
@@ -77,7 +84,10 @@ object TasksController {
                     if( temp != null){
                         tasksContainer = ArrayList(temp)
                     }
-
+                    temp = TasksService.getDoneTasks("$url/allDone")
+                    if( temp != null){
+                        doneTasksContainer = ArrayList(temp)
+                    }
                 }
                 "repeatable" -> {
                     temp = ReTasksService.getData("$url/allre")

@@ -13,6 +13,7 @@
         android:background="@color/purple_200">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -25,8 +26,7 @@
                 android:background="?attr/colorPrimary"
                 android:weightSum="1"
                 app:contentInsetStart="0dp"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                >
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
                 <TextView
                     android:id="@+id/activity_main_toolbar_title"
@@ -41,16 +41,30 @@
                     android:scrollHorizontally="true"
                     android:singleLine="true"
                     android:textColor="#ff4500"
-                    android:textSize="30sp"/>
+                    android:textSize="30sp" />
 
 
-<!--                <TextView-->
-<!--                    android:id="@+id/textView3"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="Test" />-->
+                <TextView
+                    android:id="@+id/coins"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="15dp"
+                    android:text="0"
+                    android:textAlignment="gravity"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/coin"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center"
+                    app:srcCompat="@android:drawable/btn_star_big_on" />
 
             </androidx.appcompat.widget.Toolbar>
+
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabs"

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -49,42 +50,6 @@ class EditChildActivity : AppCompatActivity() {
                 setResult(RESULT_OK, Intent())
                 finish()
             }
-
-//            binding.acceptButton.setOnClickListener{
-//                val username = binding.userName.text.trim().toString()
-//                val friendlyName = binding.userFN.text.trim().toString()
-//                val pass1 = binding.userPassword.text.trim().toString()
-//                val pass2 = binding.userPassword2.text.trim().toString()
-//
-//                if(pass1 != pass2) {
-//                    binding.monit.setBackgroundColor(Color.RED)
-//                    binding.monit.text = "Hasła nie są identyczne."
-//                    binding.monit.visibility = View.VISIBLE
-//
-//                    return@setOnClickListener
-//                }
-//
-//                try {
-//                    val user = UserInfo(id, username, email.toString(), pass1, role.toString(), friendlyName)
-//                    val resp = FamilyController.editChild(user)
-//                    if( resp == null ) {
-//                        binding.monit.setBackgroundColor(Color.RED)
-//                        binding.monit.text = "Edycja użytkownika nie powiodła się."
-//                        binding.monit.visibility = View.VISIBLE
-//
-//                        return@setOnClickListener
-//                    }
-//
-//                    Toast.makeText(applicationContext, resp, Toast.LENGTH_SHORT).show()
-//                    setResult(RESULT_OK, Intent())
-//                    finish()
-//                } catch (e: IllegalArgumentException) {
-//                    binding.monit.setBackgroundColor(Color.RED)
-//                    binding.monit.text = e.message
-//                    binding.monit.visibility = View.VISIBLE
-//                    return@setOnClickListener
-//                }
-//            }
         }
         binding.acceptButton.setOnClickListener{
             val username = binding.userName.text.trim().toString()
@@ -133,4 +98,11 @@ class EditChildActivity : AppCompatActivity() {
         }
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+//            openDrawer()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }

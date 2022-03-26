@@ -35,7 +35,6 @@ data class RepeatableTask(
     }
 }
 
-
 object DateSerializer : KSerializer<Date?> {
     override val descriptor = PrimitiveSerialDescriptor("DATE", PrimitiveKind.STRING)
 

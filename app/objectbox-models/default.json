@@ -85,9 +85,53 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "3:2436840237934250977",
+      "lastPropertyId": "8:5943570627879366426",
+      "name": "DoneTask",
+      "properties": [
+        {
+          "id": "1:7637388465570003683",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:8686572167369981106",
+          "name": "ownerId",
+          "type": 6
+        },
+        {
+          "id": "3:687385470519827179",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "4:5688993071670280690",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "5:414401501512630857",
+          "name": "points",
+          "type": 6
+        },
+        {
+          "id": "6:7658083050439296564",
+          "name": "own",
+          "type": 1
+        },
+        {
+          "id": "8:5943570627879366426",
+          "name": "timestamp",
+          "type": 10
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "2:4867449207946054530",
+  "lastEntityId": "3:2436840237934250977",
   "lastIndexId": "0:0",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
@@ -96,7 +140,8 @@
   "retiredEntityUids": [],
   "retiredIndexUids": [],
   "retiredPropertyUids": [
-    4066526454731296430
+    4066526454731296430,
+    7708348373149220114
   ],
   "retiredRelationUids": [],
   "version": 1

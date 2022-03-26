@@ -10,9 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import gfc.frontend.MainActivity
 import gfc.frontend.R
+import gfc.frontend.SettingsActivity
 import gfc.frontend.controllers.AuthorizationController
 import gfc.frontend.databinding.FragmentAccountSettingsBinding
 import gfc.frontend.dataclasses.UserInfo

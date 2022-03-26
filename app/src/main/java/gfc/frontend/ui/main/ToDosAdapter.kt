@@ -3,11 +3,13 @@ package gfc.frontend.ui.main
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.recyclerview.widget.RecyclerView
@@ -56,6 +58,7 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
         val elementPoints = holder.elementPoints
         val done = holder.elementCheck
         val owner = holder.taskOwner
+        val background = holder.view
         var ret: Long?
 
         when (section) {
@@ -77,7 +80,7 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
                         owner.text = "prywatne"
                     }
                     else {
-                        owner.text = "od Rodzica"
+                        owner.text = "od rodzica"
                     }
                 }
                 val lastDone = currentTask.lastDone
@@ -85,9 +88,11 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
                 println("Last done: " + lastDone + "\n today is: " + today(Date()))
 
                 done.setOnClickListener { view ->
+                    var mess = "Gratulacje!"
                     ret = if(done.isChecked) {
                         TasksController.taskDone(currentTask)
                     } else {
+                        mess = "Cofnięto status zadania."
                         TasksController.taskUndone(currentTask)
                     }
                     if (ret == null) {
@@ -95,8 +100,12 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
                             .setAction("Action", null).show()
                     }
                     else {
+                        Snackbar.make(view, mess, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
                         notifyDataSetChanged()
-                        (context as MainActivity).notifyPointsUpdated(ret!!)
+                        if(currentTask.own || !AuthorizationController.userIsParent) {
+                            (context as MainActivity).notifyPointsUpdated(ret!!)
+                        }
                     }
                 }
             }
@@ -119,7 +128,7 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
                         owner.text = "prywatne"
                     }
                     else {
-                        owner.text = "od Rodzica"
+                        owner.text = "od rodzica"
                     }
                 }
                 done.isChecked = false
@@ -131,8 +140,13 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
                             .setAction("Action", null).show()
                     }
                     else {
+                        Snackbar.make(view, "Gratulacje, zadanie wykonane!", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
                         notifyDataSetChanged()
-                        (context as MainActivity).notifyPointsUpdated(ret!!)
+
+                        if(currentTask.own || !AuthorizationController.userIsParent) {
+                            (context as MainActivity).notifyPointsUpdated(ret!!)
+                        }
                     }
                 }
             }
@@ -147,25 +161,92 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
                 else {
                     if(AuthorizationController.userIsParent){
                         owner.text = FamilyController.getChildrenName(currentReward.owner.id)
+                    } else {
+                        owner.text = "od rodzica"
                     }
                 }
-                done.isChecked = false
+                done.isChecked = currentReward.chosen
+                if (currentReward.chosen) {
+                    if(AuthorizationController.userIsParent){
+                        elementPoints.text = "Zadanie wykonane! Zaakceptuj."
+                    } else {
+                        elementPoints.text = "Gratulacje! Wysłano do rodzica."
+                    }
+                    background.setBackgroundColor(Color.GREEN)
+                }
 
                 done.setOnClickListener { view ->
-//                    ret = TasksController.taskDone(currentTask)
-//                    if (ret == null) {
-//                        Snackbar.make(view, "Status zadania nie został zmieniony. Błąd serwera.", Snackbar.LENGTH_LONG)
-//                            .setAction("Action", null).show()
-//                    }
-//                    else {
-//                        notifyDataSetChanged()
-//                        (context as MainActivity).notifyPointsUpdated(ret!!)
-//                    }
+                    ret = if(AuthorizationController.userIsParent && !done.isChecked) {
+                        Snackbar.make(view, "Zadanie zaakceptowane. Pora na nagrodę!", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                        RewardsController.accept(currentReward.rewardId)
+                    } else if (currentReward.owner == currentReward.reporter) {
+                        Snackbar.make(view, "Gratulacje! Pora na nagrodę.", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                        RewardsController.accept(currentReward.rewardId)
+                    } else if(done.isChecked) {
+                        val preRet = RewardsController.select(currentReward.rewardId)
+                        if(preRet == -1L) {
+                            done.isChecked = false
+                            Snackbar.make(view, "Wybacz, nie masz wystarczającej liczby punktów.", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show()
+                            return@setOnClickListener
+                        } else {
+                            Snackbar.make(view, "Gratulacje! Wysłano prośbę do rodzica.", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show()
+                            preRet
+                        }
+                    }
+                    else {
+                        Snackbar.make(view, "Rodzic powiadomiony.", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                        background.setBackgroundColor(Color.alpha(0))
+                        RewardsController.unselect(currentReward.rewardId)
+                    }
+                    if (ret == null) {
+                        Snackbar.make(view, "Status zadania nie został zmieniony. Błąd serwera.", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                    }
+                    else {
+                        notifyDataSetChanged()
+
+                        if(currentReward.owner == currentReward.reporter || !AuthorizationController.userIsParent) {
+                            (context as MainActivity).notifyPointsUpdated(ret!!)
+                        }
+                    }
+                }
+            }
+            4 -> {
+                val currentTask = TasksController.doneTasksContainer[position]
+                name.text = currentTask.name
+                description.text = currentTask.description
+                elementPoints.text = "${currentTask.points}"
+                done.isChecked = true
+                done.isEnabled = false
+                if(AuthorizationController.userIsParent){
+                    if(currentTask.own) {
+                        owner.text = "prywatne"
+                    }
+                    else {
+                        owner.text = FamilyController.getChildrenName(currentTask.ownerId)
+                    }
+                }
+                else {
+                    if(currentTask.own) {
+                        owner.text = "prywatne"
+                    }
+                    else {
+                        owner.text = "od rodzica"
+                    }
                 }
             }
         }
 
         holder.view.setOnClickListener{ view ->
+            if (section == 4) {
+                return@setOnClickListener
+            }
+
             if(!AuthorizationController.userIsParent && owner.text != "prywatne") {
                 Snackbar.make(view, "Poproś rodzica o zmianę ustawień zadania/nagrody.", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
@@ -178,9 +259,11 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
                 intent.putExtra("edit", true)
                 intent.putExtra("name", name.text)
                 intent.putExtra("description", description.text)
-                intent.putExtra("points", elementPoints.text.subSequence(1, elementPoints.text.length))
+                intent.putExtra("points", elementPoints.text.subSequence(0, elementPoints.text.length))
                 intent.putExtra("selectedChild", owner.text)
+                intent.putExtra("rewards", true)
                 intent.putExtra("rewardId", RewardsController.rewardsContainer[position].rewardId)
+
                 (context as Activity).startActivityForResult(intent, 0)
             }
             else {
@@ -210,6 +293,7 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
             1 -> TasksController.reTasksContainer.size
             2 -> TasksController.tasksContainer.size
             3 -> RewardsController.rewardsContainer.size
+            4 -> TasksController.doneTasksContainer.size
             else -> 0
         }
     }

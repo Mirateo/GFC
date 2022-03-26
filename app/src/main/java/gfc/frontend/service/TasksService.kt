@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
+import gfc.frontend.dataclasses.DoneTask
 import gfc.frontend.dataclasses.Task
 import kotlinx.coroutines.*
 
@@ -31,6 +32,12 @@ object TasksService : KtorService() {
     fun editTask(url: String, task: Task) = runBlocking<Long?> {
         ktorRequest<Long?>("POST", url, task)
         response as Long?
+    }
+
+    fun getDoneTasks(url: String) = runBlocking<List<DoneTask>?>  {
+        ktorRequest <List<DoneTask>?>("GET", url, null)
+
+        super.response as List<DoneTask>?
     }
 
 }

@@ -61,10 +61,10 @@
         android:layout_width="match_parent"
         android:layout_height="50sp"
         android:layout_margin="20sp"
-        android:visibility="invisible"
-        android:theme="@style/Spinner"
+        android:backgroundTint="#FFFFFF"
         android:text="Wybierz dziecko"
-        />
+        android:theme="@style/Spinner"
+        android:visibility="invisible" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout"

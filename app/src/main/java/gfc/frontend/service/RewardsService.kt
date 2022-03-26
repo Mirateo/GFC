@@ -31,8 +31,27 @@ object RewardsService : KtorService(){
     }
 
     fun delete(url: String) = runBlocking<Long?>  {
-        ktorRequest <Long?>("GET", url, null)
+        ktorRequest <Long?>("POST", url, null)
         super.response as Long?
     }
 
+    fun edit(url: String, reward: Reward) = runBlocking<Long?> {
+        ktorRequest<Long?>("POST", url, reward)
+        response as Long?
+    }
+
+    fun select(url: String): Long? = runBlocking<Long?> {
+        ktorRequest<Long?>("POST", url, null)
+        response as Long?
+    }
+
+    fun unselect(url: String): Long? = runBlocking<Long?> {
+        ktorRequest<Long?>("POST", url, null)
+        response as Long?
+    }
+
+    fun accept(url: String): Long? = runBlocking<Long?> {
+        ktorRequest<Long?>("POST", url, null)
+        response as Long?
+    }
 }

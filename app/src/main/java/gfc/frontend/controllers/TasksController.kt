@@ -17,7 +17,14 @@ import gfc.frontend.service.ReTasksService
 import gfc.frontend.service.TasksService
 import gfc.frontend.ui.main.ToDosAdapter
 import io.objectbox.Box
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
+
+
+fun minuteAgo(): Long {
+    return Date().time - 60000
+}
 
 object TasksController {
     lateinit var context: Context
@@ -26,12 +33,62 @@ object TasksController {
     lateinit var tasksContainer: ArrayList<Task>
     lateinit var reTasksContainer: ArrayList<RepeatableTask>
     lateinit var doneTasksContainer:  ArrayList<DoneTask>
+    lateinit var timestamp: Array<Date?>
 
     fun init(context: Context) {
         this.context = context
         userId = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE).getLong("id", 0)
         ReTasksService.init(context)
         TasksService.init(context)
+        timestamp = Array(3, {_ -> null} )
+    }
+
+    fun tabChanged(type: String?) {
+        if (timestamp[0] == null || timestamp[1] == null || timestamp[2] == null ) {
+            refreshTasks(type)
+            return
+        }
+        when (type) {
+            null -> {
+                if(timestamp[0]?.time!! < minuteAgo() || timestamp[1]?.time!! < minuteAgo() || timestamp[2]?.time!! < minuteAgo()) {
+                    refreshTasks(type)
+                }
+            }
+            "repeatable" -> {
+                if(timestamp[0]?.time!! < minuteAgo()) {
+                    refreshTasks(type)
+                }
+            }
+            "unrepeatable" -> {
+                if(timestamp[1]?.time!! < minuteAgo() ) {
+                    refreshTasks(type)
+                }
+            }
+            "done" -> {
+                if(timestamp[2]?.time!! < minuteAgo()) {
+                    refreshTasks(type)
+                }
+            }
+        }
+    }
+
+    fun updateTimestamps(type: String?) {
+        when (type) {
+            null -> {
+                timestamp[0] = Date()
+                timestamp[1] = Date()
+                timestamp[2] = Date()
+            }
+            "repeatable" -> {
+                timestamp[0] = Date()
+            }
+            "unrepeatable" -> {
+                timestamp[1] = Date()
+            }
+            "done" -> {
+                timestamp[2] = Date()
+            }
+        }
     }
 
     fun refreshTasks(type : String?) {
@@ -101,8 +158,15 @@ object TasksController {
                         tasksContainer = ArrayList(temp)
                     }
                 }
+                "done" -> {
+                    temp = TasksService.getDoneTasks("$url/allDone")
+                    if( temp != null){
+                        doneTasksContainer = ArrayList(temp)
+                    }
+                }
             }
         }
+        updateTimestamps(type)
     }
 
     fun taskDone(task: Any): Long? {
@@ -151,4 +215,5 @@ object TasksController {
         }
         return TasksService.editTask("$url/edit", task)
     }
+
 }

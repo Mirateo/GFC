@@ -41,10 +41,10 @@ class ToDosFragment : Fragment() {
 
     private fun refreshList() {
         when (arguments?.getInt(ARG_SECTION_NUMBER)) {
-            1 -> TasksController.refreshTasks("unrepeatable")
-            2 -> TasksController.refreshTasks("repeatable")
-            3 -> RewardsController.refreshRewards()
-            4 -> TasksController.refreshTasks("done")
+            1 -> TasksController.tabChanged("unrepeatable")
+            2 -> TasksController.tabChanged("repeatable")
+            3 -> RewardsController.tabChanged()
+            4 -> TasksController.tabChanged("done")
         }
 
         binding.recyclerViewList.adapter?.notifyDataSetChanged()

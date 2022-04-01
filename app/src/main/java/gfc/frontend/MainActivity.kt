@@ -141,12 +141,14 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra("rewards", false)
                 startActivityForResult(Intent(this, NewTaskActivity::class.java), 0)
             }
+            binding.fabRefresh.performClick()
         }
 
         // Refresher listener
         binding.fabRefresh.setOnClickListener { view ->
             refreshLists()
             FamilyController.init(this)
+            notifyPointsUpdated(FamilyController.getMemberById(FamilyController.getChildrenId(username))?.points!!)
             Snackbar.make(view, "Jesteś na bieżąco!", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }

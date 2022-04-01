@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Grywalizacja dla Dzieci</string>
     <string name="tab_text_1"> Zadania codzienne </string>
-    <string name="tab_text_2"> Zadania jednorazowe </string>
+    <string name="tab_text_2"> Zadania do wykonania </string>
     <string name="tab_text_3"> Nagrody </string>
     <string name="tab_text_4"> Wykonane zadania</string>
     <string name="add_things">Add things</string>

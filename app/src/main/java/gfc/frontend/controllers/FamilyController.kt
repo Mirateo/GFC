@@ -30,9 +30,9 @@ object FamilyController {
         return "dziecko"
     }
 
-    fun getChildrenId(response: String): Long {
+    fun getChildrenId(username: String): Long {
         for (child in familyList) {
-            if (child.username == response) {
+            if (child.username == username) {
                 return child.id
             }
         }

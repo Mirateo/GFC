@@ -4,18 +4,26 @@ import android.content.Context
 import gfc.frontend.dataclasses.Reward
 import gfc.frontend.requests.RewardDTO
 import gfc.frontend.service.RewardsService
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
 object RewardsController {
     lateinit var context: Context
     val url = "https://gamefication-for-children.herokuapp.com/rewards"
-    var rewardsContainer by Delegates.observable(ArrayList<Reward>()) { _, _, _ ->
-//        notifier.notifyDataSetChanged()
-    }
+    lateinit var rewardsContainer: ArrayList<Reward>
+    var timestamp: Date? = null
 
     fun init(context: Context) {
         this.context = context
         RewardsService.init(context)
+        timestamp = null
+    }
+
+    fun tabChanged() {
+        if(timestamp == null || timestamp?.time!!  < minuteAgo()) {
+            refreshRewards()
+        }
     }
 
     fun refreshRewards() {
@@ -23,6 +31,7 @@ object RewardsController {
         if( temp != null){
             rewardsContainer = ArrayList(temp)
         }
+        timestamp = Date()
     }
 
     fun addReward(rewardDTO: RewardDTO): Long? {
@@ -54,4 +63,5 @@ object RewardsController {
         refreshRewards()
         return ret
     }
+
 }

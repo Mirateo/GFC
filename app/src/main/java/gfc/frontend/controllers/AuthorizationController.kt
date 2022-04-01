@@ -40,19 +40,7 @@ object AuthorizationController {
                 .putString("token", token)
                 .apply()
 
-            val userInfo = AuthorizationService.getUserInfo("$url/user_info")
-
-            context.getSharedPreferences("userInfo", MODE_PRIVATE)
-                .edit()
-                .putLong("id", userInfo.id)
-                .putString("username", userInfo.username)
-                .putString("email", userInfo.email)
-                .putString("role", userInfo.role)
-                .putString("friendlyName", userInfo.friendlyName)
-                .putLong("points", userInfo.points)
-                .apply()
-
-            userIsParent = (userInfo.role == "PARENT")
+           getUserInfo()
 
             return true
         }
@@ -73,6 +61,21 @@ object AuthorizationController {
 
     fun editProfile(newUser: UserInfo): String? {
         return AuthorizationService.editProfile("$url/user_info/edit", newUser)
+    }
+    fun getUserInfo () {
+        val userInfo = AuthorizationService.getUserInfo("$url/user_info")
+
+        context.getSharedPreferences("userInfo", MODE_PRIVATE)
+            .edit()
+            .putLong("id", userInfo.id)
+            .putString("username", userInfo.username)
+            .putString("email", userInfo.email)
+            .putString("role", userInfo.role)
+            .putString("friendlyName", userInfo.friendlyName)
+            .putLong("points", userInfo.points)
+            .apply()
+
+        userIsParent = (userInfo.role == "PARENT")
     }
 
 }

@@ -179,10 +179,12 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
                     ret = if(AuthorizationController.userIsParent && !done.isChecked) {
                         Snackbar.make(view, "Zadanie zaakceptowane. Pora na nagrodę!", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show()
+                        background.setBackgroundColor(Color.alpha(0))
                         RewardsController.accept(currentReward.rewardId)
                     } else if (currentReward.owner == currentReward.reporter) {
                         Snackbar.make(view, "Gratulacje! Pora na nagrodę.", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show()
+                        background.setBackgroundColor(Color.alpha(0))
                         RewardsController.accept(currentReward.rewardId)
                     } else if(done.isChecked) {
                         val preRet = RewardsController.select(currentReward.rewardId)

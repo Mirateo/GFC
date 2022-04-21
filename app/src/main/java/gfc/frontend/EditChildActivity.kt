@@ -29,11 +29,9 @@ class EditChildActivity : AppCompatActivity() {
 
         if (intent.getBooleanExtra("edit", false)) {
             val id = intent.getLongExtra("id", 0L)
-            val email = intent.getStringExtra("email")
-            val role = intent.getStringExtra("role")
-
             binding.userName.setText(intent.getStringExtra("username"))
             binding.userFN.setText(intent.getStringExtra("friendlyName"))
+
             binding.delButton.isVisible = true
             binding.delButton.isClickable = true
 
@@ -41,7 +39,7 @@ class EditChildActivity : AppCompatActivity() {
                 val resp = FamilyController.delChild(id)
                 if( resp == null ) {
                     binding.monit.setBackgroundColor(Color.RED)
-                    binding.monit.text = "Dodawanie użytkownika nie powiodło się."
+                    binding.monit.text = "Usunięcie użytkownika nie powiodło się."
                     binding.monit.visibility = View.VISIBLE
 
                     return@setOnClickListener
@@ -51,6 +49,7 @@ class EditChildActivity : AppCompatActivity() {
                 finish()
             }
         }
+
         binding.acceptButton.setOnClickListener{
             val username = binding.userName.text.trim().toString()
             val friendlyName = binding.userFN.text.trim().toString()

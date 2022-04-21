@@ -35,6 +35,24 @@ object TasksController {
     lateinit var doneTasksContainer:  ArrayList<DoneTask>
     lateinit var timestamp: Array<Date?>
 
+    fun taskUndone(task: Any): Long? {
+        var ret: Long? = null
+        when (task) {
+            is Task -> {
+                ret = TasksService.taskUndone("$url/undone/${task.id}")
+                refreshTasks("unrepeatable")
+            }
+            is RepeatableTask -> {
+                ret = ReTasksService.taskUndone("$url/undone/${task.id}")
+                refreshTasks("repeatable")
+            }
+            else -> {
+                println("Incorrect Task type")
+            }
+        }
+        return ret
+    }
+
     fun init(context: Context) {
         this.context = context
         userId = context.getSharedPreferences("userInfo", Context.MODE_PRIVATE).getLong("id", 0)
@@ -187,23 +205,6 @@ object TasksController {
         return ret
     }
 
-    fun taskUndone(task: Any): Long? {
-        var ret: Long? = null
-        when (task) {
-            is Task -> {
-                ret = TasksService.taskUndone("$url/undone/${task.id}")
-                refreshTasks("unrepeatable")
-            }
-            is RepeatableTask -> {
-                ret = ReTasksService.taskUndone("$url/undone/${task.id}")
-                refreshTasks("repeatable")
-            }
-            else -> {
-                println("Incorrect Task type")
-            }
-        }
-        return ret
-    }
 
     fun deleteTask(id: Long): Long? {
         return TasksService.deleteTask("$url/remove/${id}")

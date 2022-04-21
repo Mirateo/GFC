@@ -5,10 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".LoginActivity">
+    tools:context=".LoginActivity"
+    android:background="@color/purple_200">
 
     <TextView
         android:id="@+id/textView"
+        style="@android:style/Widget.DeviceDefault.Light.TextView.SpinnerItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20sp"
@@ -16,7 +18,8 @@
         android:layout_marginRight="20sp"
         android:layout_marginBottom="30sp"
         android:text="@string/zaloguj_si_na_swoje_konto"
-        android:textSize="26sp" />
+        android:textSize="26sp"
+        android:textStyle="bold" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"

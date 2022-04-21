@@ -7,8 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import gfc.frontend.controllers.AuthorizationController
+import gfc.frontend.controllers.FamilyController
 import gfc.frontend.databinding.ActivityEditChildBinding
 import gfc.frontend.databinding.ActivityEditFamilySettingsBinding
 import gfc.frontend.databinding.FragmentAccountSettingsBinding
@@ -119,7 +121,6 @@ class EditFamilySettings : AppCompatActivity() {
             finishAffinity()
         }
 
-
         binding.newPassSave.setOnClickListener {
             val password = binding.newPass.text
             val newPass1 = binding.newPassOldOne1.text
@@ -176,6 +177,21 @@ class EditFamilySettings : AppCompatActivity() {
             startActivity(Intent(this, MainActivity::class.java))
             finishAffinity()
         }
+
+        binding.deleteChild.setOnClickListener{
+            val resp = FamilyController.delChild(userId!!)
+            if( resp == null ) {
+                binding.monit2.setBackgroundColor(Color.RED)
+                binding.monit2.text = "Usunięcie użytkownika nie powiodło się."
+                binding.monit2.visibility = View.VISIBLE
+                Toast.makeText(applicationContext, resp, Toast.LENGTH_SHORT).show()
+
+                return@setOnClickListener
+            }
+            setResult(RESULT_OK, Intent())
+            finish()
+        }
+
 
         binding.accountHome.setOnClickListener {
             finish()

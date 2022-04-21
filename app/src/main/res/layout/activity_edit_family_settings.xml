@@ -44,18 +44,30 @@
         android:textAlignment="center"
         android:textSize="20sp" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout222"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nowa nazwa">
+        android:orientation="horizontal">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/new_email"
-            android:layout_width="250dp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout222"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_weight="0.2"
+            android:hint="Nowa nazwa">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/new_email"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -64,14 +76,15 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout22"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="0.2"
             android:hint="Hasło">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/new_fn_pass"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -80,7 +93,9 @@
             android:id="@+id/new_fn_save"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="0.5"
             android:text="Zapisz" />
 
     </LinearLayout>
@@ -94,18 +109,29 @@
         android:textAlignment="center"
         android:textSize="20sp" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nowy login">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/new_login"
-            android:layout_width="250dp"
+        android:orientation="horizontal">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_weight="0.2"
+            android:hint="Nowy login">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/new_login"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -114,14 +140,15 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout2"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="0.2"
             android:hint="Hasło">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/new_login_pass"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -130,7 +157,9 @@
             android:id="@+id/new_login_save"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="0.5"
             android:text="Zapisz" />
 
     </LinearLayout>
@@ -143,33 +172,59 @@
         android:textAlignment="center"
         android:textSize="20sp" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout3"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Aktualne hasło">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/new_pass"
-            android:layout_width="250dp"
+        android:orientation="horizontal">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout3"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:inputType="textPassword" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_weight="0.2"
+            android:hint="Aktualne hasło">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout4"
-        android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/new_pass"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:inputType="textPassword" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nowe hasło">
+        android:orientation="horizontal">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/new_pass_old_one1"
-            android:layout_width="250dp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout4"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:inputType="textPassword" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_weight="0.2"
+            android:hint="Nowe hasło">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/new_pass_old_one1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:inputType="textPassword" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5" />
+    </LinearLayout>
 
 
     <LinearLayout
@@ -179,14 +234,15 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout5"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="0.2"
             android:hint="Powtórz nowe hasło">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/new_pass_old_one2"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -195,7 +251,9 @@
             android:id="@+id/new_pass_save"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="0.5"
             android:text="Zapisz" />
 
     </LinearLayout>
@@ -217,6 +275,32 @@
             android:paddingRight="20dp"
             android:paddingBottom="6dp"
             android:text="Anuluj" />
+
+        <Button
+            android:id="@+id/delete_child"
+            android:layout_width="172dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:paddingLeft="20dp"
+            android:paddingTop="6dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="6dp"
+            android:text="Usuń członka" />
+
+        <Button
+            android:id="@+id/placeholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:clickable="false"
+            android:paddingLeft="20dp"
+            android:paddingTop="6dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="6dp"
+            android:text="Anuluj"
+            android:visibility="invisible" />
 
     </LinearLayout>
 

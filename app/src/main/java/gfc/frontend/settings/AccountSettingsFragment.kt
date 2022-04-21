@@ -96,7 +96,7 @@ class AccountSettingsFragment : Fragment() {
 
             val request: UserInfo
             try {
-                request = UserInfo(userId!!, newLogin.toString().trim(), realEmail!!, realPasswd!!, role!!, friendlyName!!)
+                request = UserInfo(userId!!, newLogin.toString().trim(), realEmail!!, null, role!!, friendlyName!!)
             } catch (e: IllegalArgumentException) {
                 binding.monit2.setBackgroundColor(Color.RED)
                 binding.monit2.text = e.message
@@ -133,7 +133,7 @@ class AccountSettingsFragment : Fragment() {
 
             val request: UserInfo
             try {
-                request = UserInfo(userId!!, realUsername!!, newEmail.toString().trim(), realPasswd!!, role!!, friendlyName!!)
+                request = UserInfo(userId!!, realUsername!!, newEmail.toString().trim(), null, role!!, friendlyName!!)
             } catch (e: IllegalArgumentException) {
                 binding.monit2.setBackgroundColor(Color.RED)
                 binding.monit2.text = e.message

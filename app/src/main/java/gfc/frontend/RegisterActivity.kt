@@ -31,6 +31,11 @@ class RegisterActivity : AppCompatActivity() {
                 binding.monit.visibility = View.VISIBLE
                 return@setOnClickListener
             }
+            if(password == "") {
+                binding.monit.text = "Najpierw wprowadź hasło."
+                binding.monit.visibility = View.VISIBLE
+                return@setOnClickListener
+            }
 
             val request: SignupRequest
             try {

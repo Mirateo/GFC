@@ -5,7 +5,8 @@
     android:id="@+id/constraintLayoutList"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.ToDosFragment">
+    tools:context=".ui.main.ToDosFragment"
+    android:background="@color/purple_200">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewList"

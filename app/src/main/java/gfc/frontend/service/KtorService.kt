@@ -46,26 +46,17 @@ abstract class KtorService : Service()  {
     }
 
     suspend inline fun <reified T: Any?> ktorRequest(meth: String, url: String, json: Any?): Any? {
-
-        println("!!!!!!!!!!!!!!!!!!!!!! $json")
         val prefs = context.getSharedPreferences("credentials", MODE_PRIVATE)
-
         val username = prefs.getString("username", "")
         val password = prefs.getString("password", "")
         val token = prefs.getString("token", "")
-
         if(username == null || password == null || token == null) {
             exitProcess(1)
         }
-
         val httpClient = HttpClient(Android){
             expectSuccess = true
             install(JsonFeature) {
                 serializer = KotlinxSerializer()
-            }
-            install(Logging) {
-                logger = Logger.DEFAULT
-                level = LogLevel.ALL
             }
             install(Auth) {
                 bearer {
@@ -78,7 +69,6 @@ abstract class KtorService : Service()  {
                 }
             }
         }
-
         response = when (meth) {
                 "GET" -> {
                     httpClient.get<T>(url) {
@@ -102,47 +92,21 @@ abstract class KtorService : Service()  {
                     }
                 }
             }
-
         httpClient.close()
-
         return response
-
     }
 
     suspend inline fun <reified T: Any> ktorAnonymousRequest(url: String, json: Any)  = coroutineScope<Unit> {
         val httpClient = HttpClient(Android){
-        expectSuccess = true
-        install(JsonFeature) {
-            serializer = KotlinxSerializer()
-        }
-        install(Logging) {
-            logger = Logger.DEFAULT
-            level = LogLevel.ALL
-        }
-    }
-
-        response = try {
-            httpClient.post<T>(url) {
-                body = json
-                contentType(ContentType.Application.Json)
+            expectSuccess = false
+            install(JsonFeature) {
+                serializer = KotlinxSerializer()
             }
-        } catch (ex: RedirectResponseException) {
-            // 3xx - responses
-            println("Error: ${ex.response.status.description}")
-            null
-        } catch (ex: ClientRequestException) {
-            // 4xx - responses
-            println("Error: ${ex.response.status.description}")
-            null
-        } catch (ex: ServerResponseException) {
-            // 5xx - response
-            println("Error: ${ex.response.status.description}")
-            null
-        } catch (ex: ServerResponseException) {
-            println("Error: ${ex.response.status.description}")
-            null
         }
-
+        response = httpClient.post<T>(url) {
+            body = json
+            contentType(ContentType.Application.Json)
+        }
         httpClient.close()
     }
 

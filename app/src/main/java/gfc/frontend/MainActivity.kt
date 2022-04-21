@@ -63,34 +63,7 @@ class MainActivity : AppCompatActivity() {
         binding.drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-
-        val username =
-            getSharedPreferences("userInfo", MODE_PRIVATE).getString("username", "nope:(")
-                .toString()
-        val email =
-            getSharedPreferences("userInfo", MODE_PRIVATE).getString("email", "nope:(").toString()
-        val role =
-            getSharedPreferences("userInfo", MODE_PRIVATE).getString("role", "nope:(").toString()
-        val friendlyName =
-            getSharedPreferences("userInfo", MODE_PRIVATE).getString("friendlyName", "nope:(")
-                .toString()
-        val points =
-            getSharedPreferences("userInfo", MODE_PRIVATE).getLong("points", 0)
-
-        val navigationView: NavigationView = findViewById(R.id.nav_view)
-        val headerView: View = navigationView.getHeaderView(0)
-
-        val navWelcome: TextView = headerView.findViewById(R.id.nav_welcome_text)
-        val navUsername: TextView = headerView.findViewById(R.id.nav_username)
-        val navUserEmail: TextView = headerView.findViewById(R.id.nav_email)
-        navPoints = headerView.findViewById(R.id.nav_points)
-        coins = binding.coins
-
-        navWelcome.text = "Cześć, $friendlyName!"
-        navUsername.text = "Nazwa użytkownika: $username"
-        navUserEmail.text = "Adres e-mail: $email"
-        navPoints.text = points.toString()
-        coins.text = points.toString()
+        refreshUserInfo()
 
         binding.navView.setNavigationItemSelectedListener {
             when (it.itemId) {
@@ -148,10 +121,43 @@ class MainActivity : AppCompatActivity() {
         binding.fabRefresh.setOnClickListener { view ->
             refreshLists()
             FamilyController.init(this)
+            val username =
+                getSharedPreferences("userInfo", MODE_PRIVATE).getString("username", "nope:(")
+                    .toString()
             notifyPointsUpdated(FamilyController.getMemberById(FamilyController.getChildrenId(username))?.points!!)
             Snackbar.make(view, "Jesteś na bieżąco!", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
+    }
+
+    private fun refreshUserInfo() {
+        val username =
+            getSharedPreferences("userInfo", MODE_PRIVATE).getString("username", "nope:(")
+                .toString()
+        val email =
+            getSharedPreferences("userInfo", MODE_PRIVATE).getString("email", "nope:(").toString()
+        val role =
+            getSharedPreferences("userInfo", MODE_PRIVATE).getString("role", "nope:(").toString()
+        val friendlyName =
+            getSharedPreferences("userInfo", MODE_PRIVATE).getString("friendlyName", "nope:(")
+                .toString()
+        val points =
+            getSharedPreferences("userInfo", MODE_PRIVATE).getLong("points", 0)
+
+        val navigationView: NavigationView = findViewById(R.id.nav_view)
+        val headerView: View = navigationView.getHeaderView(0)
+
+        val navWelcome: TextView = headerView.findViewById(R.id.nav_welcome_text)
+        val navUsername: TextView = headerView.findViewById(R.id.nav_username)
+        val navUserEmail: TextView = headerView.findViewById(R.id.nav_email)
+        navPoints = headerView.findViewById(R.id.nav_points)
+        coins = binding.coins
+
+        navWelcome.text = "Cześć, $friendlyName!"
+        navUsername.text = "Nazwa użytkownika: $username"
+        navUserEmail.text = "Adres e-mail: $email"
+
+        notifyPointsUpdated(points)
     }
 
     fun refreshLists() {

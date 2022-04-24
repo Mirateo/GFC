@@ -84,8 +84,7 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
                     }
                 }
                 val lastDone = currentTask.lastDone
-                done.isChecked = lastDone != null && lastDone >= today(Date())
-                println("Last done: " + lastDone + "\n today is: " + today(Date()))
+                done.isChecked = (lastDone != null && lastDone >= today(Date()))
 
                 done.setOnClickListener { view ->
                     var mess = "Gratulacje!"
@@ -113,7 +112,6 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
                 val currentTask = TasksController.tasksContainer[position]
                 name.text = currentTask.name
                 description.text = currentTask.description
-                println("!!!!!" + currentTask + ":" + currentTask.points + ":" + currentTask.points.toString())
                 elementPoints.text = "+${currentTask.points}"
                 if(AuthorizationController.userIsParent){
                     if(currentTask.own) {
@@ -181,6 +179,18 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
                             .setAction("Action", null).show()
                         background.setBackgroundColor(Color.alpha(0))
                         RewardsController.accept(currentReward.rewardId)
+                    } else if (currentReward.owner == currentReward.reporter && AuthorizationController.userIsParent) {
+                        val preRet = RewardsController.accept(currentReward.rewardId)
+                        if(preRet == -1L) {
+                            done.isChecked = false
+                            Snackbar.make(view, "Wybacz, nie masz wystarczającej liczby punktów.", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show()
+                            return@setOnClickListener
+                        } else {
+                            Snackbar.make(view, "Gratulacje! Pora na nagrodę.", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show()
+                            preRet
+                        }
                     } else if (currentReward.owner == currentReward.reporter) {
                         Snackbar.make(view, "Gratulacje! Pora na nagrodę.", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show()

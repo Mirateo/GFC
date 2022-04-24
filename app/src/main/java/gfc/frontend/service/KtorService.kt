@@ -30,17 +30,6 @@ abstract class KtorService : Service()  {
         this.context = context
     }
 
-    val anonymousHttpClient = HttpClient(Android){
-        expectSuccess = true
-        install(JsonFeature) {
-            serializer = KotlinxSerializer()
-        }
-        install(Logging) {
-            logger = Logger.DEFAULT
-            level = LogLevel.ALL
-        }
-    }
-
     fun callBack (resp: Any?) {
         this.response =  resp
     }
@@ -67,6 +56,10 @@ abstract class KtorService : Service()  {
                         )
                     }
                 }
+            }
+            install(Logging) {
+                logger = Logger.DEFAULT
+                level = LogLevel.ALL
             }
         }
         response = when (meth) {
@@ -101,6 +94,10 @@ abstract class KtorService : Service()  {
             expectSuccess = false
             install(JsonFeature) {
                 serializer = KotlinxSerializer()
+            }
+            install(Logging) {
+                logger = Logger.DEFAULT
+                level = LogLevel.ALL
             }
         }
         response = httpClient.post<T>(url) {

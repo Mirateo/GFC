@@ -29,9 +29,7 @@ object AuthorizationController {
     }
 
     fun login(credentials: SigninRequest): Boolean {
-        println("Teraz")
         val token = AuthorizationService.login(loginUrl, credentials)
-        println("Teraz2")
         if(token != null){
             context.getSharedPreferences("credentials", MODE_PRIVATE)
                 .edit()

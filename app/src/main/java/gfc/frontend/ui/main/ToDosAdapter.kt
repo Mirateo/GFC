@@ -267,6 +267,12 @@ class ToDosAdapter(private val section: Int?) :RecyclerView.Adapter<MyViewHolder
             }
 
             if (section == 3 ) {
+                if (RewardsController.rewardsContainer[position].chosen && AuthorizationController.userIsParent) {
+                    Snackbar.make(view, "Edycja wykonanego zadania nie jest możliwa.", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show()
+                    return@setOnClickListener
+                }
+
                 val intent = Intent(context, NewTaskActivity::class.java)
                 intent.putExtra("edit", true)
                 intent.putExtra("name", name.text)

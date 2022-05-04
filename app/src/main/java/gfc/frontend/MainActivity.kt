@@ -45,9 +45,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        FamilyController.init(applicationContext)
-        TasksController.init(applicationContext)
-        RewardsController.init(applicationContext)
         // Initialize lists
         refreshLists()
 
@@ -161,6 +158,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun refreshLists() {
+        FamilyController.init(applicationContext)
+        TasksController.init(applicationContext)
+        RewardsController.init(applicationContext)
+
         val currentPage = binding.viewPager.currentItem
         binding.viewPager.adapter = SectionsPagerAdapter(this, supportFragmentManager)
         binding.tabs.setupWithViewPager(binding.viewPager)
